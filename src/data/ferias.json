@@ -1,0 +1,918 @@
+{
+  "generatedAt": "2026-06-30",
+  "source": "Lista de Ferias del Agricultor (June 2026)",
+  "regions": [
+    {
+      "id": "brunca-upacob",
+      "name": "Brunca UPACOB"
+    },
+    {
+      "id": "caribe-guacimo",
+      "name": "Caribe - Guácimo"
+    },
+    {
+      "id": "central-central",
+      "name": "Central Central"
+    },
+    {
+      "id": "central-occidental-este-heredia",
+      "name": "Central Occidental Este - Heredia"
+    },
+    {
+      "id": "central-occidental-oeste-san-ramon",
+      "name": "Central Occidental Oeste - San Ramón"
+    },
+    {
+      "id": "central-oriental-cartago",
+      "name": "Central Oriental - Cartago"
+    },
+    {
+      "id": "chorotega",
+      "name": "Chorotega"
+    },
+    {
+      "id": "ciudad-quesada",
+      "name": "Ciudad Quesada"
+    },
+    {
+      "id": "pacifico-central",
+      "name": "Pacífico Central"
+    }
+  ],
+  "ferias": [
+    {
+      "id": "alajuela",
+      "name": "Alajuela",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - sábado",
+      "administrator": "Plaza Ferias",
+      "phones": [
+        "2443-2579"
+      ]
+    },
+    {
+      "id": "alajuelita",
+      "name": "Alajuelita",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Mora",
+      "phones": [
+        "2418-5712"
+      ]
+    },
+    {
+      "id": "atenas",
+      "name": "Atenas",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "fri"
+      ],
+      "daysLabel": "Viernes",
+      "administrator": "CAC de Atenas",
+      "phones": [
+        "2446-9033"
+      ]
+    },
+    {
+      "id": "aurora-alajuelita",
+      "name": "Aurora- Alajuelita",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Alajuelita",
+      "phones": [
+        "4709 3039"
+      ]
+    },
+    {
+      "id": "barva",
+      "name": "Barva",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Barba",
+      "phones": [
+        "8506-1879",
+        "8631-9141"
+      ]
+    },
+    {
+      "id": "buenos-aires",
+      "name": "Buenos Aires",
+      "regionId": "brunca-upacob",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Red Quercus",
+      "phones": [
+        "8304- 6164"
+      ]
+    },
+    {
+      "id": "ciudad-colon",
+      "name": "Ciudad Colon",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Mora",
+      "phones": [
+        "2418-5712"
+      ]
+    },
+    {
+      "id": "ciudad-neilly",
+      "name": "Ciudad Neilly",
+      "regionId": "brunca-upacob",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Comité Regional Brunca",
+      "phones": [
+        "2773-3530"
+      ]
+    },
+    {
+      "id": "ciudad-quesada",
+      "name": "Ciudad Quesada",
+      "regionId": "ciudad-quesada",
+      "days": [
+        "thu",
+        "fri"
+      ],
+      "daysLabel": "Jueves - viernes",
+      "administrator": "Asoc. de Vendedores Artesanos y Cultivos Agrícolas de la Feria de Ciudad Quesada",
+      "phones": [
+        "8947-1548"
+      ]
+    },
+    {
+      "id": "coronado",
+      "name": "Coronado",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "CAC de Coronado",
+      "phones": [
+        "2229-4023"
+      ]
+    },
+    {
+      "id": "curridabat",
+      "name": "Curridabat",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Municipalidad Curridabat",
+      "phones": [
+        "2272-9089"
+      ]
+    },
+    {
+      "id": "desamparados",
+      "name": "Desamparados",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Desamparados",
+      "phones": [
+        "2544-0014"
+      ]
+    },
+    {
+      "id": "el-guarco",
+      "name": "El Guarco",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC del Guarco",
+      "phones": [
+        "2573-8465"
+      ]
+    },
+    {
+      "id": "el-molino",
+      "name": "El Molino",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Oreamuno",
+      "phones": [
+        "2536-7322"
+      ]
+    },
+    {
+      "id": "escazu",
+      "name": "Escazú",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Escazú",
+      "phones": [
+        "2288-3957"
+      ]
+    },
+    {
+      "id": "esparza",
+      "name": "Esparza",
+      "regionId": "pacifico-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Esparza",
+      "phones": [
+        "2636-6962"
+      ]
+    },
+    {
+      "id": "frailes",
+      "name": "Frailes",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "fri"
+      ],
+      "daysLabel": "Viernes",
+      "administrator": "CAC Desamparados",
+      "phones": [
+        "2544-0014"
+      ]
+    },
+    {
+      "id": "grecia",
+      "name": "Grecia",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Grecia",
+      "phones": [
+        "2494-7360"
+      ]
+    },
+    {
+      "id": "guachipelin",
+      "name": "Guachipelin",
+      "regionId": "central-central",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "CAC de Escazú",
+      "phones": [
+        "2288-3958"
+      ]
+    },
+    {
+      "id": "guapiles",
+      "name": "Guápiles",
+      "regionId": "caribe-guacimo",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Pococi",
+      "phones": [
+        "4033-3624"
+      ]
+    },
+    {
+      "id": "hatillo",
+      "name": "Hatillo",
+      "regionId": "central-central",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "CAC de Santa Ana",
+      "phones": [
+        "2282-5986"
+      ]
+    },
+    {
+      "id": "heredia",
+      "name": "Heredia",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - sábado",
+      "administrator": "Asociación de Agricultores feria de Heredia",
+      "phones": [
+        "8744-5732"
+      ]
+    },
+    {
+      "id": "jaco",
+      "name": "Jacó",
+      "regionId": "pacifico-central",
+      "days": [
+        "fri"
+      ],
+      "daysLabel": "Viernes",
+      "administrator": "CAC Orotina",
+      "phones": [
+        "2428-9836"
+      ]
+    },
+    {
+      "id": "la-capri",
+      "name": "La Capri",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "CAC Desamparados",
+      "phones": [
+        "2544-0014"
+      ]
+    },
+    {
+      "id": "la-fortuna",
+      "name": "La Fortuna",
+      "regionId": "ciudad-quesada",
+      "days": [
+        "fri"
+      ],
+      "daysLabel": "Viernes",
+      "administrator": "Asoc. De Productores Agrícolas San Carlos y Zarcero",
+      "phones": [
+        "8326-4604"
+      ]
+    },
+    {
+      "id": "liberia",
+      "name": "Liberia",
+      "regionId": "chorotega",
+      "days": [
+        "fri"
+      ],
+      "daysLabel": "Viernes",
+      "administrator": "CAC de Liberia",
+      "phones": [
+        "8838-7196"
+      ]
+    },
+    {
+      "id": "lomas-del-rio",
+      "name": "Lomas del Río",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Asociación de Pequeños, Medianos, Productores, Artesanos de Rincon Grande de Pavas",
+      "phones": [
+        "6079-0001"
+      ]
+    },
+    {
+      "id": "naranjo",
+      "name": "Naranjo",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - sábado",
+      "administrator": "CAC de Naranjo",
+      "phones": [
+        "2450-5732"
+      ]
+    },
+    {
+      "id": "nicoya",
+      "name": "Nicoya",
+      "regionId": "chorotega",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Nicoya",
+      "phones": [
+        "8775-9779"
+      ]
+    },
+    {
+      "id": "oreamuno",
+      "name": "Oreamuno",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Oreamuno",
+      "phones": [
+        "2536-7322"
+      ]
+    },
+    {
+      "id": "orotina",
+      "name": "Orotina",
+      "regionId": "pacifico-central",
+      "days": [
+        "fri"
+      ],
+      "daysLabel": "Viernes",
+      "administrator": "CAC de Orotina",
+      "phones": [
+        "2428-9836"
+      ]
+    },
+    {
+      "id": "palmares",
+      "name": "Palmares",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Palmares",
+      "phones": [
+        "2221-2375"
+      ]
+    },
+    {
+      "id": "paraiso",
+      "name": "Paraiso",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Paraiso",
+      "phones": [
+        "2574-7364"
+      ]
+    },
+    {
+      "id": "pavas",
+      "name": "Pavas",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Asociación de Agricultores, Productores y Artesanos de la Feria del Agricultor en Pavas",
+      "phones": [
+        "6079-0000"
+      ]
+    },
+    {
+      "id": "plaza-viquez",
+      "name": "Plaza Viquez",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC del Guarco",
+      "phones": [
+        "2573-8465"
+      ]
+    },
+    {
+      "id": "poas",
+      "name": "Poas",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Poas",
+      "phones": [
+        "2448-5375"
+      ]
+    },
+    {
+      "id": "quepos",
+      "name": "Quepos",
+      "regionId": "pacifico-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "COOPESILENCIO",
+      "phones": [
+        "2200-5940"
+      ]
+    },
+    {
+      "id": "san-antonio-belen",
+      "name": "San Antonio Belen",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Asoc. Productores  Belen",
+      "phones": [
+        "8558-2689"
+      ]
+    },
+    {
+      "id": "san-isidro",
+      "name": "San Isidro",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - sábado",
+      "administrator": "CAC San Isidro",
+      "phones": [
+        "2268-5787",
+        "8413-0424"
+      ]
+    },
+    {
+      "id": "san-isidro-pz",
+      "name": "San Isidro- PZ",
+      "regionId": "brunca-upacob",
+      "days": [
+        "thu"
+      ],
+      "daysLabel": "Jueves",
+      "administrator": "AFASIG",
+      "phones": [
+        "8822-20-63"
+      ]
+    },
+    {
+      "id": "san-joaquin",
+      "name": "San Joaquin",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Asociación de Agricultores feria de Heredia",
+      "phones": [
+        "6307-7209"
+      ]
+    },
+    {
+      "id": "san-juan-de-dios",
+      "name": "San Juan de Dios",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Asoc. Des. San Juan de Dios",
+      "phones": [
+        "2259-9535"
+      ]
+    },
+    {
+      "id": "san-luis-de-sto-domingo",
+      "name": "San Luis de Sto Domingo",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "sat",
+        "sun"
+      ],
+      "daysLabel": "Sábado - domingo",
+      "administrator": "CAC San Luis Sto Domingo",
+      "phones": [
+        "8822-7758"
+      ]
+    },
+    {
+      "id": "san-mateo",
+      "name": "San Mateo",
+      "regionId": "pacifico-central",
+      "days": [
+        "thu"
+      ],
+      "daysLabel": "Jueves",
+      "administrator": "CAC de San Mateo",
+      "phones": [
+        "2428-0393"
+      ]
+    },
+    {
+      "id": "san-pablo-heredia",
+      "name": "San Pablo-Heredia",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - sábado",
+      "administrator": "CAC Alajuela",
+      "phones": [
+        "2430-3898",
+        "8378-2365"
+      ]
+    },
+    {
+      "id": "san-pedro",
+      "name": "San Pedro",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "Comite Regional Central Oriental",
+      "phones": [
+        "2553-3185"
+      ]
+    },
+    {
+      "id": "san-rafael-abajo",
+      "name": "San Rafael Abajo",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Desamparados",
+      "phones": [
+        "2544-0014"
+      ]
+    },
+    {
+      "id": "san-rafael-arriba",
+      "name": "San Rafael Arriba",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Desamparados",
+      "phones": [
+        "2544-0014"
+      ]
+    },
+    {
+      "id": "san-rafael-alajuela",
+      "name": "San Rafael-Alajuela",
+      "regionId": "central-central",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "Asoc. Parceleros San Rafael",
+      "phones": [
+        "2418-5712"
+      ]
+    },
+    {
+      "id": "san-rafael-heredia",
+      "name": "San Rafael-Heredia",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "CAC San Rafael",
+      "phones": [
+        "4033-2330",
+        "8623-4619"
+      ]
+    },
+    {
+      "id": "san-ramon",
+      "name": "San Ramon",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - sábado",
+      "administrator": "CAC de San Ramon",
+      "phones": [
+        "2445-7585"
+      ]
+    },
+    {
+      "id": "san-sebastian",
+      "name": "San Sebastian",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Mora",
+      "phones": [
+        "2418-5712"
+      ]
+    },
+    {
+      "id": "santa-ana",
+      "name": "Santa Ana",
+      "regionId": "central-central",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "CAC de Santa Ana",
+      "phones": [
+        "2282-5986"
+      ]
+    },
+    {
+      "id": "santa-barbara",
+      "name": "Santa Barbara",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Santa Barbara",
+      "phones": [
+        "2269-1162",
+        "8384-9985"
+      ]
+    },
+    {
+      "id": "santa-cruz",
+      "name": "Santa Cruz",
+      "regionId": "chorotega",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC Santa Cruz",
+      "phones": [
+        "8775-9779"
+      ]
+    },
+    {
+      "id": "santo-domingo",
+      "name": "Santo Domingo",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC San Isidro",
+      "phones": [
+        "2268-5787",
+        "8413-0424"
+      ]
+    },
+    {
+      "id": "sarapiqui",
+      "name": "Sarapiquí",
+      "regionId": "caribe-guacimo",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Sarapiqui",
+      "phones": [
+        "2766-5808"
+      ]
+    },
+    {
+      "id": "sarchi",
+      "name": "Sarchi",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "fri"
+      ],
+      "daysLabel": "Viernes",
+      "administrator": "CAC de Sarchi",
+      "phones": [
+        "2454-4017"
+      ]
+    },
+    {
+      "id": "siquirres",
+      "name": "Siquirres",
+      "regionId": "caribe-guacimo",
+      "days": [
+        "fri"
+      ],
+      "daysLabel": "Viernes",
+      "administrator": "CAC de Siquirrres",
+      "phones": [
+        "2768-6825"
+      ]
+    },
+    {
+      "id": "tibas",
+      "name": "Tibas",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "sat",
+        "sun"
+      ],
+      "daysLabel": "Sábado - domingo",
+      "administrator": "CAC San Luis Sto Domingo",
+      "phones": [
+        "2268-4418",
+        "8822-7758"
+      ]
+    },
+    {
+      "id": "tres-rios",
+      "name": "Tres Ríos",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "Asoc. Agricultores Tres Ríos",
+      "phones": [
+        "2544-0015"
+      ]
+    },
+    {
+      "id": "turrucares",
+      "name": "Turrucares",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "CAC de Atenas",
+      "phones": [
+        "2446-9033"
+      ]
+    },
+    {
+      "id": "vargas-araya",
+      "name": "Vargas Araya",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC del Guarco",
+      "phones": [
+        "2573-8465"
+      ]
+    },
+    {
+      "id": "villas-de-ayarco",
+      "name": "Villas de Ayarco",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Oreamuno",
+      "phones": [
+        "2536-7322"
+      ]
+    },
+    {
+      "id": "zapote",
+      "name": "Zapote",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "sun"
+      ],
+      "daysLabel": "Domingo",
+      "administrator": "CAC Desamparados",
+      "phones": [
+        "2544-0014"
+      ]
+    },
+    {
+      "id": "zarcero",
+      "name": "Zarcero",
+      "regionId": "central-occidental-oeste-san-ramon",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "CAC de Zarcero",
+      "phones": [
+        "2463-2122"
+      ]
+    }
+  ]
+}
