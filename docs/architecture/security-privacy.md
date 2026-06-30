@@ -1,0 +1,77 @@
+# Security & Privacy — La Feria CR
+
+**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+
+Security and privacy posture for a public, community-edited app handling minimal personal data plus
+**geolocation** and (later) **user photos**. Related: [rbac](rbac.md),
+[moderation-trust](moderation-trust.md), [infrastructure](infrastructure.md).
+
+## Authentication & authorization
+- **AuthN:** Microsoft Entra External ID (Google + email OTP); standard OIDC; tokens validated per
+  request ([ADR-0005](../decisions/0005-identity-entra-external-id.md)).
+- **AuthZ:** server-side RBAC on every mutating route, from DB-backed roles — never client claims
+  ([rbac](rbac.md)).
+- **Anonymous writes** (proposals, new-market submissions, reports) are allowed but rate-limited and
+  CAPTCHA-gated; **confirmations require an account**.
+
+## Data classification
+| Data | Class | Handling |
+| --- | --- | --- |
+| Market info (hours, location, days) | Public | Freely shown; community-editable |
+| Account email | Personal | Stored minimally; not shown publicly |
+| Display name | Public-ish | User-chosen; shown on contributions if at all |
+| IP / device signals | Operational | Abuse prevention; short retention |
+| Precise geolocation (user) | Sensitive | **Consent-based**, used at moment of action |
+| Photos (Phase 8) | UGC | Moderated; license terms apply |
+
+**Data minimization:** collect only what's needed to run the contribution loop. No background
+location tracking.
+
+## Geolocation consent
+- The browser geolocation prompt is **explicit and purpose-bound** ("use my current location to place
+  this market's pin"). Users can always **drop a pin manually** instead.
+- We store the **market** coordinate (public), not a history of the user's personal location.
+
+## User-generated content (ownership & licensing)
+- Contributors grant La Feria CR a license to **display and distribute** their contributions (edits,
+  submissions, later photos) within the app.
+- Factual market data (hours/locations) is treated as openly shareable community data.
+- Clear **Terms** and **content rules** at point of contribution
+  ([content-guidelines](../community/content-guidelines.md)); users must not upload content they
+  don't have rights to.
+- Takedown path for IP or privacy complaints.
+
+## Content safety
+- **Text** (proposed values, names): validation, length limits, profanity/abuse checks, moderation queue.
+- **Photos** (Phase 8): **Azure AI Content Safety** auto-screening + human Community Safety review
+  before/after publish; EXIF/GPS stripped on upload.
+
+## Secrets management
+- All secrets (DB connection, Maps key, IdP client secret) in **Key Vault**; apps read via **managed
+  identity** — none in code, config, or the repo.
+- CI/CD uses **OIDC federated credentials** (no long-lived cloud secrets in GitHub)
+  ([infrastructure](infrastructure.md)).
+
+## Application security
+- Input validation + parameterized queries (ORM) → no SQL injection.
+- Output encoding / React escaping → XSS resistance; strict CSP where feasible.
+- CSRF protection on cookie-based flows; bearer tokens for API.
+- **Rate limiting** and **CAPTCHA** on anonymous writes; **WAF** (Front Door) as traffic grows.
+- HTTPS everywhere; HSTS; secure/SameSite cookies.
+- Least-privilege identities between app, DB, and storage.
+
+## Privacy & compliance posture
+- Minimal PII; **deletion/export** path for account data on request.
+- Transparent privacy notice covering data use, geolocation, and UGC licensing.
+- Audit logs for privileged actions ([data-model](data-model.md) `moderation_actions`).
+- Costa Rica data-protection (and GDPR-aligned good practice) considered before public launch.
+
+## Abuse handling
+- Tooling and policies in [moderation-trust](moderation-trust.md): reports, removal, temp-bans,
+  revert, break-glass admin overrides — all audited.
+
+## Open questions
+- Whether to show contributor display names publicly or keep contributions pseudonymous.
+- Retention windows for IP/device abuse signals.
+- Exact UGC license wording (review before community launch).
+- Logging/region requirements for CR data-protection compliance.
