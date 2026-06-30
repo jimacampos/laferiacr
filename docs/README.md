@@ -18,6 +18,8 @@ implement against; they are living drafts and will evolve.
 | [product/personas.md](product/personas.md) | Target users incl. older / non-tech shoppers | 🟡 Draft |
 | [product/prd.md](product/prd.md) | Requirements & user stories by release | 🟡 Draft |
 | [product/roadmap.md](product/roadmap.md) | Phased roadmap (8 phases) | 🟡 Draft |
+| [product/phase-1-tasks.md](product/phase-1-tasks.md) | Executable task list for Phase 1 | 🟡 Draft |
+| [product/backlog.md](product/backlog.md) | Feature backlog & open questions | 🟢 Living |
 
 ### Architecture
 | Doc | Description | Status |

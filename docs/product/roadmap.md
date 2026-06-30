@@ -35,6 +35,8 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 - Switch reads from the static import to the database.
 - **Exit criteria:** app behaves exactly like v0, now DB-backed and deployed on Azure.
 
+> 📋 Executable checklist: [phase-1-tasks.md](phase-1-tasks.md).
+
 ## Phase 2 — Accounts & market detail
 **Goal:** identity + a place to show and (soon) edit per-market info.
 - Integrate Entra External ID (Google + email OTP); login needed only to confirm.
