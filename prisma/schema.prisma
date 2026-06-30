@@ -1,0 +1,47 @@
+// Prisma schema for La Feria CR — Phase 1 (backend foundation).
+// Storage: PostgreSQL Flexible Server + PostGIS (see docs/architecture/data-model.md,
+// docs/decisions/0004-database-postgresql-flexible.md, docs/decisions/0010-orm-prisma.md).
+//
+// Prisma 7 uses the `prisma-client` generator (TypeScript output) and a driver adapter
+// (@prisma/adapter-pg). The connection string is supplied at runtime via the adapter and
+// to the CLI via prisma.config.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Canonical record per feria (farmer's market). Seeded from the official June 2026 list
+/// with source='official'; community contributions land in later phases via proposals.
+model Market {
+  id         String   @id @default(uuid()) @db.Uuid
+  /// Stable seed key (the v0 slug id); drives idempotent upserts.
+  slug       String   @unique
+  name       String
+  regionId   String   @map("region_id")
+  regionName String   @map("region_name")
+  /// Canonical day-of-week keys in week order, e.g. ["fri","sat"].
+  days       Json
+  /// Original Spanish day label from the source list.
+  daysLabel  String   @map("days_label")
+  /// Human-readable operating hours; null until contributed (Phase 3).
+  hoursText  String?  @map("hours_text")
+  /// Market administrator/organizer.
+  organizer  String?
+  phones     String[] @default([])
+  /// PostGIS point; null until a location is known/contributed (Phase 3).
+  location   Unsupported("geography(Point, 4326)")?
+  /// Provenance: 'official' (seed list) | 'community' (added later).
+  source     String   @default("official")
+  /// 'active' | 'hidden' | 'pending'.
+  status     String   @default("active")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@index([regionId])
+  @@map("markets")
+}

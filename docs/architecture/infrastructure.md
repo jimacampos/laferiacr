@@ -1,6 +1,6 @@
 # Infrastructure — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-01_
 
 Azure footprint, environments, IaC, CI/CD, and **cost control**. Guiding constraint:
 **minimize cost via serverless / scale-to-zero**. Component rationale lives in
@@ -44,6 +44,23 @@ flowchart LR
 - No secrets in templates — outputs wired to **Key Vault**; apps read via managed identity.
 - Idempotent deploys; infra changes go through PRs like app code.
 
+**As implemented (Phase 1).** `infra/main.bicep` (resource-group scoped) composes one module per
+service — `modules/{monitoring,registry,postgres,maps,keyvault,containerapp}.bicep` — with
+`dev.bicepparam` / `prod.bicepparam` supplying per-env values (secrets via
+`readEnvironmentVariable('PG_ADMIN_PASSWORD')`, never in source). A **user-assigned managed identity**
+is granted `AcrPull` and `Key Vault Secrets User`, so the Container App pulls images and reads the
+`database-url` secret without credentials. The `DATABASE_URL` is composed in Bicep from Postgres
+outputs and written straight to Key Vault. See [`infra/README.md`](../../infra/README.md) for the
+deploy commands.
+
+## Application packaging
+- `next.config.ts` uses `output: "standalone"`; a multi-stage **`Dockerfile`** runs `prisma generate`
+  + `next build` and ships the standalone server (Prisma's `@prisma/client` / `@prisma/adapter-pg` /
+  `pg` are marked `serverExternalPackages`).
+- The read path is gated by a **`DATA_SOURCE`** flag: it serves the static `ferias.json` (v0 parity) by
+  default and queries Postgres only when `DATA_SOURCE=db` and `DATABASE_URL` is set — so CI builds need
+  no database. The deployed Container App sets `DATA_SOURCE=db`.
+
 ## CI/CD — GitHub Actions
 
 ```mermaid
@@ -59,6 +76,14 @@ flowchart LR
 - **CD:** build/push image to ACR, deploy revision to Container Apps, run **DB migrations**, smoke-test.
 - Federated credentials (OIDC) — **no long-lived cloud secrets** in GitHub.
 - Environment protection rules gate prod.
+
+**As implemented (Phase 1).** `.github/workflows/ci.yml` runs lint + build on PRs/`main`
+(`prisma generate` runs on `npm ci`; no DB needed). `.github/workflows/cd.yml` authenticates via OIDC
+and is gated by a GitHub `environment` (`dev`/`prod`). Because the app image and ACR have a
+chicken-and-egg dependency, the first deploy uses a **placeholder image** to create the registry, then
+the workflow `az acr build`s the real image (tagged with the commit SHA) and redeploys. Migrations run
+with `prisma migrate deploy`, temporarily opening the Postgres firewall to the runner IP and pulling
+`DATABASE_URL` from Key Vault; the rule is removed afterward.
 
 ## Observability
 - App Insights for traces/metrics/logs across SSR + API; **sampling** to control cost.

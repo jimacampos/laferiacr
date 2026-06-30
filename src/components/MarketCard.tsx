@@ -1,14 +1,18 @@
 "use client";
 
-import { getRegion } from "@/data/ferias";
 import type { Feria } from "@/data/types";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { phoneToTelHref } from "@/lib/filters";
 import { DayBadges } from "./DayBadges";
 
-export function MarketCard({ feria }: { feria: Feria }) {
+export function MarketCard({
+  feria,
+  regionName,
+}: {
+  feria: Feria;
+  regionName?: string;
+}) {
   const { t } = useTranslation();
-  const region = getRegion(feria.regionId);
 
   return (
     <article className="flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm transition hover:shadow-md">
@@ -16,7 +20,7 @@ export function MarketCard({ feria }: { feria: Feria }) {
         <h3 className="text-base font-bold text-stone-900 sm:text-lg">
           {feria.name}
         </h3>
-        {region && (
+        {regionName && (
           <p className="flex items-center gap-1 text-sm text-stone-500">
             <svg
               aria-hidden="true"
@@ -31,7 +35,7 @@ export function MarketCard({ feria }: { feria: Feria }) {
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
-            {region.name}
+            {regionName}
           </p>
         )}
       </div>
