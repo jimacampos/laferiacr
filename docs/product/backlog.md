@@ -28,6 +28,7 @@ in the [roadmap](roadmap.md) when they're ready to schedule.
 | BL-010 | "Senior mode" (extra-large, simplified UI) | enhancement | P3 | idea | Accessibility | vs scalable settings; [accessibility](../accessibility.md) |
 | BL-011 | Front Door + CDN caching for read-heavy browsing | infra | P3 | idea | Infra | Add when traffic warrants ([infrastructure](../architecture/infrastructure.md)) |
 | BL-012 | Speed up CD deploy pipeline (~12 min/run) | tech-debt | P3 | idea | Infra / CI-CD | Revisit [cd.yml](../../.github/workflows/cd.yml): cache `npm ci`, skip redundant double bicep deploy + no-op `az acr build` layers, gate migrate/seed when unchanged |
+| BL-013 | Add Google as an Entra External ID sign-in provider | enhancement | P3 | idea | Auth / Phase 2 follow-up | Nice-to-have one-tap login alongside working email OTP; portal-only (Google Cloud OAuth client → Entra IdP → add to user flow), no app code. [runbook](../../deploy/entra-external-id-setup.md), [ADR-0005](../decisions/0005-identity-entra-external-id.md); see [OQ-005](#open-questions--decisions-to-make) |
 
 ## Open questions / decisions to make
 | ID | Question | Priority | Status | Related |
