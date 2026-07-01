@@ -56,7 +56,7 @@ platform and move data into PostgreSQL **without changing the user experience**.
 ## 5. Data seeding
 - [x] Write an **idempotent seed** that loads `src/data/ferias.json` into `markets` with `source='official'` (upsert by stable key).
 - [x] Reuse v0 **day-normalization** logic (`scripts/generate_data.py`) so `days` keys match the app. _(Seed carries the already-normalized `days` from `ferias.json`.)_
-- [ ] Run seed against dev; verify **66 markets**, 9 regions, correct day keys.
+- [x] Run seed against dev; verify **66 markets**, 9 regions, correct day keys. _(Seeded live; 66 markets / 9 regions confirmed.)_
 
 ## 6. Read-path cutover
 - [x] Add a server-side data access layer querying `markets` (replacing the static `src/data/ferias.ts` import).
@@ -66,7 +66,7 @@ platform and move data into PostgreSQL **without changing the user experience**.
 ## 7. Verify parity & deploy
 - [x] `npm run lint` + `npm run build` clean.
 - [x] Manual parity check: home shows **"this weekend"** (64 of 66), filters, search, tap-to-call all work. _(Verified via local production server smoke test.)_
-- [ ] Deploy to **dev**, smoke test; then **prod**.
+- [ ] Deploy to **dev**, smoke test; then **prod**. _(dev ✅ live & DB-backed with v0 parity — "64 ferias"; prod pending.)_
 - [ ] Confirm App Insights receives traces; alerts wired (error rate, DB CPU, **daily spend**).
 
 ## 8. Wrap-up
