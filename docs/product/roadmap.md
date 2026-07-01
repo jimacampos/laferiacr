@@ -27,6 +27,7 @@ Static, bilingual, mobile-first directory of 66 official markets; "this weekend"
 filters; search; tap-to-call. No backend, no accounts. **This is the baseline all phases build on.**
 
 ## Phase 1 — Backend foundation & data migration _(invisible to users)_
+**Status:** ✅ Done — live on **dev** (Azure infra + CI/CD; DB-backed reads with v0 parity).
 **Goal:** stand up Azure infrastructure and move data into a database without changing the UX.
 - Provision Azure via Bicep: Container Apps + ACR, PostgreSQL Flexible (+PostGIS), Key Vault,
   Application Insights, Azure Maps, Entra External ID tenant.
@@ -49,7 +50,7 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 > 📋 Executable checklist: [phase-2-tasks.md](phase-2-tasks.md).
 
 ## Phase 3 — ⭐ Community contributions: hours + location _(first community release)_
-**Status:** 🟡 In progress — implemented in-repo (dev-only); awaiting operator deploy + smoke ([phase-3-tasks](phase-3-tasks.md)).
+**Status:** ✅ Done — live on **dev** (propose → confirm → verify; auto-promotion at N=2; badges, conflicts, reporting, Postgres rate limiting, break-glass admin; verified end-to-end — e.g. Atenas location promoted). CAPTCHA seam present but flag-gated off; follow-ups tracked as BL-014…BL-016 ([phase-3-tasks](phase-3-tasks.md)).
 **Goal:** the core propose → confirm → verify loop.
 - Anonymous **"Suggest an edit"** for hours and for location (pin drop / use my location).
 - Signed-in **confirm/reject**; **auto-promotion** at threshold **N = 2** (net confirmations); conflict display.

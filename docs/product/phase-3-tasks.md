@@ -1,6 +1,6 @@
 # Phase 3 — Task List: ⭐ Community contributions — hours + location
 
-**Status:** 🟡 In progress · _Last updated: 2026-07-01_
+**Status:** ✅ Done — live on **dev** · _Last updated: 2026-07-01_
 
 Concrete, checkable tasks to execute **Phase 3** of the [roadmap](roadmap.md): the core
 **propose → confirm → verify** loop so the community can improve and verify real market **hours** and
@@ -139,17 +139,17 @@ ADRs [0007](../decisions/0007-contribution-anonymous-propose-account-confirm.md)
 
 ## 9. Verify & deploy (dev only)
 - [x] `npm run lint` + `npm run build` clean; promotion engine covered by focused tests.
-- [ ] Migration applies on dev (`prisma migrate deploy`); seed the **super_admin** row.
-- [ ] **Manual smoke on dev:** submit a location proposal (pin drop) → confirm with **two** different
+- [x] Migration applies on dev (`prisma migrate deploy`); seed the **super_admin** row. _(Migrated via CD; super_admin seeded.)_
+- [x] **Manual smoke on dev:** submit a location proposal (pin drop) → confirm with **two** different
   accounts → market auto-verifies and the **map shows a real pin**; repeat for hours; verify badges,
   counts, last-updated, conflict display, report, rate-limit 429, and a break-glass revert.
-- [ ] Confirm App Insights receives contribution traces; no regressions to v0 browse/detail.
+- [x] Confirm App Insights receives contribution traces; no regressions to v0 browse/detail.
 
 ## Operator follow-ups (require live dev / portal)
-- [ ] Deploy to **dev**; run `prisma migrate deploy`; seed the super_admin (operator `oid`).
+- [x] Deploy to **dev**; run `prisma migrate deploy`; seed the super_admin (operator `oid`).
 - [ ] When enabling CAPTCHA: create the provider account, add keys to Key Vault + container-app env,
-  flip `CAPTCHA_ENABLED=true` on dev.
-- [ ] Smoke-test the full propose → confirm×2 → verify loop on dev.
+  flip `CAPTCHA_ENABLED=true` on dev. _(Deferred → [BL-016](backlog.md).)_
+- [x] Smoke-test the full propose → confirm×2 → verify loop on dev. _(Verified — Atenas location promoted.)_
 
 ---
 _Tip: run the **`start-phase`** skill to auto-load these tasks into the session's todo list and create a

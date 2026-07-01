@@ -1,6 +1,6 @@
 # Phase 1 — Task List: Backend foundation & data migration
 
-**Status:** 🟡 In progress · _Last updated: 2026-07-01_
+**Status:** ✅ Done — live on **dev** · _Last updated: 2026-07-01_
 
 Concrete, checkable tasks to execute **Phase 1** of the [roadmap](roadmap.md): stand up the Azure
 platform and move data into PostgreSQL **without changing the user experience**. Reference docs:

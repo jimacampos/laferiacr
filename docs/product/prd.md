@@ -14,7 +14,7 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
 | Release | Theme | Status |
 | --- | --- | --- |
 | **v0** | Static directory (read-only) | ✅ Shipped |
-| **Community v1** | Hours + location, propose → confirm → verify | 🟡 In progress (Phases 1–3 implemented in dev) |
+| **Community v1** | Hours + location, propose → confirm → verify | 🟡 On dev (Phases 1–3 done & live on dev; prod deferred) |
 | **Governance** | Roles, moderation, community-submitted markets | Planned (Phases 4–5) |
 | **Hardening** | Trust weighting + accessibility | Planned (Phase 6) |
 | **Engagement** | PWA + notifications | Planned (Phase 7) |
