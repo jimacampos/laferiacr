@@ -82,25 +82,27 @@ jobs:
             --template-file infra/main.bicep \
             --parameters "infra/${ENVIRONMENT}.bicepparam"
 
-      - name: Run database migrations
+      - name: Run database migrations & seed
         run: |
           KV_NAME=$(az keyvault list -g "$RESOURCE_GROUP" --query "[0].name" -o tsv)
           PG_NAME=$(az postgres flexible-server list -g "$RESOURCE_GROUP" --query "[0].name" -o tsv)
           DATABASE_URL=$(az keyvault secret show --vault-name "$KV_NAME" --name database-url --query value -o tsv)
 
-          # Temporarily allow this runner so migrate deploy can reach the firewalled server.
+          # Temporarily allow this runner so migrate/seed can reach the firewalled server.
           RUNNER_IP=$(curl -s https://api.ipify.org)
           az postgres flexible-server firewall-rule create \
-            --resource-group "$RESOURCE_GROUP" --name "$PG_NAME" \
-            --rule-name "gh-runner-${GITHUB_RUN_ID}" \
+            --resource-group "$RESOURCE_GROUP" --server-name "$PG_NAME" \
+            --name "gh-runner-${GITHUB_RUN_ID}" \
             --start-ip-address "$RUNNER_IP" --end-ip-address "$RUNNER_IP" >/dev/null
 
           npm ci
           DATABASE_URL="$DATABASE_URL" npm run db:migrate
+          # Idempotent upsert-by-slug; keeps the official list in sync without clobbering data.
+          DATABASE_URL="$DATABASE_URL" npm run db:seed
 
           az postgres flexible-server firewall-rule delete \
-            --resource-group "$RESOURCE_GROUP" --name "$PG_NAME" \
-            --rule-name "gh-runner-${GITHUB_RUN_ID}" --yes >/dev/null
+            --resource-group "$RESOURCE_GROUP" --server-name "$PG_NAME" \
+            --name "gh-runner-${GITHUB_RUN_ID}" --yes >/dev/null
 
       - name: Smoke test
         run: |
