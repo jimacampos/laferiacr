@@ -22,6 +22,8 @@ export interface MarketLocation {
 export interface MarketDetail {
   /** Public identifier (the v0 slug). */
   id: string;
+  /** Internal DB uuid; null in the static fallback (no contribution loop). */
+  dbId: string | null;
   name: string;
   regionId: string;
   regionName: string;
@@ -87,6 +89,7 @@ export async function getMarketsData(): Promise<MarketsData> {
 
 /** Row shape returned by the raw detail query (PostGIS point projected to lat/lng). */
 interface MarketDetailRow {
+  id: string;
   slug: string;
   name: string;
   region_id: string;
@@ -127,12 +130,13 @@ export async function getMarketBySlug(
       location: null,
       source: "official",
       updatedAt: dataGeneratedAt,
+      dbId: null,
     };
   }
 
   const { prisma } = await import("./prisma");
   const rows = await prisma.$queryRaw<MarketDetailRow[]>`
-    SELECT slug, name, region_id, region_name, days, days_label, hours_text,
+    SELECT id, slug, name, region_id, region_name, days, days_label, hours_text,
            organizer, phones, source, updated_at,
            ST_Y(location::geometry) AS lat, ST_X(location::geometry) AS lng
     FROM markets
@@ -144,6 +148,7 @@ export async function getMarketBySlug(
 
   return {
     id: row.slug,
+    dbId: row.id,
     name: row.name,
     regionId: row.region_id,
     regionName: row.region_name,

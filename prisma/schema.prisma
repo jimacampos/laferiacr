@@ -42,6 +42,9 @@ model Market {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
 
+  proposals     Proposal[]
+  changeHistory ChangeHistory[]
+
   @@index([regionId])
   @@map("markets")
 }
@@ -59,5 +62,131 @@ model User {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
 
+  proposals     Proposal[]
+  confirmations Confirmation[]
+  roles         UserRole[]
+
   @@map("users")
+}
+
+/// A suggested change to ONE field of a market (Phase 3 contribution loop; see
+/// docs/architecture/data-model.md, docs/architecture/moderation-trust.md, ADR-0007/0008).
+/// Anonymous proposals are allowed (`submittedBy` null); an account is required to confirm.
+model Proposal {
+  id        String @id @default(uuid()) @db.Uuid
+  marketId  String @map("market_id") @db.Uuid
+  /// 'hours' | 'location'.
+  field     String
+  /// JSON payload: a string for hours; { "lat": number, "lng": number } for location.
+  proposedValue Json @map("proposed_value")
+  /// Author account; null for anonymous submissions (ADR-0007).
+  submittedBy String? @map("submitted_by") @db.Uuid
+  /// Hashed submitter IP for abuse triage only (operational, short-retention).
+  submitterIpHash String? @map("submitter_ip_hash")
+  /// 'pending' | 'verified' | 'superseded' | 'rejected'.
+  status    String @default("pending")
+  /// Cached vote tallies; net = confirmCount - rejectCount drives promotion at N.
+  confirmCount Int @default(0) @map("confirm_count")
+  rejectCount  Int @default(0) @map("reject_count")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  market        Market         @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  submitter     User?          @relation(fields: [submittedBy], references: [id], onDelete: SetNull)
+  confirmations Confirmation[]
+  changeHistory ChangeHistory[]
+
+  @@index([marketId, field, status])
+  @@index([submittedBy])
+  @@map("proposals")
+}
+
+/// One account-gated vote on a proposal. Unique per (proposal, user) → one vote each.
+/// A proposal's own author cannot confirm it (enforced in the API).
+model Confirmation {
+  id         String @id @default(uuid()) @db.Uuid
+  proposalId String @map("proposal_id") @db.Uuid
+  userId     String @map("user_id") @db.Uuid
+  /// 'confirm' | 'reject'.
+  vote       String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  proposal Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([proposalId, userId])
+  @@map("confirmations")
+}
+
+/// Flag on a market or proposal (polymorphic target). Anonymous reports allowed.
+/// Feeds the Phase 4 moderation queue; Phase 3 only records them.
+model Report {
+  id         String @id @default(uuid()) @db.Uuid
+  /// 'market' | 'proposal'.
+  targetType String @map("target_type")
+  targetId   String @map("target_id") @db.Uuid
+  /// Reporter account; null for anonymous reports.
+  reportedBy String? @map("reported_by") @db.Uuid
+  reason     String?
+  /// 'open' | 'actioned' | 'dismissed'.
+  status     String @default("open")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([targetType, targetId, status])
+  @@map("reports")
+}
+
+/// Append-only record of every promoted field change and every break-glass admin action —
+/// enables display of history and revert (NFR-11). `causedByProposal` set for automated
+/// promotions; `actorId` set for admin override/revert/hide.
+model ChangeHistory {
+  id               String  @id @default(uuid()) @db.Uuid
+  marketId         String  @map("market_id") @db.Uuid
+  field            String
+  oldValue         Json?   @map("old_value")
+  newValue         Json?   @map("new_value")
+  causedByProposal String? @map("caused_by_proposal") @db.Uuid
+  /// Admin who performed a manual action; null for automated promotions.
+  actorId          String? @map("actor_id") @db.Uuid
+  /// 'promote' | 'override' | 'revert' | 'hide'.
+  action           String  @default("promote")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  market   Market    @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  proposal Proposal? @relation(fields: [causedByProposal], references: [id], onDelete: SetNull)
+
+  @@index([marketId, field])
+  @@map("change_history")
+}
+
+/// Grants a role to a user (pulled forward from Phase 4 for minimal break-glass admin;
+/// see docs/architecture/rbac.md). Phase 3 only uses 'super_admin'.
+model UserRole {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  /// 'member' | 'trusted' | 'community_safety' | 'super_admin'.
+  role      String
+  /// Optional scope (e.g. region) for future regional moderators.
+  scope     String?
+  grantedAt DateTime @default(now()) @map("granted_at")
+  /// Granting admin; null when bootstrapped/seeded.
+  grantedBy String?  @map("granted_by") @db.Uuid
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role, scope])
+  @@map("user_roles")
+}
+
+/// Durable per-IP log of anonymous write attempts, counted within a trailing window for
+/// rate limiting (see ADR-0012). Operational data with short retention; pruned periodically.
+model ContributionAttempt {
+  id        String   @id @default(uuid()) @db.Uuid
+  ipHash    String   @map("ip_hash")
+  /// 'proposal' | 'report'.
+  action    String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([ipHash, action, createdAt])
+  @@map("contribution_attempts")
 }

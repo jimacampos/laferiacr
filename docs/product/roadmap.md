@@ -49,11 +49,13 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 > 📋 Executable checklist: [phase-2-tasks.md](phase-2-tasks.md).
 
 ## Phase 3 — ⭐ Community contributions: hours + location _(first community release)_
+**Status:** 🟡 In progress — implemented in-repo (dev-only); awaiting operator deploy + smoke ([phase-3-tasks](phase-3-tasks.md)).
 **Goal:** the core propose → confirm → verify loop.
 - Anonymous **"Suggest an edit"** for hours and for location (pin drop / use my location).
-- Signed-in **confirm/reject**; **auto-promotion** at threshold **N**; conflict display.
+- Signed-in **confirm/reject**; **auto-promotion** at threshold **N = 2** (net confirmations); conflict display.
 - Verified / needs-confirmation badges; last-updated; confirmation counts.
-- Reporting/flagging; rate limiting; CAPTCHA; reversible history; minimal admin break-glass.
+- Reporting/flagging; **Postgres-backed** rate limiting; CAPTCHA seam (flag-gated off on dev); reversible history; minimal admin break-glass.
+- Decisions: [ADR-0012](../decisions/0012-anti-abuse-rate-limiting-and-captcha.md) (anti-abuse), [ADR-0013](../decisions/0013-minimal-roles-phase-3-break-glass.md) (minimal roles).
 - **Exit criteria:** the public can improve and verify real hours/locations safely.
 
 ## Phase 4 — Roles, permissions & moderation

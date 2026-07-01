@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADRs)
 
-**Status:** 🟢 Index · _Last updated: 2026-06-30_
+**Status:** 🟢 Index · _Last updated: 2026-07-01_
 
 ADRs capture significant, hard-to-reverse decisions: the **context**, the **decision**, and its
 **consequences**. They are immutable once accepted — to change a decision, add a new ADR that
@@ -23,6 +23,8 @@ supersedes the old one.
 | [0009](0009-community-submitted-markets.md) | Community-submitted new markets | 🟢 Accepted |
 | [0010](0010-orm-prisma.md) | ORM: Prisma (with the pg driver adapter) | 🟢 Accepted |
 | [0011](0011-auth-library-authjs.md) | Auth library: Auth.js (NextAuth v5) | 🟢 Accepted |
+| [0012](0012-anti-abuse-rate-limiting-and-captcha.md) | Anti-abuse: Postgres rate limiting + CAPTCHA seam | 🟢 Accepted |
+| [0013](0013-minimal-roles-phase-3-break-glass.md) | Minimal `user_roles` in Phase 3 for break-glass | 🟢 Accepted |
 
 ## Template
 ```markdown

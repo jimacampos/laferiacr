@@ -1,6 +1,6 @@
 # Moderation & Trust — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-01_
 
 How community input becomes trustworthy "verified" data, and how abuse is contained. Combines an
 **automated** confirmation loop ([ADR-0008](../decisions/0008-promotion-automated-confirmation-and-roles.md))
@@ -11,31 +11,34 @@ with a **human** safety layer ([rbac](rbac.md)). Entities in [data-model](data-m
 ```mermaid
 stateDiagram-v2
   [*] --> pending: proposal submitted (anon ok)
-  pending --> verified: confirmations >= N
+  pending --> verified: net confirmations >= 2
   pending --> rejected: confirms reject / moderator rejects
   verified --> superseded: newer proposal verified
   pending --> superseded: a competing proposal verifies first
-  verified --> reverted: moderator/admin revert
   rejected --> [*]
   superseded --> [*]
-  reverted --> [*]
 ```
 
 - **pending** — collecting account-gated confirmations.
-- **verified** — reached threshold **N**; value promoted onto the market (+ `change_history`).
+- **verified** — reached threshold **N = 2**; value promoted onto the market (+ `change_history`).
 - **superseded** — a newer verified proposal replaced this field's value.
 - **rejected** — net-negative votes or moderator decision.
-- **reverted** — undone by a moderator/admin (abuse or error).
 
 ## Confirmation threshold (N)
-- Promotion is automatic at **N** net confirmations for the same proposed value.
-- **N is an open question.** Start simple and conservative (e.g. **N = 2–3**, unweighted) and tune
-  with real usage. N is Super-Admin configurable ([rbac](rbac.md)).
+- Promotion is automatic at **N = 2** net confirmations for the same proposed value, where
+  `net = confirm_count - reject_count`. This resolves OQ-001.
+- `CONFIRMATION_THRESHOLD` configures N (default 2); Super-Admin configuration is planned in Phase 4
+  ([rbac](rbac.md)).
+- **One-user-one-vote:** confirmations are unique per `(proposal_id, user_id)`.
+- **Self-vote rule:** a signed-in proposer cannot confirm/reject their own proposal, and the
+  proposer's vote never counts. Promotion requires N confirmations from other accounts; anonymous
+  proposals start at 0.
 - **Reputation weighting** (Trusted/mod votes count more) is **deferred to Phase 6**; v1 is 1 user = 1 vote.
 
 ## Conflict resolution
 - Multiple competing proposals for the same field can be open at once; users confirm the one they
   believe. The **first to reach N wins**; others become `superseded`.
+- Promotion also supersedes competing pending/verified proposals for the same market field.
 - The detail page surfaces disagreement ("2 people say 5am, 1 says 6am") instead of hiding it.
 - Persistent conflict (flip-flopping) escalates to the moderation queue.
 
@@ -47,12 +50,13 @@ flowchart LR
   Q --> CS{Community Safety review}
   CS -->|valid| ACT[Remove / hide / revert / ban]
   CS -->|invalid| DIS[Dismiss]
-  ACT --> AUD[(moderation_actions audit)]
+  ACT --> AUD[(audit log)]
   DIS --> AUD
 ```
 
 - Anyone (incl. anonymous) can report a market or proposal.
-- Community Safety triages; actions are **reversible and audited**.
+- Community Safety triages in Phase 4; Phase 3 break-glass actions are **reversible and audited** in
+  `change_history`.
 - Appeals go through [content-guidelines](../community/content-guidelines.md).
 
 ## Anti-abuse controls
@@ -69,6 +73,7 @@ flowchart LR
 - **Automation** handles the happy path: propose → confirm → auto-verify. No human needed for normal edits.
 - **Humans** (Community Safety, Super Admin) handle exceptions: abuse, conflicts, and policy. They do
   not gate everyday contributions.
+- Promotions and break-glass actions write `change_history`, which enables display and revert.
 
 ## Trust signals shown to users
 - Verified vs needs-confirmation badges; confirmation counts; last-updated; provenance
@@ -76,7 +81,7 @@ flowchart LR
   ([accessibility](../accessibility.md)).
 
 ## Open questions
-- Final **N**, and when to enable reputation weighting.
+- When to enable reputation weighting.
 - Moderator vetting and regional scoping.
 - Auto-quarantine thresholds (e.g. N reports auto-hide pending review).
 - Duplicate-detection strictness for new markets.

@@ -1,10 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
+import { ContributionBadge } from "@/components/contributions/ContributionBadge";
+import { ProposalList } from "@/components/contributions/ProposalList";
+import { ReportButton } from "@/components/contributions/ReportButton";
+import { SuggestHours } from "@/components/contributions/SuggestHours";
+import { SuggestLocation } from "@/components/contributions/SuggestLocation";
 import { DayBadges } from "@/components/DayBadges";
 import { MarketMap } from "@/components/MarketMap";
 import { useTranslation } from "@/i18n/I18nProvider";
+import type { MarketContributions } from "@/lib/contributions/types";
 import { phoneToTelHref } from "@/lib/filters";
 import type { MarketDetail } from "@/lib/markets";
 
@@ -43,8 +50,19 @@ function PhoneIcon() {
   );
 }
 
-export function MarketDetailView({ market }: { market: MarketDetail }) {
+export function MarketDetailView({
+  market,
+  contributions,
+}: {
+  market: MarketDetail;
+  contributions: MarketContributions;
+}) {
   const { t, lang } = useTranslation();
+  const router = useRouter();
+
+  // Contributions only apply to DB-backed markets (the static fallback has no dbId).
+  const canContribute = Boolean(market.dbId);
+  const refresh = () => router.refresh();
 
   const updated = new Date(market.updatedAt).toLocaleDateString(
     lang === "es" ? "es-CR" : "en-US",
@@ -98,15 +116,35 @@ export function MarketDetailView({ market }: { market: MarketDetail }) {
         </header>
 
         <section className="border-t border-stone-100 pt-4">
-          <h2 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-stone-400">
-            {t("detail.hours")}
-          </h2>
+          <div className="mb-1.5 flex flex-wrap items-center gap-2">
+            <h2 className="text-xs font-medium uppercase tracking-wide text-stone-400">
+              {t("detail.hours")}
+            </h2>
+            {market.hoursText && contributions.hours.verified && (
+              <ContributionBadge
+                verified
+                confirmCount={contributions.hours.verifiedConfirmCount}
+                verifiedAt={contributions.hours.verifiedAt}
+              />
+            )}
+          </div>
           {market.hoursText ? (
             <p className="text-sm text-stone-800">{market.hoursText}</p>
           ) : (
             <p className="text-sm italic text-stone-400">
               {t("detail.hoursUnknown")}
             </p>
+          )}
+          {canContribute && (
+            <>
+              <ProposalList
+                proposals={contributions.hours.pending}
+                field="hours"
+                name={market.name}
+                onChanged={refresh}
+              />
+              <SuggestHours slug={market.id} onSubmitted={refresh} />
+            </>
           )}
         </section>
 
@@ -118,14 +156,39 @@ export function MarketDetailView({ market }: { market: MarketDetail }) {
         </section>
 
         <section className="border-t border-stone-100 pt-4">
-          <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-stone-400">
-            {t("detail.location")}
-          </h2>
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <h2 className="text-xs font-medium uppercase tracking-wide text-stone-400">
+              {t("detail.location")}
+            </h2>
+            {market.location && contributions.location.verified && (
+              <ContributionBadge
+                verified
+                confirmCount={contributions.location.verifiedConfirmCount}
+                verifiedAt={contributions.location.verifiedAt}
+              />
+            )}
+          </div>
           <MarketMap location={market.location} name={market.name} />
           {!market.location && (
             <p className="mt-2 text-sm italic text-stone-400">
               {t("detail.locationUnknown")}
             </p>
+          )}
+          {canContribute && (
+            <>
+              <ProposalList
+                proposals={contributions.location.pending}
+                field="location"
+                name={market.name}
+                onChanged={refresh}
+              />
+              <SuggestLocation
+                slug={market.id}
+                name={market.name}
+                current={market.location}
+                onSubmitted={refresh}
+              />
+            </>
           )}
         </section>
 
@@ -156,6 +219,12 @@ export function MarketDetailView({ market }: { market: MarketDetail }) {
                 </a>
               ))}
             </div>
+          </section>
+        )}
+
+        {canContribute && (
+          <section className="border-t border-stone-100 pt-4">
+            <ReportButton slug={market.id} />
           </section>
         )}
       </article>

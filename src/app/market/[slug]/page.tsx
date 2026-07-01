@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
+import { auth } from "@/auth";
 import { MarketDetailView } from "@/components/MarketDetailView";
+import {
+  EMPTY_CONTRIBUTIONS,
+  getMarketContributions,
+} from "@/lib/contributions/proposals";
 import { getMarketBySlug } from "@/lib/markets";
 
 // Reads run per request so the DB-backed source (DATA_SOURCE=db) is always current;
@@ -35,5 +40,10 @@ export default async function MarketPage({
   const market = await loadMarket(slug);
   if (!market) notFound();
 
-  return <MarketDetailView market={market} />;
+  const session = await auth();
+  const contributions = market.dbId
+    ? await getMarketContributions(market.dbId, session?.user?.id)
+    : EMPTY_CONTRIBUTIONS;
+
+  return <MarketDetailView market={market} contributions={contributions} />;
 }

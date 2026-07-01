@@ -36,7 +36,7 @@ flowchart TD
 | Component | Responsibility | Why |
 | --- | --- | --- |
 | **Container Apps (ACA)** | Run the Next.js container (SSR + API), scale 0→N | Full App-Router SSR; cheapest real-Next.js serverless ([ADR-0003](../decisions/0003-compute-azure-container-apps.md)) |
-| **PostgreSQL Flexible + PostGIS** | Markets, proposals, confirmations, roles, audit; geo queries | Relational integrity + "near me" ([ADR-0004](../decisions/0004-database-postgresql-flexible.md)) |
+| **PostgreSQL Flexible + PostGIS** | Markets, proposals, confirmations, reports, roles, rate limits, audit; geo queries | Relational integrity + "near me" ([ADR-0004](../decisions/0004-database-postgresql-flexible.md)) |
 | **Entra External ID** | Sign-in for confirming/moderating | Managed identity, social + OTP ([ADR-0005](../decisions/0005-identity-entra-external-id.md)) |
 | **Azure Maps** | Display markets, drop/confirm pins, geocode | Native Azure, single bill ([ADR-0006](../decisions/0006-maps-azure-maps.md)) |
 | **Key Vault** | Secrets (DB conn, Maps key, IdP secret) | No secrets in code/config |
@@ -48,7 +48,8 @@ flowchart TD
 ## Key principle: official list = seed source of truth
 The official June 2026 spreadsheet seeds the `markets` table. **Community contributions are
 overlays/proposals** on top of seeded records; an unedited market always shows its official values.
-Official data is never overwritten in place — promotions create new verified values with history.
+Official data is never overwritten silently — promotions create new verified values with reversible
+history.
 See [data-model](data-model.md).
 
 ## Core request flows
@@ -77,11 +78,15 @@ sequenceDiagram
   participant U as Browser
   participant A as API route handler
   participant D as PostgreSQL
-  U->>A: POST /api/markets/:id/proposals (hours|location) + CAPTCHA
-  A->>A: validate, rate-limit, verify CAPTCHA
+  U->>A: POST /api/markets/:id/proposals (hours|location) + CAPTCHA token if enabled
+  A->>A: validate, hash IP, rate-limit, verify CAPTCHA seam
   A->>D: insert proposal (status=pending)
   A-->>U: 201 "needs confirmation"
 ```
+
+> **As implemented (Phase 3).** Anonymous users can propose free-text hours or a lat/lng pin. The
+> location helper uses explicit browser geolocation consent, then submits only the selected market
+> coordinate. Anonymous writes use Postgres-backed per-IP rate limits and a flag-gated CAPTCHA seam.
 
 **Confirm (account required) → auto-promote**
 ```mermaid
@@ -89,17 +94,23 @@ sequenceDiagram
   participant U as Member
   participant A as API route handler
   participant D as PostgreSQL
-  U->>A: POST /api/proposals/:id/confirm (Bearer token)
-  A->>A: authZ (role>=Member), one-vote-per-user
-  A->>D: insert confirmation; recompute count
-  alt count >= N
-    A->>D: promote proposal -> market verified value (+ history)
+  U->>A: POST confirm/reject route
+  A->>A: auth() session, self-vote check, one-vote-per-user
+  A->>D: insert confirmation; update confirm/reject counters
+  alt confirm_count - reject_count >= 2
+    A->>D: promote proposal -> market verified value (+ change_history)
+    A->>D: supersede competing proposals
   end
   A-->>U: updated proposal/market state
 ```
 
-Moderation and promotion rules: see [moderation-trust](moderation-trust.md). Authorization model:
-see [rbac](rbac.md).
+The detail UI shows verified/needs-confirmation badges, conflicts, and report actions for proposals
+or markets. Minimal Super-Admin break-glass actions (revert, override, hide) are API-level only in
+Phase 3 and audited via `change_history`. Moderation and promotion rules: see
+[moderation-trust](moderation-trust.md). Authorization model: see [rbac](rbac.md).
+
+Phase 3 contribution reads/writes use `proposals`, `confirmations`, `reports`, `change_history`,
+`user_roles` (`super_admin` only), and `contribution_attempts`.
 
 ## Environments
 - **dev** and **prod** as separate resource groups (and ideally subscriptions), provisioned by the
