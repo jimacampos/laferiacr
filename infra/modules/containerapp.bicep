@@ -103,6 +103,13 @@ var baseEnv = [
     name: 'HOSTNAME'
     value: '0.0.0.0'
   }
+  {
+    // Canonical external URL for Auth.js. Behind the Container Apps ingress the
+    // request reaches the container as HOSTNAME:PORT (0.0.0.0:3000), so Auth.js
+    // host detection can't build the right callback/redirect URI; set it explicitly.
+    name: 'AUTH_URL'
+    value: 'https://${namePrefix}-app.${env.properties.defaultDomain}'
+  }
 ]
 
 var authEnv = concat(

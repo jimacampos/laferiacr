@@ -38,7 +38,7 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 > 📋 Executable checklist: [phase-1-tasks.md](phase-1-tasks.md).
 
 ## Phase 2 — Accounts & market detail
-**Status:** 🟡 In progress (code-complete on `phase-2-accounts-market-detail`; dev deploy + Entra setup pending).
+**Status:** ✅ Done — live on **dev** (detail pages + keyless Azure Maps + Entra External ID sign-in; `users` upsert verified).
 **Goal:** identity + a place to show and (soon) edit per-market info.
 - Integrate Entra External ID (Google + email OTP); login needed only to confirm.
 - Per-market **detail page**: hours, location, days, organizer, freshness/confidence.

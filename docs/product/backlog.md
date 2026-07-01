@@ -1,6 +1,6 @@
 # Backlog — La Feria CR
 
-**Status:** 🟢 Living document · _Last updated: 2026-06-30_
+**Status:** 🟢 Living document · _Last updated: 2026-07-01_
 
 The single place to capture future features and decisions that aren't in the active phase. Add items
 with the **`backlog-add`** skill (it appends a row using the format below). Promote items into a phase
@@ -27,6 +27,7 @@ in the [roadmap](roadmap.md) when they're ready to schedule.
 | BL-009 | Opt-in push notifications ("open near you") | feature | P3 | scheduled | Phase 7 | Azure Notification Hubs |
 | BL-010 | "Senior mode" (extra-large, simplified UI) | enhancement | P3 | idea | Accessibility | vs scalable settings; [accessibility](../accessibility.md) |
 | BL-011 | Front Door + CDN caching for read-heavy browsing | infra | P3 | idea | Infra | Add when traffic warrants ([infrastructure](../architecture/infrastructure.md)) |
+| BL-012 | Speed up CD deploy pipeline (~12 min/run) | tech-debt | P3 | idea | Infra / CI-CD | Revisit [cd.yml](../../.github/workflows/cd.yml): cache `npm ci`, skip redundant double bicep deploy + no-op `az acr build` layers, gate migrate/seed when unchanged |
 
 ## Open questions / decisions to make
 | ID | Question | Priority | Status | Related |
