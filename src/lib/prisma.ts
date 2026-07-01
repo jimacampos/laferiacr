@@ -15,8 +15,25 @@ function createPrismaClient(): PrismaClient {
   return new PrismaClient({ adapter });
 }
 
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
+let client: PrismaClient | undefined = globalForPrisma.prisma;
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+function getClient(): PrismaClient {
+  if (!client) {
+    client = createPrismaClient();
+    if (process.env.NODE_ENV !== "production") {
+      globalForPrisma.prisma = client;
+    }
+  }
+  return client;
 }
+
+// Lazy proxy: the underlying client (which requires DATABASE_URL) is only created on first
+// use, never at import time. This keeps `next build` page-data collection — and any code
+// path that merely imports a prisma-using module without a DB configured — from throwing.
+export const prisma = new Proxy({} as PrismaClient, {
+  get(_target, prop) {
+    const instance = getClient();
+    const value = Reflect.get(instance, prop, instance);
+    return typeof value === "function" ? value.bind(instance) : value;
+  },
+}) as PrismaClient;

@@ -2,7 +2,7 @@
 
 import "azure-maps-control/dist/atlas.min.css";
 
-import type { Map as AzureMap } from "azure-maps-control";
+import type { Map as AzureMap, source as AtlasSource } from "azure-maps-control";
 import { useEffect, useRef, useState } from "react";
 
 import { useTranslation } from "@/i18n/I18nProvider";
@@ -16,13 +16,29 @@ type MapStatus = "loading" | "ready" | "error";
 export function MarketMap({
   location,
   name,
+  editable = false,
+  picked = null,
+  onPick,
 }: {
   location: MarketLocation | null;
   name: string;
+  /** Enable pin-drop editing for a location proposal. */
+  editable?: boolean;
+  /** Currently picked point in edit mode (drives the movable pin). */
+  picked?: MarketLocation | null;
+  /** Called when the user taps the map (edit mode). */
+  onPick?: (loc: MarketLocation) => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const { t, lang } = useTranslation();
   const [status, setStatus] = useState<MapStatus>("loading");
+
+  const mapRef = useRef<AzureMap | undefined>(undefined);
+  const pickSourceRef = useRef<AtlasSource.DataSource | undefined>(undefined);
+  const onPickRef = useRef(onPick);
+  useEffect(() => {
+    onPickRef.current = onPick;
+  }, [onPick]);
 
   useEffect(() => {
     let disposed = false;
@@ -44,9 +60,10 @@ export function MarketMap({
       const atlas = await import("azure-maps-control");
       if (disposed || !container.current) return;
 
+      const start = picked ?? location;
       map = new atlas.Map(container.current, {
-        center: location ? [location.lng, location.lat] : COSTA_RICA_CENTER,
-        zoom: location ? 14 : 6.4,
+        center: start ? [start.lng, start.lat] : COSTA_RICA_CENTER,
+        zoom: start ? 14 : 6.4,
         language: lang === "es" ? "es-ES" : "en-US",
         style: "road",
         authOptions: {
@@ -63,19 +80,35 @@ export function MarketMap({
           },
         },
       });
+      mapRef.current = map;
 
       map.events.add("ready", () => {
         if (disposed || !map) return;
-        if (location) {
-          const source = new atlas.source.DataSource();
-          map.sources.add(source);
-          source.add(new atlas.data.Point([location.lng, location.lat]));
-          map.layers.add(
-            new atlas.layer.SymbolLayer(source, undefined, {
-              iconOptions: { allowOverlap: true },
-            }),
-          );
+        const source = new atlas.source.DataSource();
+        map.sources.add(source);
+        map.layers.add(
+          new atlas.layer.SymbolLayer(source, undefined, {
+            iconOptions: { allowOverlap: true },
+          }),
+        );
+        pickSourceRef.current = source;
+
+        const initial = editable ? picked : location;
+        if (initial) {
+          source.add(new atlas.data.Point([initial.lng, initial.lat]));
         }
+
+        if (editable) {
+          map.events.add("click", (e) => {
+            const position = e.position;
+            if (!position) return;
+            const [lng, lat] = position;
+            source.clear();
+            source.add(new atlas.data.Point([lng, lat]));
+            onPickRef.current?.({ lat, lng });
+          });
+        }
+
         map.controls.add(new atlas.control.ZoomControl(), {
           position: atlas.ControlPosition.TopRight,
         });
@@ -91,9 +124,31 @@ export function MarketMap({
 
     return () => {
       disposed = true;
+      mapRef.current = undefined;
+      pickSourceRef.current = undefined;
       map?.dispose();
     };
-  }, [location, name, lang]);
+    // Re-init only on inputs that change the base map, not on `picked` (synced below).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location, name, lang, editable]);
+
+  // In edit mode, reflect an externally-set pick (e.g. "use my location") onto the map.
+  useEffect(() => {
+    if (!editable || status !== "ready" || !picked) return;
+    const map = mapRef.current;
+    const source = pickSourceRef.current;
+    if (!map || !source) return;
+    let cancelled = false;
+    void import("azure-maps-control").then((atlas) => {
+      if (cancelled) return;
+      source.clear();
+      source.add(new atlas.data.Point([picked.lng, picked.lat]));
+      map.setCamera({ center: [picked.lng, picked.lat], zoom: 15 });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [picked, editable, status]);
 
   return (
     <div className="relative h-64 w-full overflow-hidden rounded-xl border border-stone-200 bg-stone-100">

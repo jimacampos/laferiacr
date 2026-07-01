@@ -35,7 +35,11 @@ Other scripts:
 npm run build    # production build
 npm run start    # serve the production build
 npm run lint     # ESLint
+npm test         # Vitest unit tests (npm run test:watch to watch)
 ```
+
+Unit tests live next to the code they cover as `*.test.ts` (run by [Vitest](https://vitest.dev));
+the `@/*` import alias works in tests via `vite-tsconfig-paths`. CI runs lint, tests, and build.
 
 ## Project structure
 

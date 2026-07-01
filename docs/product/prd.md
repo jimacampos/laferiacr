@@ -14,7 +14,7 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
 | Release | Theme | Status |
 | --- | --- | --- |
 | **v0** | Static directory (read-only) | ✅ Shipped |
-| **Community v1** | Hours + location, propose → confirm → verify | 🟡 In progress (Phases 1–3) |
+| **Community v1** | Hours + location, propose → confirm → verify | 🟡 In progress (Phases 1–3 implemented in dev) |
 | **Governance** | Roles, moderation, community-submitted markets | Planned (Phases 4–5) |
 | **Hardening** | Trust weighting + accessibility | Planned (Phase 6) |
 | **Engagement** | PWA + notifications | Planned (Phase 7) |
@@ -54,6 +54,10 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
   others are shown as alternatives.
 - **FR-18 Report:** anyone can report a proposal or market as inappropriate/incorrect.
 
+_(Phase 3: FR-13–FR-18 implemented in dev for hours + location. N defaults to 2 net confirmations;
+anonymous proposals/reports are allowed, confirm/reject requires sign-in, and competing proposals are
+superseded on promotion.)_
+
 **User story — propose hours**
 > As a shopper, I want to correct a market's hours so others aren't misled.
 - **AC:** From a market page I can submit hours without logging in; my submission appears as
@@ -67,6 +71,9 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
 ### Abuse controls
 - **NFR-10** Per-IP rate limiting on submissions; CAPTCHA on anonymous submissions.
 - **NFR-11** All promoted changes are recorded in history and are reversible.
+
+_(Phase 3: NFR-10–NFR-11 implemented in dev with Postgres-backed anonymous write rate limits, a
+flag-gated CAPTCHA seam, and reversible `change_history`.)_
 
 ---
 
