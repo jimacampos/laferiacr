@@ -15,6 +15,14 @@
 #   - The workflow reads the `database-url` secret from an RBAC-enabled Key
 #     Vault, which needs the data-plane **Key Vault Secrets User** role
 #     (Contributor alone does not grant secret *data* access).
+#   - The bicep template *creates role assignments* (the app's user-assigned
+#     identity gets AcrPull on the registry + Key Vault Secrets User on the
+#     vault). Writing role assignments needs `Microsoft.Authorization/
+#     roleAssignments/write`, which **Contributor explicitly excludes** — so the
+#     deploy identity also needs **User Access Administrator** on the group, or
+#     `az deployment group create` fails with "Authorization failed ... does not
+#     have permission to perform action Microsoft.Authorization/roleAssignments/
+#     write".
 #
 # Run once per environment. Requires the Azure CLI (`az login`) with permission
 # to create app registrations and role assignments. Idempotent.
@@ -58,7 +66,7 @@ if ! az ad app federated-credential list --id "$APP_ID" \
   }" --output none
 fi
 
-echo "==> Role assignments on $RESOURCE_GROUP (Contributor + Key Vault Secrets User)"
+echo "==> Role assignments on $RESOURCE_GROUP (Contributor + Key Vault Secrets User + User Access Administrator)"
 RG_SCOPE="/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/${RESOURCE_GROUP}"
 # Contributor: bicep deploys, `az acr build` (needs scheduleRun), Postgres
 # firewall rules, containerapp show.
@@ -66,6 +74,11 @@ az role assignment create --assignee "$APP_ID" --role "Contributor" \
   --scope "$RG_SCOPE" --output none 2>/dev/null || true
 # Key Vault Secrets User: read the database-url secret before `prisma migrate deploy`.
 az role assignment create --assignee "$APP_ID" --role "Key Vault Secrets User" \
+  --scope "$RG_SCOPE" --output none 2>/dev/null || true
+# User Access Administrator: the bicep template creates role assignments for the
+# app's user-assigned identity (AcrPull + Key Vault Secrets User); Contributor
+# cannot write role assignments, so the deploy identity needs this too.
+az role assignment create --assignee "$APP_ID" --role "User Access Administrator" \
   --scope "$RG_SCOPE" --output none 2>/dev/null || true
 
 cat <<EOF
