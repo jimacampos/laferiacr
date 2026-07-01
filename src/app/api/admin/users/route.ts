@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 
 import { requireCapability } from "@/lib/contributions/guards";
-import { findUsers } from "@/lib/contributions/roleAdmin";
+import { listUsers } from "@/lib/contributions/roleAdmin";
 
 export const dynamic = "force-dynamic";
 
-// User lookup for the role-management screen (Phase 4). Super Admin only. Searches accounts by
-// email / display name / Entra oid so an operator can find who to grant a role or ban.
+// User listing for the role-management screen (Phase 4). Super Admin only. Returns a paginated
+// list of accounts (newest first) so an operator can browse everyone or filter by email / display
+// name / Entra oid to find who to grant a role or ban.
 export async function GET(request: Request) {
   if (!process.env.DATABASE_URL) {
     return NextResponse.json({ error: "unavailable" }, { status: 503 });
@@ -16,6 +17,9 @@ export async function GET(request: Request) {
 
   const url = new URL(request.url);
   const query = url.searchParams.get("query") ?? "";
-  const users = await findUsers(query);
-  return NextResponse.json({ users });
+  const pageParam = Number.parseInt(url.searchParams.get("page") ?? "1", 10);
+  const page = Number.isFinite(pageParam) && pageParam > 0 ? pageParam : 1;
+
+  const result = await listUsers({ query, page });
+  return NextResponse.json(result);
 }
