@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/i18n/I18nProvider";
+import { AuthStatus } from "./AuthStatus";
 import { LanguageToggle } from "./LanguageToggle";
 
 export function Header() {
@@ -20,7 +21,10 @@ export function Header() {
             <p className="text-sm text-emerald-50/90">{t("app.tagline")}</p>
           </div>
         </div>
-        <LanguageToggle />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageToggle />
+          <AuthStatus />
+        </div>
       </div>
     </header>
   );

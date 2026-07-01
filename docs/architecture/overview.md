@@ -1,6 +1,6 @@
 # Architecture Overview — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-01_
 
 How La Feria CR is built on **Azure**, optimized for **low cost (serverless / scale-to-zero)**.
 Decisions here are justified by the [ADRs](../decisions/README.md). Companion docs:
@@ -64,6 +64,12 @@ sequenceDiagram
   D-->>A: rows
   A-->>U: SSR HTML (ES/EN)
 ```
+
+> **As implemented (Phase 2).** `/market/:slug` renders hours, days, organizer, phones, and
+> provenance/freshness badges plus an **Azure Maps** panel. The browser SDK never sees a Maps key:
+> it fetches a short-lived Entra token from `/api/maps/token` (minted with the app managed identity)
+> and authenticates anonymously with a `getToken` callback. Sign-in (Auth.js → Entra External ID)
+> is wired into the header but **optional** — see the Read flow stays fully anonymous.
 
 **Propose (anonymous allowed)**
 ```mermaid

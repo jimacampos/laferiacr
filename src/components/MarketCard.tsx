@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import type { Feria } from "@/data/types";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { phoneToTelHref } from "@/lib/filters";
@@ -15,10 +17,15 @@ export function MarketCard({
   const { t } = useTranslation();
 
   return (
-    <article className="flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm transition hover:shadow-md">
+    <article className="relative flex h-full flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm transition hover:shadow-md focus-within:ring-2 focus-within:ring-emerald-500">
       <div>
         <h3 className="text-base font-bold text-stone-900 sm:text-lg">
-          {feria.name}
+          <Link
+            href={`/market/${feria.id}`}
+            className="transition after:absolute after:inset-0 hover:text-emerald-700 focus-visible:outline-none"
+          >
+            {feria.name}
+          </Link>
         </h3>
         {regionName && (
           <p className="flex items-center gap-1 text-sm text-stone-500">
@@ -57,7 +64,7 @@ export function MarketCard({
           </p>
         )}
         {feria.phones.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2 pt-0.5">
+          <div className="relative z-10 flex flex-wrap items-center gap-2 pt-0.5">
             {feria.phones.map((phone) => (
               <a
                 key={phone}
