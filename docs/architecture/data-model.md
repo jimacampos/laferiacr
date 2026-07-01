@@ -79,6 +79,7 @@ erDiagram
     text email
     text display_name
     timestamptz created_at
+    timestamptz updated_at
   }
   user_roles {
     uuid id PK
@@ -155,8 +156,11 @@ Flags on a market or proposal (`target_type` + `target_id`). Feeds the moderatio
 ([moderation-trust](moderation-trust.md)). `status`: `open` | `actioned` | `dismissed`.
 
 ### users
-Created on first sign-in via Entra External ID. `external_id` maps to the IdP subject; minimal PII
-(see [security-privacy](security-privacy.md)).
+Created on first sign-in via Entra External ID. **`external_id` is unique** and holds the token's
+immutable `oid` claim (not `sub`); `email`/`display_name` are refreshed on each sign-in. Minimal PII
+(see [security-privacy](security-privacy.md)). **Implemented in Phase 2** (`prisma/migrations/*_add_users`,
+upserted from the Auth.js `jwt` callback in `src/auth.ts`); `user_roles` and the rest of the graph
+below arrive in later phases.
 
 ### user_roles
 Grants a `role` (`member` | `trusted` | `community_safety` | `super_admin`) with optional `scope`

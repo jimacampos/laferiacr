@@ -36,6 +36,20 @@ param minReplicas int = 0
 @description('Database name.')
 param databaseName string = 'laferiacr'
 
+@secure()
+@description('Auth.js session secret (AUTH_SECRET). Empty defers sign-in setup.')
+param authSecret string = ''
+
+@description('Entra External ID app (client) id for sign-in. Empty defers auth.')
+param entraClientId string = ''
+
+@secure()
+@description('Entra External ID app client secret. Empty defers auth.')
+param entraClientSecret string = ''
+
+@description('Entra External ID (CIAM) OIDC issuer/authority URL. Empty defers auth.')
+param entraIssuer string = ''
+
 var tags = {
   app: 'laferiacr'
   env: environmentName
@@ -85,10 +99,16 @@ module maps 'modules/maps.bicep' = {
   params: {
     namePrefix: namePrefix
     tags: tags
+    appIdentityPrincipalId: appIdentity.properties.principalId
   }
 }
 
 var databaseUrl = 'postgresql://${postgresAdminLogin}:${postgresAdminPassword}@${postgres.outputs.fqdn}:5432/${databaseName}?sslmode=require'
+
+// Only wire the sign-in secret refs when the operator has supplied them; otherwise the
+// container app would reference Key Vault secrets that were never created.
+var authConfigured = !empty(authSecret)
+var entraSecretConfigured = !empty(entraClientSecret)
 
 module keyvault 'modules/keyvault.bicep' = {
   name: 'keyvault'
@@ -99,6 +119,8 @@ module keyvault 'modules/keyvault.bicep' = {
     appIdentityPrincipalId: appIdentity.properties.principalId
     databaseUrl: databaseUrl
     azureMapsKey: maps.outputs.primaryKey
+    authSecret: authSecret
+    entraClientSecret: entraClientSecret
   }
 }
 
@@ -115,6 +137,12 @@ module containerApp 'modules/containerapp.bicep' = {
     databaseUrlSecretUri: keyvault.outputs.databaseUrlSecretUri
     appInsightsConnectionString: monitoring.outputs.appInsightsConnectionString
     minReplicas: minReplicas
+    mapsClientId: maps.outputs.clientId
+    managedIdentityClientId: appIdentity.properties.clientId
+    authSecretUri: authConfigured ? keyvault.outputs.authSecretUri : ''
+    entraClientSecretUri: entraSecretConfigured ? keyvault.outputs.entraClientSecretUri : ''
+    entraClientId: entraClientId
+    entraIssuer: entraIssuer
   }
 }
 

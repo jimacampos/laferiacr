@@ -11,6 +11,12 @@ param appIdentityPrincipalId string
 param databaseUrl string
 @secure()
 param azureMapsKey string = ''
+@secure()
+@description('Auth.js session secret (AUTH_SECRET). Empty defers sign-in setup.')
+param authSecret string = ''
+@secure()
+@description('Entra External ID app client secret. Empty defers sign-in setup.')
+param entraClientSecret string = ''
 
 var kvName = take(toLower(replace('${namePrefix}-kv', '--', '-')), 24)
 
@@ -46,6 +52,22 @@ resource mapsKeySecret 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = if (!emp
   }
 }
 
+resource authSecretRes 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = if (!empty(authSecret)) {
+  parent: kv
+  name: 'auth-secret'
+  properties: {
+    value: authSecret
+  }
+}
+
+resource entraClientSecretRes 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = if (!empty(entraClientSecret)) {
+  parent: kv
+  name: 'entra-client-secret'
+  properties: {
+    value: entraClientSecret
+  }
+}
+
 // Key Vault Secrets User
 var secretsUserRoleId = subscriptionResourceId(
   'Microsoft.Authorization/roleDefinitions',
@@ -65,3 +87,5 @@ resource secretsUser 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
 output name string = kv.name
 output uri string = kv.properties.vaultUri
 output databaseUrlSecretUri string = '${kv.properties.vaultUri}secrets/database-url'
+output authSecretUri string = '${kv.properties.vaultUri}secrets/auth-secret'
+output entraClientSecretUri string = '${kv.properties.vaultUri}secrets/entra-client-secret'

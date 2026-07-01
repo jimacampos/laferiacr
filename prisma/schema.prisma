@@ -45,3 +45,19 @@ model Market {
   @@index([regionId])
   @@map("markets")
 }
+
+/// Application account, created on first sign-in via Microsoft Entra External ID
+/// (see docs/decisions/0005-identity-entra-external-id.md). Maps the IdP subject to an
+/// internal record; holds minimal PII (see docs/architecture/security-privacy.md).
+/// Roles/permissions land in Phase 4 (user_roles), not here.
+model User {
+  id          String   @id @default(uuid()) @db.Uuid
+  /// Stable IdP subject (OIDC `sub`) — unique per account.
+  externalId  String   @unique @map("external_id")
+  email       String?
+  displayName String?  @map("display_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("users")
+}

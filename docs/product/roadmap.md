@@ -1,6 +1,6 @@
 # Roadmap — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-01_
 
 Phased delivery from the shipped static directory (v0) to a community-maintained, photo-rich guide.
 No dates — phases are ordered by dependency and value. Requirements are in [prd.md](prd.md);
@@ -38,11 +38,15 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 > 📋 Executable checklist: [phase-1-tasks.md](phase-1-tasks.md).
 
 ## Phase 2 — Accounts & market detail
+**Status:** 🟡 In progress (code-complete on `phase-2-accounts-market-detail`; dev deploy + Entra setup pending).
 **Goal:** identity + a place to show and (soon) edit per-market info.
 - Integrate Entra External ID (Google + email OTP); login needed only to confirm.
 - Per-market **detail page**: hours, location, days, organizer, freshness/confidence.
 - Azure Maps display with a pin where coordinates exist.
 - **Exit criteria:** users can sign in; every market has a detail page with a map.
+- **Scope note:** MVP 0 targets the **dev** environment only; prod is deferred.
+
+> 📋 Executable checklist: [phase-2-tasks.md](phase-2-tasks.md).
 
 ## Phase 3 — ⭐ Community contributions: hours + location _(first community release)_
 **Goal:** the core propose → confirm → verify loop.

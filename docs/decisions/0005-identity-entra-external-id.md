@@ -22,3 +22,11 @@ the IdP subject to an internal `users` record.
 - **Negative:** ties identity to Azure/Entra; another service to configure (tenant, app registrations,
   redirect URIs).
 - **Neutral:** which social providers beyond Google to enable is an **open question**.
+
+## Implementation notes (Phase 2)
+- **Client library:** Auth.js (NextAuth v5) with the `microsoft-entra-id` provider —
+  see [ADR-0011](0011-auth-library-authjs.md). Sessions are stateless **JWTs**.
+- **Internal key:** the `users.external_id` maps to the token's immutable **`oid`** claim (not `sub`),
+  per Microsoft's guidance for a durable storage key; the row is upserted in the Auth.js `jwt` callback.
+- **Optional in Phase 2:** sign-in is wired into the header but not required to read; route protection
+  arrives in Phase 3. Operator setup: [`deploy/entra-external-id-setup.md`](../../deploy/entra-external-id-setup.md).

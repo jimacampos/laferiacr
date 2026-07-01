@@ -1,6 +1,6 @@
 # Product Requirements (PRD) — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-01_
 
 This PRD describes **what** we build, grouped by release. The **order** of delivery is in
 [roadmap.md](roadmap.md); the **how** is in the [architecture](../architecture/overview.md) docs.
@@ -14,7 +14,7 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
 | Release | Theme | Status |
 | --- | --- | --- |
 | **v0** | Static directory (read-only) | ✅ Shipped |
-| **Community v1** | Hours + location, propose → confirm → verify | Planned (Phases 1–3) |
+| **Community v1** | Hours + location, propose → confirm → verify | 🟡 In progress (Phases 1–3) |
 | **Governance** | Roles, moderation, community-submitted markets | Planned (Phases 4–5) |
 | **Hardening** | Trust weighting + accessibility | Planned (Phase 6) |
 | **Engagement** | PWA + notifications | Planned (Phase 7) |
@@ -39,7 +39,9 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
   baseline and are never lost (community data overlays them).
 - **FR-11** Each market has a **detail page** showing current hours, location, day(s), organizer,
   and a **freshness/confidence** indicator (verified vs needs confirmation, last-updated).
+  _(Phase 2: `/market/:slug` with an Azure Maps panel; pins appear once coordinates land in Phase 3.)_
 - **FR-12** Accounts via Entra External ID (Google + email OTP). **Reading requires no account.**
+  _(Phase 2: Auth.js sign-in in the header; optional until Phase 3 needs a verified account.)_
 
 ### Contributions (the core loop)
 - **FR-13 Propose hours:** anyone (anonymous allowed) can propose opening hours for a market.

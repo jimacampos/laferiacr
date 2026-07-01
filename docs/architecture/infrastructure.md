@@ -53,6 +53,18 @@ is granted `AcrPull` and `Key Vault Secrets User`, so the Container App pulls im
 outputs and written straight to Key Vault. See [`infra/README.md`](../../infra/README.md) for the
 deploy commands.
 
+**Phase 2 additions.**
+- **Azure Maps auth (no shared key on the client).** The same app managed identity is granted
+  **Azure Maps Data Reader** on the Maps account. The container app gets `AZURE_MAPS_CLIENT_ID`
+  (the Maps account `uniqueId`) and `AZURE_MANAGED_IDENTITY_CLIENT_ID`; a server route
+  (`/api/maps/token`) mints a short-lived Entra token via `DefaultAzureCredential`, and the browser
+  SDK uses anonymous auth + a `getToken` callback. Unset → the map degrades to "unavailable".
+- **Sign-in secrets (optional).** When supplied, `AUTH_SECRET` and the Entra client secret are stored
+  in Key Vault (`auth-secret`, `entra-client-secret`) and referenced by the container app; the client
+  id + issuer are plain env vars. All four are gated on being non-empty, so the app provisions and runs
+  before Entra External ID is configured. Operator runbook:
+  [`deploy/entra-external-id-setup.md`](../../deploy/entra-external-id-setup.md).
+
 ## Application packaging
 - `next.config.ts` uses `output: "standalone"`; a multi-stage **`Dockerfile`** runs `prisma generate`
   + `next build` and ships the standalone server (Prisma's `@prisma/client` / `@prisma/adapter-pg` /

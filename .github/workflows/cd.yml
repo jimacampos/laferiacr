@@ -10,7 +10,9 @@ name: CD
 #   Repo Secrets:        AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
 #   Environment (dev,prod):
 #     Variables:         AZURE_RESOURCE_GROUP   (optional: AZURE_LOCATION, default centralus)
+#                        (optional sign-in: AUTH_MICROSOFT_ENTRA_ID_ID, AUTH_MICROSOFT_ENTRA_ID_ISSUER)
 #     Secrets:           PG_ADMIN_PASSWORD
+#                        (optional sign-in: AUTH_SECRET, AUTH_MICROSOFT_ENTRA_ID_SECRET)
 # Add a required-reviewers protection rule on the `prod` environment to gate production.
 
 on:
@@ -38,6 +40,12 @@ jobs:
       RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION || 'centralus' }}
       PG_ADMIN_PASSWORD: ${{ secrets.PG_ADMIN_PASSWORD }}
+      # Sign-in (optional; empty until Entra External ID is configured). Both bicep
+      # deploys below read these via readEnvironmentVariable(..., '').
+      AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+      AUTH_MICROSOFT_ENTRA_ID_ID: ${{ vars.AUTH_MICROSOFT_ENTRA_ID_ID }}
+      AUTH_MICROSOFT_ENTRA_ID_SECRET: ${{ secrets.AUTH_MICROSOFT_ENTRA_ID_SECRET }}
+      AUTH_MICROSOFT_ENTRA_ID_ISSUER: ${{ vars.AUTH_MICROSOFT_ENTRA_ID_ISSUER }}
     steps:
       - uses: actions/checkout@v4
 

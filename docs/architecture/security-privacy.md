@@ -1,6 +1,6 @@
 # Security & Privacy — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-01_
 
 Security and privacy posture for a public, community-edited app handling minimal personal data plus
 **geolocation** and (later) **user photos**. Related: [rbac](rbac.md),
@@ -8,7 +8,11 @@ Security and privacy posture for a public, community-edited app handling minimal
 
 ## Authentication & authorization
 - **AuthN:** Microsoft Entra External ID (Google + email OTP); standard OIDC; tokens validated per
-  request ([ADR-0005](../decisions/0005-identity-entra-external-id.md)).
+  request ([ADR-0005](../decisions/0005-identity-entra-external-id.md)). Implemented with **Auth.js
+  (NextAuth v5)** ([ADR-0011](../decisions/0011-auth-library-authjs.md)); sessions are stateless
+  **JWTs** (no server session store), and the app persists only a minimal `users` row keyed on the
+  immutable `oid` claim. Sign-in is **optional** in Phase 2 — reading needs no account, and route
+  protection lands in Phase 3.
 - **AuthZ:** server-side RBAC on every mutating route, from DB-backed roles — never client claims
   ([rbac](rbac.md)).
 - **Anonymous writes** (proposals, new-market submissions, reports) are allowed but rate-limited and
@@ -47,8 +51,10 @@ location tracking.
   before/after publish; EXIF/GPS stripped on upload.
 
 ## Secrets management
-- All secrets (DB connection, Maps key, IdP client secret) in **Key Vault**; apps read via **managed
-  identity** — none in code, config, or the repo.
+- All secrets (DB connection, Maps key, IdP client secret, `AUTH_SECRET`) in **Key Vault**; apps read
+  via **managed identity** — none in code, config, or the repo.
+- The map uses **no client secret at all**: the app identity is granted Azure Maps Data Reader and a
+  server route mints a short-lived Entra token per request (see [infrastructure](infrastructure.md)).
 - CI/CD uses **OIDC federated credentials** (no long-lived cloud secrets in GitHub)
   ([infrastructure](infrastructure.md)).
 
