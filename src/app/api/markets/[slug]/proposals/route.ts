@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
+import { activeBan } from "@/lib/contributions/bans";
 import { verifyCaptcha } from "@/lib/contributions/captcha";
 import { getMarketIdBySlug } from "@/lib/contributions/proposals";
 import { checkRateLimit } from "@/lib/contributions/rateLimit";
@@ -54,6 +55,12 @@ export async function POST(
 
   const session = await auth();
   const submittedBy = session?.user?.id ?? null;
+
+  // Active-banned accounts cannot write (Phase 4). Anonymous submissions are unaffected here
+  // but remain rate-limited + CAPTCHA-gated above.
+  if (submittedBy && (await activeBan(submittedBy))) {
+    return NextResponse.json({ error: "banned" }, { status: 403 });
+  }
 
   const proposal = await prisma.proposal.create({
     data: {

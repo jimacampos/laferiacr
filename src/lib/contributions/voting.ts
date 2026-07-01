@@ -1,8 +1,8 @@
 import { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
-import { confirmationThreshold } from "./config";
 import { shouldPromote } from "./promotion";
+import { resolveConfirmationThreshold } from "./settings";
 import type { LocationValue } from "./validation";
 
 export type Vote = "confirm" | "reject";
@@ -79,7 +79,7 @@ export async function castVote(
   userId: string,
   vote: Vote,
 ): Promise<CastVoteResult> {
-  const threshold = confirmationThreshold();
+  const threshold = await resolveConfirmationThreshold();
 
   return prisma.$transaction(async (tx) => {
     const proposal = await tx.proposal.findUnique({

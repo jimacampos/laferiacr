@@ -25,6 +25,8 @@ supersedes the old one.
 | [0011](0011-auth-library-authjs.md) | Auth library: Auth.js (NextAuth v5) | 🟢 Accepted |
 | [0012](0012-anti-abuse-rate-limiting-and-captcha.md) | Anti-abuse: Postgres rate limiting + CAPTCHA seam | 🟢 Accepted |
 | [0013](0013-minimal-roles-phase-3-break-glass.md) | Minimal `user_roles` in Phase 3 for break-glass | 🟢 Accepted |
+| [0014](0014-rbac-moderation-queue-and-temp-bans.md) | Full RBAC, moderation queue, `moderation_actions`, temp-bans | 🟢 Accepted |
+| [0015](0015-admin-configurable-settings-app-config.md) | Admin-configurable settings via `app_config` | 🟢 Accepted |
 
 ## Template
 ```markdown

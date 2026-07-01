@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslation } from "@/i18n/I18nProvider";
+import { AdminLink } from "./AdminLink";
 import { AuthStatus } from "./AuthStatus";
 import { LanguageToggle } from "./LanguageToggle";
 
@@ -22,6 +23,7 @@ export function Header() {
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
+          <AdminLink />
           <LanguageToggle />
           <AuthStatus />
         </div>

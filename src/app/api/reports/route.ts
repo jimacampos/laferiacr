@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
+import { activeBan } from "@/lib/contributions/bans";
 import { verifyCaptcha } from "@/lib/contributions/captcha";
 import { getMarketIdBySlug } from "@/lib/contributions/proposals";
 import { checkRateLimit } from "@/lib/contributions/rateLimit";
@@ -76,6 +77,9 @@ export async function POST(request: Request) {
   }
 
   const session = await auth();
+  if (session?.user?.id && (await activeBan(session.user.id))) {
+    return NextResponse.json({ error: "banned" }, { status: 403 });
+  }
   await prisma.report.create({
     data: {
       targetType,

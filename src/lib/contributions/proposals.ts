@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
 
-import { confirmationThreshold, type ProposalField } from "./config";
+import { type ProposalField } from "./config";
 import { remainingConfirmations } from "./promotion";
+import { resolveConfirmationThreshold } from "./settings";
 import type {
   FieldContributionState,
   LocationValue,
@@ -96,7 +97,7 @@ export async function getMarketContributions(
   marketId: string,
   viewerId?: string,
 ): Promise<MarketContributions> {
-  const threshold = confirmationThreshold();
+  const threshold = await resolveConfirmationThreshold();
   try {
     const proposals = await prisma.proposal.findMany({
       where: { marketId, status: { in: ["pending", "verified"] } },
