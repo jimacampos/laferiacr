@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 
+import { resolveIdentity } from "@/lib/authIdentity";
+
 // Auth.js (NextAuth v5) wired to Microsoft Entra External ID (CIAM) over OIDC
 // (see docs/decisions/0011-auth-library-authjs.md and 0005-identity-entra-external-id.md).
 // The CIAM authority differs from workforce Entra, so `issuer` is supplied via env.
@@ -35,11 +37,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const email = user.email ?? null;
         const displayName = user.name ?? null;
         const { prisma } = await import("@/lib/prisma");
-        const dbUser = await prisma.user.upsert({
-          where: { externalId: user.id },
-          update: { email, displayName },
-          create: { externalId: user.id, email, displayName },
-        });
+        // Entra External ID can return a different `oid`/`sub` per login for the same
+        // email OTP account, which would strand role grants on abandoned rows. Anchor on
+        // the verified email (oldest row wins) so one human == one account; fall back to
+        // the subject-keyed upsert only when there is no email (see src/lib/authIdentity.ts).
+        const existingByEmail = email
+          ? await prisma.user.findFirst({
+              where: { email },
+              orderBy: { createdAt: "asc" },
+              select: { id: true },
+            })
+          : null;
+        const resolution = resolveIdentity({ email, existingByEmail });
+        const dbUser =
+          resolution.kind === "reuse"
+            ? await prisma.user.update({
+                where: { id: resolution.userId },
+                data: { email, displayName },
+              })
+            : await prisma.user.upsert({
+                where: { externalId: user.id },
+                update: { email, displayName },
+                create: { externalId: user.id, email, displayName },
+              });
         token.uid = dbUser.id;
       }
       return token;

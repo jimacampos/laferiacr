@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useTranslation } from "@/i18n/I18nProvider";
 import {
   banUser,
   changeRole,
-  searchUsers,
+  listUsers,
   type UserSummary,
 } from "@/lib/contributions/adminApi";
 import { BAN_DURATIONS } from "@/lib/contributions/bansPolicy";
+import { pageBounds } from "@/lib/contributions/pagination";
 import { ROLES } from "@/lib/contributions/rolesPolicy";
 
 // Roles a Super Admin can grant/revoke (everything except the implicit `member`).
@@ -164,28 +165,61 @@ function UserCard({
   );
 }
 
-/** Super-Admin role management: search accounts, grant/revoke roles, and issue temp-bans. */
+/** Super-Admin role management: browse a paginated list of accounts, filter, grant/revoke roles,
+ * and issue temp-bans. */
 export function RoleManager({ currentUserId }: { currentUserId: string }) {
   const { t } = useTranslation();
   const [query, setQuery] = useState("");
+  const [activeQuery, setActiveQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [reloadKey, setReloadKey] = useState(0);
   const [users, setUsers] = useState<UserSummary[]>([]);
-  const [busy, setBusy] = useState(false);
-  const [searched, setSearched] = useState(false);
+  const [total, setTotal] = useState(0);
+  // Corrected by the API response; kept in sync so page math matches the server.
+  const [pageSize, setPageSize] = useState(10);
+  const [busy, setBusy] = useState(true);
+  const [loaded, setLoaded] = useState(false);
 
-  async function search(e?: React.FormEvent) {
+  useEffect(() => {
+    let active = true;
+    listUsers(activeQuery, page).then((res) => {
+      if (!active) return;
+      setUsers(res.data?.users ?? []);
+      setTotal(res.data?.total ?? 0);
+      if (res.data?.pageSize) setPageSize(res.data.pageSize);
+      setBusy(false);
+      setLoaded(true);
+    });
+    return () => {
+      active = false;
+    };
+  }, [activeQuery, page, reloadKey]);
+
+  function submitSearch(e?: React.FormEvent) {
     e?.preventDefault();
     setBusy(true);
-    const res = await searchUsers(query.trim());
-    setBusy(false);
-    setSearched(true);
-    setUsers(res.data?.users ?? []);
+    setPage(1);
+    setActiveQuery(query.trim());
   }
+
+  function goToPage(next: number) {
+    setBusy(true);
+    setPage(next);
+  }
+
+  // Refetch the current page after a grant/revoke/ban so badges stay accurate.
+  function reload() {
+    setBusy(true);
+    setReloadKey((k) => k + 1);
+  }
+
+  const { totalPages, from, to } = pageBounds(total, page, pageSize);
 
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-lg font-semibold text-stone-900">{t("roles.title")}</h2>
 
-      <form onSubmit={search} className="flex flex-wrap gap-2">
+      <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
         <input
           type="text"
           value={query}
@@ -202,8 +236,16 @@ export function RoleManager({ currentUserId }: { currentUserId: string }) {
         </button>
       </form>
 
-      {searched && users.length === 0 ? (
-        <p className="text-sm text-stone-500">{t("roles.noResults")}</p>
+      {loaded && total > 0 && (
+        <p className="text-xs text-stone-500">
+          {t("roles.showing", { from, to, total })}
+        </p>
+      )}
+
+      {loaded && users.length === 0 ? (
+        <p className="text-sm text-stone-500">
+          {activeQuery ? t("roles.noResults") : t("roles.empty")}
+        </p>
       ) : (
         <ul className="flex flex-col gap-3">
           {users.map((user) => (
@@ -211,10 +253,34 @@ export function RoleManager({ currentUserId }: { currentUserId: string }) {
               key={user.id}
               user={user}
               currentUserId={currentUserId}
-              onChanged={search}
+              onChanged={reload}
             />
           ))}
         </ul>
+      )}
+
+      {loaded && totalPages > 1 && (
+        <nav className="flex items-center justify-between gap-2 border-t border-stone-100 pt-3">
+          <button
+            type="button"
+            disabled={busy || page <= 1}
+            onClick={() => goToPage(page - 1)}
+            className="rounded-full border border-stone-300 px-3 py-1.5 text-xs font-medium text-stone-700 transition hover:bg-stone-100 disabled:opacity-40"
+          >
+            {t("roles.prev")}
+          </button>
+          <span className="text-xs text-stone-500">
+            {t("roles.page", { page, pages: totalPages })}
+          </span>
+          <button
+            type="button"
+            disabled={busy || page >= totalPages}
+            onClick={() => goToPage(page + 1)}
+            className="rounded-full border border-stone-300 px-3 py-1.5 text-xs font-medium text-stone-700 transition hover:bg-stone-100 disabled:opacity-40"
+          >
+            {t("roles.next")}
+          </button>
+        </nav>
       )}
     </section>
   );

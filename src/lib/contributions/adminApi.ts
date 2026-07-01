@@ -1,7 +1,7 @@
 import type { ApiResult } from "./api";
 import type { AuditEntry, QueueItem } from "./moderation";
 import type { ConfigSetting } from "./settings";
-import type { UserSummary } from "./roleAdmin";
+import type { UserPage, UserSummary } from "./roleAdmin";
 
 // Thin client-side fetch wrappers for the Phase 4 admin/moderation endpoints. Pure browser
 // code — no server/prisma imports — safe to use from client components. Authorization is
@@ -69,10 +69,14 @@ export function moderateMarket(
 
 // --- Roles -----------------------------------------------------------------
 
-export function searchUsers(
+export function listUsers(
   query: string,
-): Promise<ApiResult<{ users: UserSummary[] }>> {
-  return request(`/api/admin/users?query=${encodeURIComponent(query)}`);
+  page = 1,
+): Promise<ApiResult<UserPage>> {
+  const params = new URLSearchParams();
+  if (query) params.set("query", query);
+  params.set("page", String(page));
+  return request(`/api/admin/users?${params.toString()}`);
 }
 
 export function changeRole(
@@ -108,4 +112,4 @@ export function setConfigValue(
 
 // --- Re-exported view types (for client components) ------------------------
 
-export type { QueueItem, AuditEntry, ConfigSetting, UserSummary };
+export type { QueueItem, AuditEntry, ConfigSetting, UserSummary, UserPage };

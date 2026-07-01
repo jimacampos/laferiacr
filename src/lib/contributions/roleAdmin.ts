@@ -24,36 +24,64 @@ export interface UserSummary {
   roles: string[];
 }
 
-/** Search accounts by email / display name / Entra oid (for the role-management screen). */
-export async function findUsers(query: string, limit = 20): Promise<UserSummary[]> {
-  const q = query.trim();
-  const users = await prisma.user.findMany({
-    where: q
-      ? {
-          OR: [
-            { email: { contains: q, mode: "insensitive" } },
-            { displayName: { contains: q, mode: "insensitive" } },
-            { externalId: { contains: q, mode: "insensitive" } },
-          ],
-        }
-      : undefined,
-    take: limit,
-    orderBy: { createdAt: "desc" },
-    select: {
-      id: true,
-      email: true,
-      displayName: true,
-      externalId: true,
-      roles: { select: { role: true } },
-    },
-  });
-  return users.map((u) => ({
-    id: u.id,
-    email: u.email,
-    displayName: u.displayName,
-    externalId: u.externalId,
-    roles: u.roles.map((r) => r.role),
-  }));
+export interface UserPage {
+  users: UserSummary[];
+  total: number;
+  page: number;
+  pageSize: number;
+}
+
+export const USERS_PAGE_SIZE = 10;
+
+/**
+ * Paginated account listing for the role-management screen. An optional `query` filters by
+ * email / display name / Entra oid; an empty query lists everyone (newest first).
+ */
+export async function listUsers(
+  opts: { query?: string; page?: number; pageSize?: number } = {},
+): Promise<UserPage> {
+  const pageSize = Math.min(Math.max(opts.pageSize ?? USERS_PAGE_SIZE, 1), 50);
+  const page = Math.max(opts.page ?? 1, 1);
+  const q = (opts.query ?? "").trim();
+  const where = q
+    ? {
+        OR: [
+          { email: { contains: q, mode: "insensitive" as const } },
+          { displayName: { contains: q, mode: "insensitive" as const } },
+          { externalId: { contains: q, mode: "insensitive" as const } },
+        ],
+      }
+    : undefined;
+
+  const [total, users] = await prisma.$transaction([
+    prisma.user.count({ where }),
+    prisma.user.findMany({
+      where,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        email: true,
+        displayName: true,
+        externalId: true,
+        roles: { select: { role: true } },
+      },
+    }),
+  ]);
+
+  return {
+    users: users.map((u) => ({
+      id: u.id,
+      email: u.email,
+      displayName: u.displayName,
+      externalId: u.externalId,
+      roles: u.roles.map((r) => r.role),
+    })),
+    total,
+    page,
+    pageSize,
+  };
 }
 
 /** Number of distinct accounts holding `super_admin` (guards against removing the last one). */

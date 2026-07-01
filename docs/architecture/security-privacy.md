@@ -10,8 +10,9 @@ Security and privacy posture for a public, community-edited app handling minimal
 - **AuthN:** Microsoft Entra External ID (Google + email OTP); standard OIDC; tokens validated per
   request ([ADR-0005](../decisions/0005-identity-entra-external-id.md)). Implemented with **Auth.js
   (NextAuth v5)** ([ADR-0011](../decisions/0011-auth-library-authjs.md)); sessions are stateless
-  **JWTs** (no server session store), and the app persists only a minimal `users` row keyed on the
-  immutable `oid` claim. Reading needs no account; Phase 3 protects confirm/reject routes.
+  **JWTs** (no server session store), and the app persists only a minimal `users` row anchored on the
+  **verified email** (falling back to the `oid` claim when absent —
+  [ADR-0016](../decisions/0016-email-anchored-identity-resolution.md)). Reading needs no account; Phase 3 protects confirm/reject routes.
 - **AuthZ:** server-side RBAC on every mutating route, from DB-backed roles — never client claims
   ([rbac](rbac.md)). Phase 4 resolves capabilities via `can(userId, capability)` and route guards.
 - **Anonymous writes** (Phase 3 proposals and reports; later new-market submissions) are allowed but

@@ -27,6 +27,7 @@ supersedes the old one.
 | [0013](0013-minimal-roles-phase-3-break-glass.md) | Minimal `user_roles` in Phase 3 for break-glass | 🟢 Accepted |
 | [0014](0014-rbac-moderation-queue-and-temp-bans.md) | Full RBAC, moderation queue, `moderation_actions`, temp-bans | 🟢 Accepted |
 | [0015](0015-admin-configurable-settings-app-config.md) | Admin-configurable settings via `app_config` | 🟢 Accepted |
+| [0016](0016-email-anchored-identity-resolution.md) | Email-anchored identity resolution (amends 0005) | 🟢 Accepted |
 
 ## Template
 ```markdown
