@@ -88,8 +88,8 @@ ADRs [0008](../decisions/0008-promotion-automated-confirmation-and-roles.md),
   `moderation_actions`** (actor + reason + metadata) alongside the existing `change_history` entries.
 
 ## 4. Super-Admin APIs (roles, bans, config, audit)
-- [ ] **Roles:** `GET /api/admin/users?query=` (lookup by email / oid / display name);
-  `POST /api/admin/roles` — `grant` | `revoke` (userId, role, scope=null). **Guard: cannot revoke the last
+- [ ] **Roles:** `GET /api/admin/users?query=&page=` (paginated list, 10/page; lookup by email / oid /
+  display name); `POST /api/admin/roles` — `grant` | `revoke` (userId, role, scope=null). **Guard: cannot revoke the last
   `super_admin`.** Writes `moderation_actions`. Capability `manage_roles`.
 - [ ] **Temp-bans:** `POST /api/admin/bans` (userId, duration preset|permanent → `expires_at`, reason);
   `POST /api/admin/bans/[id]` to **lift early**. Capability `ban_user`. Writes `moderation_actions`.

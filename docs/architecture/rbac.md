@@ -81,8 +81,10 @@ Roles are **additive** — higher roles include lower-role capabilities.
 
 ## Appointment & governance
 - **Super Admin** is bootstrapped during setup with `npm run db:seed:admin`, keyed on
-  `SUPER_ADMIN_OID` or `SUPER_ADMIN_EMAIL` and safe to re-run. Additional admins are granted by an
-  existing Super Admin.
+  `SUPER_ADMIN_OID` or `SUPER_ADMIN_EMAIL` and safe to re-run; when keyed by email it grants **every**
+  `users` row for that address, so the grant survives duplicate identities
+  ([ADR-0016](../decisions/0016-email-anchored-identity-resolution.md)). Additional admins are granted
+  by an existing Super Admin.
 - **Community Safety** moderators are appointed by a Super Admin; vetting criteria and optional
   regional scoping are an **open question** ([moderation-trust](moderation-trust.md)).
 - **Trusted** is earned automatically via reputation in Phase 6 (or granted manually before then).

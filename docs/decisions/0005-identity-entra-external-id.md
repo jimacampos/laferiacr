@@ -26,7 +26,10 @@ the IdP subject to an internal `users` record.
 ## Implementation notes (Phase 2)
 - **Client library:** Auth.js (NextAuth v5) with the `microsoft-entra-id` provider —
   see [ADR-0011](0011-auth-library-authjs.md). Sessions are stateless **JWTs**.
-- **Internal key:** the `users.external_id` maps to the token's immutable **`oid`** claim (not `sub`),
-  per Microsoft's guidance for a durable storage key; the row is upserted in the Auth.js `jwt` callback.
+- **Internal key:** the `users.external_id` maps to the token's **`oid`** claim, the row is upserted in
+  the Auth.js `jwt` callback. **Amended in Phase 4 ([ADR-0016](0016-email-anchored-identity-resolution.md)):**
+  the External ID tenant was observed returning a *different* `oid` per login for the same email-OTP
+  account, so identity now anchors on the **verified email** (reuse the existing row) and falls back to
+  the `oid`-keyed upsert only when no email is present.
 - **Optional in Phase 2:** sign-in is wired into the header but not required to read; route protection
   arrives in Phase 3. Operator setup: [`deploy/entra-external-id-setup.md`](../../deploy/entra-external-id-setup.md).
