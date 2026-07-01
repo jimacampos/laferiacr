@@ -16,9 +16,13 @@ and ADRs [0003](../docs/decisions/0003-compute-azure-container-apps.md) /
   `/api/health` probes, `DATABASE_URL` sourced from Key Vault, `DATA_SOURCE=db`.
 
 ## Prerequisites (operator)
-- Azure subscription(s); a resource group per environment (e.g. `laferia-dev`, `laferia-prod`).
-- OIDC federated credentials for the CD workflow (no long-lived secrets).
-- `PG_ADMIN_PASSWORD` and `CONTAINER_IMAGE` provided at deploy time via environment variables.
+- Azure subscription(s); the CD workflow (or `deploy/azure-oidc-setup.sh`) creates a resource group
+  per environment (e.g. `laferia-dev`, `laferia-prod`) in **`centralus`** by default.
+- OIDC federated credentials for the CD workflow (no long-lived secrets) — run
+  [`deploy/azure-oidc-setup.sh`](../deploy/README.md) once per environment. It also grants the deploy
+  identity **Contributor** (so `az acr build` works) and **Key Vault Secrets User** on the group.
+- `PG_ADMIN_PASSWORD` and `CONTAINER_IMAGE` provided at deploy time via environment variables;
+  region overridable via `AZURE_LOCATION`.
 
 ## Validate / deploy
 ```bash

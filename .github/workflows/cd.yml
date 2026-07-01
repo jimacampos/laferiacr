@@ -2,11 +2,15 @@ name: CD
 
 # Build the image, push to ACR, deploy infra + the new revision to Azure Container Apps,
 # run database migrations, then smoke-test. Auth uses GitHub OIDC federated credentials —
-# no long-lived cloud secrets.
+# no long-lived cloud secrets. See deploy/README.md + deploy/azure-oidc-setup.sh for the
+# one-time identity setup (the federated credential subject must be the *environment*, e.g.
+# repo:<owner>/<repo>:environment:dev, because each job below runs in a GitHub environment).
 #
-# Required GitHub *Environment* configuration (dev, prod):
-#   Variables: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID, AZURE_RESOURCE_GROUP
-#   Secrets:   PG_ADMIN_PASSWORD
+# Required GitHub configuration:
+#   Repo Secrets:        AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
+#   Environment (dev,prod):
+#     Variables:         AZURE_RESOURCE_GROUP   (optional: AZURE_LOCATION, default centralus)
+#     Secrets:           PG_ADMIN_PASSWORD
 # Add a required-reviewers protection rule on the `prod` environment to gate production.
 
 on:
@@ -32,6 +36,7 @@ jobs:
     env:
       ENVIRONMENT: ${{ github.event.inputs.environment || 'dev' }}
       RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_LOCATION: ${{ vars.AZURE_LOCATION || 'centralus' }}
       PG_ADMIN_PASSWORD: ${{ secrets.PG_ADMIN_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
@@ -39,9 +44,9 @@ jobs:
       - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # First deploy creates the ACR (app starts on a placeholder image); later runs are no-ops here.
       - name: Provision infrastructure

@@ -41,7 +41,7 @@ platform and move data into PostgreSQL **without changing the user experience**.
 - [ ] Build & run the image locally; verify parity with `npm run dev`.
 
 ## 3. CI/CD (GitHub Actions)
-- [ ] Configure **OIDC federated credentials** (no long-lived secrets).
+- [ ] Configure **OIDC federated credentials** (no long-lived secrets). _(Scripted: `deploy/azure-oidc-setup.sh` — operator runs per env.)_
 - [x] CI workflow: `npm ci` → `npm run lint` → `npm run build` on PRs.
 - [x] CD workflow: build image → push to ACR → deploy ACA revision → run migrations → smoke check.
 - [ ] Add environment protection rules for **prod**.

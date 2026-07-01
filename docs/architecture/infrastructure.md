@@ -79,11 +79,16 @@ flowchart LR
 
 **As implemented (Phase 1).** `.github/workflows/ci.yml` runs lint + build on PRs/`main`
 (`prisma generate` runs on `npm ci`; no DB needed). `.github/workflows/cd.yml` authenticates via OIDC
-and is gated by a GitHub `environment` (`dev`/`prod`). Because the app image and ACR have a
-chicken-and-egg dependency, the first deploy uses a **placeholder image** to create the registry, then
-the workflow `az acr build`s the real image (tagged with the commit SHA) and redeploys. Migrations run
-with `prisma migrate deploy`, temporarily opening the Postgres firewall to the runner IP and pulling
-`DATABASE_URL` from Key Vault; the rule is removed afterward.
+and is gated by a GitHub `environment` (`dev`/`prod`). The one-time deploy identity is created by
+`deploy/azure-oidc-setup.sh` — its federated credential subject is the **GitHub environment**
+(`repo:<owner>/<repo>:environment:<env>`), and it is granted **Contributor** (so the OIDC-only
+`az acr build` works — `az acr login` can't, and `AcrPush` lacks `scheduleRun`) plus **Key Vault
+Secrets User** on the resource group. Because the app image and ACR have a chicken-and-egg dependency,
+the first deploy uses a **placeholder image** to create the registry, then the workflow `az acr build`s
+the real image (tagged with the commit SHA) and redeploys. Migrations run with `prisma migrate deploy`,
+temporarily opening the Postgres firewall to the runner IP and pulling `DATABASE_URL` from Key Vault;
+the rule is removed afterward. Deploys default to region **`centralus`** (known-good quota on this
+subscription; override with `AZURE_LOCATION`).
 
 ## Observability
 - App Insights for traces/metrics/logs across SSR + API; **sampling** to control cost.
