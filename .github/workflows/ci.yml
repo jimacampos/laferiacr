@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  lint-build:
+    name: Lint & build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # `npm ci` runs the postinstall `prisma generate`; the build uses the static
+      # data source (DATA_SOURCE unset), so no database is required in CI.
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run build

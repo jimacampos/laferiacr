@@ -1,0 +1,118 @@
+name: CD
+
+# Build the image, push to ACR, deploy infra + the new revision to Azure Container Apps,
+# run database migrations, then smoke-test. Auth uses GitHub OIDC federated credentials —
+# no long-lived cloud secrets. See deploy/README.md + deploy/azure-oidc-setup.sh for the
+# one-time identity setup (the federated credential subject must be the *environment*, e.g.
+# repo:<owner>/<repo>:environment:dev, because each job below runs in a GitHub environment).
+#
+# Required GitHub configuration:
+#   Repo Secrets:        AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
+#   Environment (dev,prod):
+#     Variables:         AZURE_RESOURCE_GROUP   (optional: AZURE_LOCATION, default centralus)
+#     Secrets:           PG_ADMIN_PASSWORD
+# Add a required-reviewers protection rule on the `prod` environment to gate production.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Target environment
+        type: choice
+        options: [dev, prod]
+        default: dev
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy ${{ github.event.inputs.environment || 'dev' }}
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.environment || 'dev' }}
+      RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_LOCATION: ${{ vars.AZURE_LOCATION || 'centralus' }}
+      PG_ADMIN_PASSWORD: ${{ secrets.PG_ADMIN_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # First deploy creates the ACR (app starts on a placeholder image); later runs are no-ops here.
+      - name: Provision infrastructure
+        env:
+          CONTAINER_IMAGE: ${{ vars.LAST_IMAGE || 'mcr.microsoft.com/k8se/quickstart:latest' }}
+        run: |
+          az deployment group create \
+            --resource-group "$RESOURCE_GROUP" \
+            --template-file infra/main.bicep \
+            --parameters "infra/${ENVIRONMENT}.bicepparam"
+
+      - name: Resolve ACR
+        id: acr
+        run: |
+          ACR_NAME=$(az acr list -g "$RESOURCE_GROUP" --query "[0].name" -o tsv)
+          LOGIN_SERVER=$(az acr show -n "$ACR_NAME" --query loginServer -o tsv)
+          echo "name=$ACR_NAME" >> "$GITHUB_OUTPUT"
+          echo "image=${LOGIN_SERVER}/laferiacr:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Build & push image
+        run: |
+          az acr build \
+            --registry "${{ steps.acr.outputs.name }}" \
+            --image "laferiacr:${GITHUB_SHA}" \
+            --file Dockerfile .
+
+      - name: Deploy application revision
+        env:
+          CONTAINER_IMAGE: ${{ steps.acr.outputs.image }}
+        run: |
+          az deployment group create \
+            --resource-group "$RESOURCE_GROUP" \
+            --template-file infra/main.bicep \
+            --parameters "infra/${ENVIRONMENT}.bicepparam"
+
+      - name: Run database migrations
+        run: |
+          KV_NAME=$(az keyvault list -g "$RESOURCE_GROUP" --query "[0].name" -o tsv)
+          PG_NAME=$(az postgres flexible-server list -g "$RESOURCE_GROUP" --query "[0].name" -o tsv)
+          DATABASE_URL=$(az keyvault secret show --vault-name "$KV_NAME" --name database-url --query value -o tsv)
+
+          # Temporarily allow this runner so migrate deploy can reach the firewalled server.
+          RUNNER_IP=$(curl -s https://api.ipify.org)
+          az postgres flexible-server firewall-rule create \
+            --resource-group "$RESOURCE_GROUP" --name "$PG_NAME" \
+            --rule-name "gh-runner-${GITHUB_RUN_ID}" \
+            --start-ip-address "$RUNNER_IP" --end-ip-address "$RUNNER_IP" >/dev/null
+
+          npm ci
+          DATABASE_URL="$DATABASE_URL" npm run db:migrate
+
+          az postgres flexible-server firewall-rule delete \
+            --resource-group "$RESOURCE_GROUP" --name "$PG_NAME" \
+            --rule-name "gh-runner-${GITHUB_RUN_ID}" --yes >/dev/null
+
+      - name: Smoke test
+        run: |
+          FQDN=$(az containerapp show -g "$RESOURCE_GROUP" -n "laferia-${ENVIRONMENT}-app" \
+            --query properties.configuration.ingress.fqdn -o tsv)
+          for i in $(seq 1 10); do
+            if curl -fsS "https://${FQDN}/api/health" >/dev/null; then
+              echo "Health check passed at https://${FQDN}/api/health"
+              exit 0
+            fi
+            echo "Waiting for app to become healthy ($i/10)..."
+            sleep 15
+          done
+          echo "Health check failed" >&2
+          exit 1

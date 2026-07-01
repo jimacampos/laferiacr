@@ -1,6 +1,6 @@
 # Data Model — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-01_
 
 Logical data model for the community platform. Storage is **PostgreSQL Flexible Server + PostGIS**
 ([ADR-0004](../decisions/0004-database-postgresql-flexible.md)). This is a design reference, not a
@@ -33,13 +33,16 @@ erDiagram
 
   markets {
     uuid id PK
+    text slug UK
     text name
-    text region
+    text region_id
+    text region_name
     jsonb days
+    text days_label
     text hours_text
     geography location
     text organizer
-    text phone
+    text[] phones
     text source
     text status
     timestamptz updated_at
@@ -118,12 +121,23 @@ erDiagram
 
 ### markets
 Canonical record per feria. Seeded from the official list, enriched by the community.
+- `slug`: the stable v0 identifier, **unique** — used as the idempotent seed/upsert key.
 - `source`: `official` | `community`.
 - `status`: `active` | `hidden` | `pending` (community-added awaiting confirmations).
+- `region_id` + `region_name`: kept as a pair (rather than a single `region`) to preserve exact v0
+  parity — the UI groups by `region_id` and labels with `region_name`.
 - `days`: normalized canonical keys (`["fri","sat"]`) — see day-normalization below.
-- `hours_text`: human string now (e.g. "5am–3pm"); may become structured later.
+- `days_label`: the original Spanish day string (e.g. "Viernes - sábado"); stored for provenance.
+- `hours_text`: human string now (e.g. "5am–3pm"); may become structured later. Null until known.
+- `phones`: `text[]` — markets can list multiple contact numbers (v0 parity).
 - `location`: PostGIS `geography(Point,4326)`, nullable until known.
 - Per-field freshness/confidence derived from the latest promoted proposal.
+
+> **Phase 1 implementation note.** The deployed `markets` table (Prisma model, see
+> [ADR-0010](../decisions/0010-orm-prisma.md)) splits `region` into `region_id`/`region_name` and uses
+> `phones text[]`, plus `slug` and `days_label`, to mirror `src/data/ferias.json` exactly. The PostGIS
+> `location` column and its GiST index are created via raw SQL in the initial migration because Prisma
+> does not natively type `geography`.
 
 ### proposals
 A suggested change to **one field** of a market (`field` ∈ `hours` | `location` | other).
@@ -174,5 +188,6 @@ Threshold **N** and weighting are policy — see [moderation-trust](moderation-t
 question** (start simple, e.g. 2–3 unweighted).
 
 ## Seeding
-Phase 1 loads `src/data/ferias.json` (from the official xlsx) into `markets` with `source=official`.
-Re-seeding is idempotent (upsert by stable key) and never clobbers community-verified fields.
+Phase 1 loads `src/data/ferias.json` (from the official xlsx) into `markets` with `source=official`
+via `prisma/seed.ts`. Re-seeding is idempotent (**upsert by `slug`**) and never clobbers
+community-verified fields (`hours_text`/`location` are left untouched on update).

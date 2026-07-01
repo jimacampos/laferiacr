@@ -21,6 +21,7 @@ supersedes the old one.
 | [0007](0007-contribution-anonymous-propose-account-confirm.md) | Contributions: anonymous propose, account to confirm | 🟢 Accepted |
 | [0008](0008-promotion-automated-confirmation-and-roles.md) | Promotion: automated confirmation + role governance | 🟢 Accepted |
 | [0009](0009-community-submitted-markets.md) | Community-submitted new markets | 🟢 Accepted |
+| [0010](0010-orm-prisma.md) | ORM: Prisma (with the pg driver adapter) | 🟢 Accepted |
 
 ## Template
 ```markdown
