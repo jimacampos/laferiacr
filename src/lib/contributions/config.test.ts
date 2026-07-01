@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { captchaEnabled, confirmationThreshold } from "./config";
+import {
+  captchaEnabled,
+  confirmationThreshold,
+  parseThreshold,
+  resolveThreshold,
+} from "./config";
 
 // Config reads operator-tunable policy from the environment with safe defaults so the app
 // runs unconfigured on dev. These pin the defaults and the parsing guards.
@@ -41,5 +46,37 @@ describe("captchaEnabled", () => {
   it("is on only for the exact string 'true'", () => {
     vi.stubEnv("CAPTCHA_ENABLED", "true");
     expect(captchaEnabled()).toBe(true);
+  });
+});
+
+describe("parseThreshold", () => {
+  it("parses a positive integer", () => {
+    expect(parseThreshold("3")).toBe(3);
+  });
+
+  it("returns null for absent, non-numeric, or non-positive input", () => {
+    expect(parseThreshold(null)).toBeNull();
+    expect(parseThreshold(undefined)).toBeNull();
+    expect(parseThreshold("")).toBeNull();
+    expect(parseThreshold("abc")).toBeNull();
+    expect(parseThreshold("0")).toBeNull();
+    expect(parseThreshold("-2")).toBeNull();
+  });
+});
+
+describe("resolveThreshold (Phase 4: DB → env → default)", () => {
+  it("prefers a valid DB value over env and default", () => {
+    expect(resolveThreshold("5", "3")).toBe(5);
+  });
+
+  it("falls back to env when the DB value is absent or invalid", () => {
+    expect(resolveThreshold(null, "3")).toBe(3);
+    expect(resolveThreshold("bad", "3")).toBe(3);
+    expect(resolveThreshold("0", "4")).toBe(4);
+  });
+
+  it("falls back to the built-in default when neither is valid", () => {
+    expect(resolveThreshold(null, null)).toBe(2);
+    expect(resolveThreshold("nope", "-1")).toBe(2);
   });
 });

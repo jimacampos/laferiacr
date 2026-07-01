@@ -37,6 +37,8 @@ export interface MarketDetail {
   location: MarketLocation | null;
   /** Provenance: 'official' (seed list) | 'community' (added later). */
   source: string;
+  /** Lifecycle status: 'active' | 'hidden' | 'pending'. */
+  status: string;
   /** Last-updated timestamp used as a freshness signal (ISO string). */
   updatedAt: string;
 }
@@ -100,6 +102,7 @@ interface MarketDetailRow {
   organizer: string | null;
   phones: string[];
   source: string;
+  status: string;
   updated_at: Date;
   lat: number | null;
   lng: number | null;
@@ -110,9 +113,14 @@ interface MarketDetailRow {
  * (no hours/location yet) unless DATA_SOURCE=db, in which case it reads the row from
  * Postgres and projects the PostGIS `location` to lat/lng via ST_Y/ST_X. Returns null
  * when the slug is unknown so the route can render notFound().
+ *
+ * Public reads see only `status = 'active'` markets. Moderators pass `includeHidden` so a
+ * hidden market can be opened (e.g. to review or unhide it); the returned `status` lets the
+ * UI flag it.
  */
 export async function getMarketBySlug(
   slug: string,
+  opts: { includeHidden?: boolean } = {},
 ): Promise<MarketDetail | null> {
   if (!isDbBacked()) {
     const feria = staticFerias.find((f) => f.id === slug);
@@ -129,6 +137,7 @@ export async function getMarketBySlug(
       phones: feria.phones,
       location: null,
       source: "official",
+      status: "active",
       updatedAt: dataGeneratedAt,
       dbId: null,
     };
@@ -137,10 +146,11 @@ export async function getMarketBySlug(
   const { prisma } = await import("./prisma");
   const rows = await prisma.$queryRaw<MarketDetailRow[]>`
     SELECT id, slug, name, region_id, region_name, days, days_label, hours_text,
-           organizer, phones, source, updated_at,
+           organizer, phones, source, status, updated_at,
            ST_Y(location::geometry) AS lat, ST_X(location::geometry) AS lng
     FROM markets
-    WHERE slug = ${slug} AND status = 'active'
+    WHERE slug = ${slug}
+      AND (status = 'active' OR ${opts.includeHidden ?? false})
     LIMIT 1`;
 
   const row = rows[0];
@@ -162,6 +172,7 @@ export async function getMarketBySlug(
         ? { lat: row.lat, lng: row.lng }
         : null,
     source: row.source,
+    status: row.status,
     updatedAt: row.updated_at.toISOString(),
   };
 }

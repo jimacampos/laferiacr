@@ -13,11 +13,14 @@ Security and privacy posture for a public, community-edited app handling minimal
   **JWTs** (no server session store), and the app persists only a minimal `users` row keyed on the
   immutable `oid` claim. Reading needs no account; Phase 3 protects confirm/reject routes.
 - **AuthZ:** server-side RBAC on every mutating route, from DB-backed roles — never client claims
-  ([rbac](rbac.md)).
+  ([rbac](rbac.md)). Phase 4 resolves capabilities via `can(userId, capability)` and route guards.
 - **Anonymous writes** (Phase 3 proposals and reports; later new-market submissions) are allowed but
   rate-limited and CAPTCHA-gated; **confirmations require an account**.
 - In Phase 3, proposal confirm/reject routes re-check the Auth.js session server-side; client claims
   are never trusted.
+- **Temp-bans (Phase 4):** an active ban **blocks all content writes** (propose, confirm/reject,
+  report) — enforced server-side in the write guards; governance routes are not ban-gated so a
+  moderator can't self-lock ([ADR-0014](../decisions/0014-rbac-moderation-queue-and-temp-bans.md)).
 
 ## Data classification
 | Data | Class | Handling |
@@ -83,12 +86,13 @@ location tracking. Contributor display names are not shown publicly in Phase 3 (
 - Minimal PII; **deletion/export** path for account data on request.
 - Transparent privacy notice covering data use, geolocation, and UGC licensing.
 - Audit logs for privileged actions ([data-model](data-model.md) `change_history` in Phase 3;
-  `moderation_actions` in Phase 4).
+  `moderation_actions` **dual-write** in Phase 4 records who/what/why for every governance action).
 - Costa Rica data-protection (and GDPR-aligned good practice) considered before public launch.
 
 ## Abuse handling
-- Tooling and policies in [moderation-trust](moderation-trust.md): reports, removal, temp-bans,
-  revert, break-glass admin overrides — all audited.
+- Tooling and policies in [moderation-trust](moderation-trust.md): reports queue, content removal,
+  hide/unhide markets, temp-bans, revert, and Super-Admin override — all audited in
+  `moderation_actions`.
 
 ## Open questions
 - Retention windows for IP/device abuse signals.

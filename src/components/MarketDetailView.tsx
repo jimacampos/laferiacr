@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { AdminControls } from "@/components/admin/AdminControls";
 import { ContributionBadge } from "@/components/contributions/ContributionBadge";
 import { ProposalList } from "@/components/contributions/ProposalList";
 import { ReportButton } from "@/components/contributions/ReportButton";
@@ -50,18 +51,26 @@ function PhoneIcon() {
   );
 }
 
+export interface MarketViewer {
+  isModerator: boolean;
+  isSuperAdmin: boolean;
+}
+
 export function MarketDetailView({
   market,
   contributions,
+  viewer,
 }: {
   market: MarketDetail;
   contributions: MarketContributions;
+  viewer?: MarketViewer;
 }) {
   const { t, lang } = useTranslation();
   const router = useRouter();
 
   // Contributions only apply to DB-backed markets (the static fallback has no dbId).
   const canContribute = Boolean(market.dbId);
+  const canModerate = Boolean(viewer?.isModerator && market.dbId);
   const refresh = () => router.refresh();
 
   const updated = new Date(market.updatedAt).toLocaleDateString(
@@ -115,6 +124,15 @@ export function MarketDetailView({
           </div>
         </header>
 
+        {canModerate && (
+          <AdminControls
+            slug={market.id}
+            hidden={market.status === "hidden"}
+            isSuperAdmin={Boolean(viewer?.isSuperAdmin)}
+            onChanged={refresh}
+          />
+        )}
+
         <section className="border-t border-stone-100 pt-4">
           <div className="mb-1.5 flex flex-wrap items-center gap-2">
             <h2 className="text-xs font-medium uppercase tracking-wide text-stone-400">
@@ -142,6 +160,7 @@ export function MarketDetailView({
                 field="hours"
                 name={market.name}
                 onChanged={refresh}
+                canModerate={canModerate}
               />
               <SuggestHours slug={market.id} onSubmitted={refresh} />
             </>
@@ -181,6 +200,7 @@ export function MarketDetailView({
                 field="location"
                 name={market.name}
                 onChanged={refresh}
+                canModerate={canModerate}
               />
               <SuggestLocation
                 slug={market.id}

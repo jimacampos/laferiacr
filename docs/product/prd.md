@@ -15,7 +15,7 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
 | --- | --- | --- |
 | **v0** | Static directory (read-only) | ✅ Shipped |
 | **Community v1** | Hours + location, propose → confirm → verify | 🟡 On dev (Phases 1–3 done & live on dev; prod deferred) |
-| **Governance** | Roles, moderation, community-submitted markets | Planned (Phases 4–5) |
+| **Governance** | Roles, moderation, community-submitted markets | 🚧 In progress (Phase 4 on dev; Phase 5 planned) |
 | **Hardening** | Trust weighting + accessibility | Planned (Phase 6) |
 | **Engagement** | PWA + notifications | Planned (Phase 7) |
 | **Rich content** | Photos & beyond | Planned (Phase 8) |
@@ -79,15 +79,20 @@ flag-gated CAPTCHA seam, and reversible `change_history`.)_
 
 ## Governance — Roles & community-submitted markets (Phases 4–5)
 - **FR-20** Role hierarchy: Anonymous, Member, Trusted, Community Safety, Super Admin
-  (see [rbac.md](../architecture/rbac.md)).
+  (see [rbac.md](../architecture/rbac.md)). _Phase 4 — 🚧 in progress on dev; enforced server-side
+  from the DB (`trusted` is a manual marker with no new powers yet)._
 - **FR-21 Community Safety** can remove inappropriate content, resolve reports, hide/disable a
-  market, and temporarily ban abusers.
+  market, and temporarily ban abusers. _Phase 4 — 🚧 in progress on dev (reports queue + temp-bans)._
 - **FR-22 Super Admin** can override any field, manage roles/moderators, configure threshold **N**,
-  and revert history. All privileged actions are audited.
+  and revert history. All privileged actions are audited. _Phase 4 — 🚧 in progress on dev; audited via
+  the new `moderation_actions` table; **N** is DB-configurable
+  ([ADR-0015](../decisions/0015-admin-configurable-settings-app-config.md))._
 - **FR-23 Add a market:** users can submit a brand-new market (name, region, days, location, hours).
+  _Phase 5 — planned._
 - **FR-24 Duplicate detection:** new submissions are checked against existing markets by name
-  similarity and proximity before publishing.
+  similarity and proximity before publishing. _Phase 5 — planned._
 - **FR-25 Provenance:** markets are labeled **"Official (2026 list)"** or **"Community-added"**.
+  _Phase 5 — planned._
 
 ---
 

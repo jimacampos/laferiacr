@@ -38,15 +38,15 @@ in the [roadmap](roadmap.md) when they're ready to schedule.
 | ID | Question | Priority | Status | Related |
 | --- | --- | :--: | --- | --- |
 | OQ-001 | Confirmation threshold **N** starting value | P1 | ✅ resolved (Phase 3: **N = 2**, net confirmations; configurable via `CONFIRMATION_THRESHOLD`) | [moderation-trust](../architecture/moderation-trust.md), [ADR-0008](../decisions/0008-promotion-automated-confirmation-and-roles.md) |
-| OQ-002 | When to enable reputation weighting of votes | P2 | open | [moderation-trust](../architecture/moderation-trust.md) |
-| OQ-003 | Moderator vetting & regional scoping | P2 | open | [rbac](../architecture/rbac.md) |
+| OQ-002 | When to enable reputation weighting of votes | P2 | open (deferred to Phase 6; Phase 4 `trusted` is a manual marker, no weighting) | [moderation-trust](../architecture/moderation-trust.md) |
+| OQ-003 | Moderator vetting & regional scoping | P2 | open (Phase 4 decision: **manual grant only, scoping deferred** — `user_roles.scope` kept but not enforced; grants global) | [rbac](../architecture/rbac.md), [ADR-0014](../decisions/0014-rbac-moderation-queue-and-temp-bans.md) |
 | OQ-004 | Duplicate-detection strictness for new markets | P2 | open | [ADR-0009](../decisions/0009-community-submitted-markets.md) |
 | OQ-005 | Entra sign-in providers beyond Google | P2 | open | [ADR-0005](../decisions/0005-identity-entra-external-id.md) |
 | OQ-006 | Pin prod ACA to min-1 replica vs scale-to-zero | P2 | open | [infrastructure](../architecture/infrastructure.md) |
 | OQ-007 | Private networking (VNet/Private Link) for DB | P3 | open | [infrastructure](../architecture/infrastructure.md) |
 | OQ-008 | Show contributor display names publicly vs pseudonymous | P2 | open (Phase 3 default: **pseudonymous** — no public names) | [security-privacy](../architecture/security-privacy.md) |
-| OQ-009 | Auto-quarantine threshold (reports before auto-hide) | P2 | open | [moderation-trust](../architecture/moderation-trust.md) |
-| OQ-010 | Appeal channel & SLA | P3 | open | [content-guidelines](../community/content-guidelines.md) |
+| OQ-009 | Auto-quarantine threshold (reports before auto-hide) | P2 | open (Phase 4 decision: **no auto-quarantine** — the queue sorts by open-report count and moderators act manually, to avoid false-report brigading; revisit later) | [moderation-trust](../architecture/moderation-trust.md), [ADR-0014](../decisions/0014-rbac-moderation-queue-and-temp-bans.md) |
+| OQ-010 | Appeal channel & SLA | P3 | open (needed once temp-bans/removals are live in Phase 4; not built yet) | [content-guidelines](../community/content-guidelines.md), [moderation-trust](../architecture/moderation-trust.md) |
 | OQ-011 | CI accessibility gate (tool + threshold) | P3 | open | [accessibility](../accessibility.md) |
 | OQ-012 | Retention windows for IP/device abuse signals | P3 | open | [security-privacy](../architecture/security-privacy.md) |
 

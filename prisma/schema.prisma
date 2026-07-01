@@ -133,6 +133,7 @@ model Report {
   createdAt  DateTime @default(now()) @map("created_at")
 
   @@index([targetType, targetId, status])
+  @@index([status, createdAt])
   @@map("reports")
 }
 
@@ -189,4 +190,65 @@ model ContributionAttempt {
 
   @@index([ipHash, action, createdAt])
   @@map("contribution_attempts")
+}
+
+/// Append-only audit of moderator/admin actions (Phase 4, ADR-0014) — who did what to which
+/// target and why. Complements `change_history`, which logs field value diffs used for revert;
+/// this table captures the governance action itself (removals, hides, bans, role and config
+/// changes). FKs to `users` are enforced in SQL (see migration) rather than as Prisma relations,
+/// mirroring the Phase 3 `reports`/`change_history` precedent to keep the `User` model clean.
+model ModerationAction {
+  id         String   @id @default(uuid()) @db.Uuid
+  /// Moderator/admin who performed the action; null if the account was later deleted.
+  actorId    String?  @map("actor_id") @db.Uuid
+  /// e.g. 'resolve_report' | 'dismiss_report' | 'remove_proposal' | 'hide_market' |
+  /// 'unhide_market' | 'override_field' | 'revert_field' | 'grant_role' | 'revoke_role' |
+  /// 'ban_user' | 'lift_ban' | 'set_config'.
+  action     String
+  /// 'market' | 'proposal' | 'report' | 'user' | 'config'.
+  targetType String   @map("target_type")
+  /// Target uuid where applicable; null for keyed targets (e.g. a config key kept in metadata).
+  targetId   String?  @map("target_id") @db.Uuid
+  reason     String?
+  /// Extra structured context (role granted, ban duration, config key + old/new value, etc.).
+  metadata   Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([targetType, targetId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@map("moderation_actions")
+}
+
+/// Temporary or permanent ban on a user (Phase 4, ADR-0014). An active ban blocks all writes
+/// (propose / confirm-reject / report). Active = `lifted_at IS NULL AND (expires_at IS NULL OR
+/// expires_at > now())`; a null `expires_at` is a permanent ban. FKs enforced in SQL.
+model UserBan {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  reason    String?
+  /// Moderator/admin who issued the ban; null if that account was later deleted.
+  createdBy String?   @map("created_by") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at")
+  /// When the ban expires; null = permanent.
+  expiresAt DateTime? @map("expires_at")
+  /// When the ban was lifted early; null = still active (subject to expiry).
+  liftedAt  DateTime? @map("lifted_at")
+  liftedBy  String?   @map("lifted_by") @db.Uuid
+
+  @@index([userId, expiresAt])
+  @@map("user_bans")
+}
+
+/// Admin-configurable key/value settings (Phase 4, ADR-0015). Currently holds
+/// `confirmation_threshold` (N). Runtime read order: this table → env → built-in default,
+/// so the app still runs unconfigured on dev.
+model AppConfig {
+  key       String   @id
+  value     String
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  /// Super Admin who last changed the value; null when seeded.
+  updatedBy String?  @map("updated_by") @db.Uuid
+
+  @@map("app_config")
 }

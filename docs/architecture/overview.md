@@ -105,12 +105,15 @@ sequenceDiagram
 ```
 
 The detail UI shows verified/needs-confirmation badges, conflicts, and report actions for proposals
-or markets. Minimal Super-Admin break-glass actions (revert, override, hide) are API-level only in
-Phase 3 and audited via `change_history`. Moderation and promotion rules: see
-[moderation-trust](moderation-trust.md). Authorization model: see [rbac](rbac.md).
+or markets. Super-Admin break-glass actions (revert, override, hide) were API-level only in Phase 3;
+**Phase 4 adds full RBAC, a reports queue, temp-bans, and an `/admin` UI**, with every governance
+action dual-written to `moderation_actions` (audit) plus `change_history` (field diffs). Moderation
+and promotion rules: see [moderation-trust](moderation-trust.md). Authorization model: see
+[rbac](rbac.md).
 
 Phase 3 contribution reads/writes use `proposals`, `confirmations`, `reports`, `change_history`,
-`user_roles` (`super_admin` only), and `contribution_attempts`.
+`user_roles` (`super_admin` only), and `contribution_attempts`. Phase 4 adds `moderation_actions`,
+`user_bans`, and `app_config`, and activates all four roles in `user_roles`.
 
 ## Environments
 - **dev** and **prod** as separate resource groups (and ideally subscriptions), provisioned by the

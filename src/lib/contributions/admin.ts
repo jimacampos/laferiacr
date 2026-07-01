@@ -1,6 +1,7 @@
 import { Prisma } from "../../../generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 
+import { recordModerationAction } from "./moderation";
 import type { LocationValue } from "./validation";
 
 export type AdminField = "hours" | "location" | "status";
@@ -77,6 +78,7 @@ export async function overrideField(
   marketId: string,
   field: "hours" | "location",
   newValue: string | LocationValue,
+  reason?: string | null,
 ): Promise<void> {
   const value = newValue as unknown as Prisma.InputJsonValue;
   await prisma.$transaction(async (tx) => {
@@ -96,6 +98,17 @@ export async function overrideField(
       where: { marketId, field, status: { in: ["pending", "verified"] } },
       data: { status: "superseded" },
     });
+    await recordModerationAction(
+      {
+        actorId,
+        action: "override_field",
+        targetType: "market",
+        targetId: marketId,
+        reason,
+        metadata: { field },
+      },
+      tx,
+    );
   });
 }
 
@@ -108,6 +121,7 @@ export async function revertField(
   actorId: string,
   marketId: string,
   field: "hours" | "location",
+  reason?: string | null,
 ): Promise<boolean> {
   return prisma.$transaction(async (tx) => {
     const last = await tx.changeHistory.findFirst({
@@ -133,15 +147,27 @@ export async function revertField(
         action: "revert",
       },
     });
+    await recordModerationAction(
+      {
+        actorId,
+        action: "revert_field",
+        targetType: "market",
+        targetId: marketId,
+        reason,
+        metadata: { field },
+      },
+      tx,
+    );
     return true;
   });
 }
 
-/** Hide (or unhide) a market. Records the status change (action='hide'). */
+/** Hide (or unhide) a market. Records the status change (action='hide') + moderation audit. */
 export async function setMarketHidden(
   actorId: string,
   marketId: string,
   hidden: boolean,
+  reason?: string | null,
 ): Promise<void> {
   const status = hidden ? "hidden" : "active";
   await prisma.$transaction(async (tx) => {
@@ -157,5 +183,15 @@ export async function setMarketHidden(
         action: "hide",
       },
     });
+    await recordModerationAction(
+      {
+        actorId,
+        action: hidden ? "hide_market" : "unhide_market",
+        targetType: "market",
+        targetId: marketId,
+        reason,
+      },
+      tx,
+    );
   });
 }

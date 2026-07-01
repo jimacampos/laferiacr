@@ -1,6 +1,6 @@
 # Glossary — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-01_
 
 Shared vocabulary for the project. Domain terms include **ES↔EN** equivalents since the product and
 source data are bilingual.
@@ -32,7 +32,10 @@ source data are bilingual.
 | **Promotion** | The act of a proposal becoming the market's verified value. |
 | **Supersede** | When a newer verified value replaces an older one. |
 | **Report / flag** | Signaling content as wrong, fake, spam, or offensive. |
-| **Break-glass** | Emergency Super-Admin override used before full moderation tooling exists. |
+| **Reports queue** | The moderation view where open reports are grouped per target and triaged (Phase 4). |
+| **Moderation action** | An audited privileged action (remove, hide, ban, override, revert, role/config change) recorded in `moderation_actions`. |
+| **Temp-ban** | A time-boxed (1d/7d/30d) or permanent block on all writes for an abusive user (Phase 4). |
+| **Break-glass** | Emergency Super-Admin override used before full moderation tooling existed; superseded by Phase 4 RBAC + `/admin` tooling. |
 
 ## Roles
 | Role | Meaning |
@@ -40,8 +43,8 @@ source data are bilingual.
 | **Anonymous** | Not signed in; can browse, propose, submit, report. |
 | **Member** | Signed-in user; can confirm/reject. |
 | **Trusted** | Reputable contributor; weighted votes (later). |
-| **Community Safety** | Moderator; removes bad content, resolves reports. |
-| **Super Admin** | Operator; overrides, role management, config, revert. |
+| **Community Safety** | Moderator; removes bad content, resolves reports, hides markets, temp-bans abusers. |
+| **Super Admin** | Operator; overrides, role management, config (**N**), revert; full audit trail. |
 
 See [architecture/rbac.md](architecture/rbac.md) for full capabilities.
 

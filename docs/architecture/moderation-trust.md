@@ -1,6 +1,6 @@
 # Moderation & Trust — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-01_
+**Status:** 🟢 Implemented (Phase 4) · _Last updated: 2026-07-01_
 
 How community input becomes trustworthy "verified" data, and how abuse is contained. Combines an
 **automated** confirmation loop ([ADR-0008](../decisions/0008-promotion-automated-confirmation-and-roles.md))
@@ -27,8 +27,9 @@ stateDiagram-v2
 ## Confirmation threshold (N)
 - Promotion is automatic at **N = 2** net confirmations for the same proposed value, where
   `net = confirm_count - reject_count`. This resolves OQ-001.
-- `CONFIRMATION_THRESHOLD` configures N (default 2); Super-Admin configuration is planned in Phase 4
-  ([rbac](rbac.md)).
+- N is resolved **DB → env → default 2**: the `app_config.confirmation_threshold` value (edited by a
+  Super Admin at `/admin/settings`) takes precedence over the `CONFIRMATION_THRESHOLD` env var, which
+  falls back to the built-in default ([ADR-0015](../decisions/0015-admin-configurable-settings-app-config.md)).
 - **One-user-one-vote:** confirmations are unique per `(proposal_id, user_id)`.
 - **Self-vote rule:** a signed-in proposer cannot confirm/reject their own proposal, and the
   proposer's vote never counts. Promotion requires N confirmations from other accounts; anonymous
@@ -55,9 +56,14 @@ flowchart LR
 ```
 
 - Anyone (incl. anonymous) can report a market or proposal.
-- Community Safety triages in Phase 4; Phase 3 break-glass actions are **reversible and audited** in
-  `change_history`.
-- Appeals go through [content-guidelines](../community/content-guidelines.md).
+- **Community Safety triages the queue (Phase 4):** open reports are grouped by target and ranked by
+  open-report **count**, then recency. A moderator **resolves** (actioned) or **dismisses** all open
+  reports on a target, can **remove** an abusive proposal, **hide/unhide** a market, and **temp-ban**
+  the author; a Super Admin can additionally **override/revert** a field. Every action **dual-writes**
+  `moderation_actions` (who/what/why) and, for field changes, `change_history` (for revert).
+- **No auto-quarantine (OQ-009 deferred):** the queue only surfaces counts; nothing is auto-hidden.
+  This is the safest default against coordinated false reports — all removals are manual.
+- Appeals go through [content-guidelines](../community/content-guidelines.md) (channel & SLA — OQ-010).
 
 ## Anti-abuse controls
 | Vector | Control |
@@ -66,8 +72,8 @@ flowchart LR
 | Vote stuffing | **Account required** to confirm; one vote per user per proposal |
 | Sock-puppets / sybil | Email-verified accounts; reputation + anomaly heuristics (Phase 6) |
 | Bad new markets | Duplicate detection; pending until confirmed; moderation |
-| Vandalism | Full history + **revert**; moderator removal; temp-bans |
-| Coordinated attack | WAF/Front Door; alerting; Super-Admin break-glass overrides |
+| Vandalism | Full history + **revert**; moderator content removal; **temp-bans** (1d/7d/30d/permanent, block all writes) |
+| Coordinated attack | WAF/Front Door; alerting; Super-Admin override/revert; manual queue triage (no auto-hide) |
 
 ## Governance vs. automation
 - **Automation** handles the happy path: propose → confirm → auto-verify. No human needed for normal edits.
@@ -81,7 +87,9 @@ flowchart LR
   ([accessibility](../accessibility.md)).
 
 ## Open questions
-- When to enable reputation weighting.
-- Moderator vetting and regional scoping.
-- Auto-quarantine thresholds (e.g. N reports auto-hide pending review).
+- When to enable reputation weighting (OQ-002; Phase 6).
+- Moderator vetting and regional scoping (OQ-003; `scope` column present, enforcement deferred).
+- ~~Auto-quarantine thresholds~~ — **decided against for Phase 4** (OQ-009 parked): the queue ranks by
+  report count and all removals are manual, to resist false-report brigading.
+- Appeal channel & SLA (OQ-010; see [content-guidelines](../community/content-guidelines.md)).
 - Duplicate-detection strictness for new markets.

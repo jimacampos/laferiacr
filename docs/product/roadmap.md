@@ -60,11 +60,21 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 - **Exit criteria:** the public can improve and verify real hours/locations safely.
 
 ## Phase 4 — Roles, permissions & moderation
+**Status:** 🚧 In progress — building on **dev** (full RBAC + moderation queue + temp-bans + admin UI; MVP 0, dev only).
 **Goal:** real governance to replace break-glass.
-- Implement RBAC: Member, Trusted, **Community Safety**, **Super Admin** ([rbac.md](../architecture/rbac.md)).
+- Implement RBAC: Member, Trusted, **Community Safety**, **Super Admin** ([rbac.md](../architecture/rbac.md)),
+  enforced server-side from the DB; `trusted` is a manual marker (reputation grants are Phase 6).
 - Community Safety tooling: reports queue, content removal, hide/disable markets, temp-bans.
-- Super Admin tooling: override fields, manage roles, configure **N**, revert; full audit trail.
+- Super Admin tooling: override fields, manage roles, configure **N** (DB-backed), revert; full audit
+  trail via the new `moderation_actions` table.
+- Dedicated `/admin` UI + inline moderation controls on the market detail page.
+- Decisions: [ADR-0014](../decisions/0014-rbac-moderation-queue-and-temp-bans.md) (RBAC + queue +
+  `moderation_actions` + temp-bans), [ADR-0015](../decisions/0015-admin-configurable-settings-app-config.md)
+  (admin-configurable settings). Deferred: reputation/auto-grant (Phase 6), regional scoping (OQ-003),
+  auto-quarantine (OQ-009, decided against for now).
 - **Exit criteria:** moderators and admins can keep content safe with audited, reversible actions.
+
+> 📋 Executable checklist: [phase-4-tasks.md](phase-4-tasks.md).
 
 ## Phase 5 — Add new markets (community-submitted)
 **Goal:** grow beyond the official list.

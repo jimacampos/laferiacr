@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 
-import { auth } from "@/auth";
 import { MarketDetailView } from "@/components/MarketDetailView";
+import { getViewerAccess } from "@/lib/contributions/access";
 import {
   EMPTY_CONTRIBUTIONS,
   getMarketContributions,
@@ -37,13 +37,27 @@ export default async function MarketPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const market = await loadMarket(slug);
+  const access = await getViewerAccess();
+
+  // Public reads see active markets only; a moderator may open a hidden one (e.g. to unhide it).
+  let market = await loadMarket(slug);
+  if (!market && access.isModerator) {
+    market = await getMarketBySlug(slug, { includeHidden: true });
+  }
   if (!market) notFound();
 
-  const session = await auth();
   const contributions = market.dbId
-    ? await getMarketContributions(market.dbId, session?.user?.id)
+    ? await getMarketContributions(market.dbId, access.userId ?? undefined)
     : EMPTY_CONTRIBUTIONS;
 
-  return <MarketDetailView market={market} contributions={contributions} />;
+  return (
+    <MarketDetailView
+      market={market}
+      contributions={contributions}
+      viewer={{
+        isModerator: access.isModerator,
+        isSuperAdmin: access.isSuperAdmin,
+      }}
+    />
+  );
 }

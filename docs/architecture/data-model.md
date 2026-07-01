@@ -9,8 +9,9 @@ migration script; final column types/indexes are settled during Phase 1.
 ## Design principles
 - **Official list is seed truth.** Markets are seeded from the June 2026 spreadsheet; community input
   lives in `proposals`/`confirmations` and is **promoted** onto the market, never silently overwriting.
-- **Auditable & reversible.** Every promoted change writes `change_history`; Phase 3 break-glass
-  actions also audit there, while the dedicated `moderation_actions` table remains Phase 4.
+- **Auditable & reversible.** Every promoted change writes `change_history`; Phase 4 governance
+  actions **dual-write** the dedicated `moderation_actions` table (who/what/why), while
+  `change_history` remains the field-diff log that powers revert.
 - **Provenance everywhere.** Markets carry `source` (official vs community) and per-field freshness.
 
 ## Entity overview
@@ -30,6 +31,7 @@ erDiagram
   markets ||--o{ change_history : "records"
   users ||--o{ moderation_actions : "performs"
   markets ||--o{ moderation_actions : "targets"
+  users ||--o{ user_bans : "banned"
 
   markets {
     uuid id PK
@@ -109,7 +111,24 @@ erDiagram
     text target_type
     uuid target_id
     text reason
+    jsonb metadata
     timestamptz created_at
+  }
+  user_bans {
+    uuid id PK
+    uuid user_id FK
+    text reason
+    uuid created_by FK
+    timestamptz created_at
+    timestamptz expires_at
+    timestamptz lifted_at
+    uuid lifted_by FK
+  }
+  app_config {
+    text key PK
+    text value
+    timestamptz updated_at
+    uuid updated_by FK
   }
   change_history {
     uuid id PK
@@ -170,7 +189,7 @@ the proposal.
 ### reports
 Flags on a market or proposal (`target_type` + `target_id`). Feeds the moderation queue
 ([moderation-trust](moderation-trust.md)). `status`: `open` | `actioned` | `dismissed`. Indexed by
-`(target_type, target_id, status)`.
+`(target_type, target_id, status)` and, for queue listing, `(status, created_at)`.
 
 ### users
 Created on first sign-in via Entra External ID. **`external_id` is unique** and holds the token's
@@ -181,8 +200,10 @@ upserted from the Auth.js `jwt` callback in `src/auth.ts`); contribution tables 
 ### user_roles
 Grants a `role` (`member` | `trusted` | `community_safety` | `super_admin`) with optional `scope`
 (e.g. region) for future regional moderators. Pulled forward into Phase 3 for break-glass admin
-([ADR-0013](../decisions/0013-minimal-roles-phase-3-break-glass.md)); Phase 3 uses only
-`super_admin`. Unique on `(user_id, role, scope)` plus a partial unique index where `scope IS NULL`
+([ADR-0013](../decisions/0013-minimal-roles-phase-3-break-glass.md)); **Phase 4 activates all four
+roles** ([ADR-0014](../decisions/0014-rbac-moderation-queue-and-temp-bans.md)) — `member` is implicit
+(never stored), `trusted` is a manual marker, and `scope` is stored but not yet enforced (all grants
+global). Unique on `(user_id, role, scope)` plus a partial unique index where `scope IS NULL`
 because Postgres treats NULLs as distinct. See [rbac](rbac.md).
 
 ### market_submissions
@@ -190,8 +211,22 @@ Proposed **new** markets (Phase 5). Holds candidate details until promoted to a 
 `promoted_market_id` links the result. Duplicate detection on name + proximity before acceptance.
 
 ### moderation_actions
-Append-only audit of moderator/admin actions (remove, hide, ban, override, revert) — who/what/why/when.
-Deferred to Phase 4; Phase 3 break-glass actions are audited through `change_history`.
+Append-only audit of moderator/admin actions (remove, hide, ban, override, revert, grant/revoke role,
+set config) — who/what/why/when, plus a `metadata` jsonb for action context (role, ban duration,
+config key/old/new). **Implemented in Phase 4** ([ADR-0014](../decisions/0014-rbac-moderation-queue-and-temp-bans.md));
+every privileged action **dual-writes** here while `change_history` keeps the field-value diffs that
+power revert. `actor_id` FK is `SET NULL` on user deletion.
+
+### user_bans
+Temp-bans that block **all writes** while active. `expires_at` null = permanent; a ban is active when
+`lifted_at IS NULL AND (expires_at IS NULL OR expires_at > now())`. `created_by`/`lifted_by` record the
+moderators. Durations are presets (1d/7d/30d) or permanent; early lift supported. Index `(user_id,
+expires_at)`. New in Phase 4 ([ADR-0014](../decisions/0014-rbac-moderation-queue-and-temp-bans.md)).
+
+### app_config
+Key/value store for runtime-tunable policy. Seeds `confirmation_threshold`; N resolves **DB → env →
+default 2**. `updated_by` records the Super Admin. New in Phase 4
+([ADR-0015](../decisions/0015-admin-configurable-settings-app-config.md)).
 
 ### change_history
 Append-only record of every promoted field change (old → new, causing proposal) enabling display of
@@ -210,13 +245,15 @@ in `scripts/generate_data.py` and is reused when seeding.
 
 ## Promotion & versioning
 1. Proposal collects account-gated confirmations and rejects.
-2. At **N = 2** net confirmations (`confirm_count - reject_count`) it becomes `verified`; the market's
+2. At **N** net confirmations (`confirm_count - reject_count`) it becomes `verified`; the market's
    field is updated and `change_history` is written.
 3. Competing proposals for the same field are `superseded`.
-4. Super Admin break-glass actions can override, revert, or hide, writing `change_history`.
+4. Community Safety can remove/hide content and temp-ban abusers; Super Admin can override, revert, or
+   hide — each writes `change_history` (field diffs) and `moderation_actions` (governance audit).
 
-Threshold **N** defaults to 2 and is configurable with `CONFIRMATION_THRESHOLD`; weighting remains
-deferred — see [moderation-trust](moderation-trust.md).
+Threshold **N** defaults to 2 and resolves **DB (`app_config`) → env (`CONFIRMATION_THRESHOLD`) →
+default**, editable by a Super Admin ([ADR-0015](../decisions/0015-admin-configurable-settings-app-config.md));
+weighting remains deferred — see [moderation-trust](moderation-trust.md).
 
 ## Seeding
 Phase 1 loads `src/data/ferias.json` (from the official xlsx) into `markets` with `source=official`

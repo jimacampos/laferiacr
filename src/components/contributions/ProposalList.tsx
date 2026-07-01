@@ -6,6 +6,7 @@ import { useState } from "react";
 import { MarketMap } from "@/components/MarketMap";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { voteProposal } from "@/lib/contributions/api";
+import { removeProposal } from "@/lib/contributions/adminApi";
 import type { LocationValue, PendingProposal } from "@/lib/contributions/types";
 
 const ENTRA_PROVIDER = "microsoft-entra-id";
@@ -19,17 +20,20 @@ function ProposalCard({
   field,
   name,
   onChanged,
+  canModerate,
 }: {
   proposal: PendingProposal;
   field: "hours" | "location";
   name: string;
   onChanged: () => void;
+  canModerate: boolean;
 }) {
   const { t } = useTranslation();
   const { data: session, status } = useSession();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [promoted, setPromoted] = useState(false);
+  const [removed, setRemoved] = useState(false);
 
   const signedIn = Boolean(session?.user);
 
@@ -44,6 +48,27 @@ function ProposalCard({
     }
     if (res.data?.promoted) setPromoted(true);
     onChanged();
+  }
+
+  async function remove() {
+    setBusy(true);
+    setError(null);
+    const res = await removeProposal(proposal.id);
+    setBusy(false);
+    if (!res.ok) {
+      setError(t("admin.controls.error"));
+      return;
+    }
+    setRemoved(true);
+    onChanged();
+  }
+
+  if (removed) {
+    return (
+      <li className="rounded-xl border border-stone-200 bg-stone-50/60 p-3 text-sm italic text-stone-400">
+        {t("admin.controls.removed")}
+      </li>
+    );
   }
 
   const remainingLabel =
@@ -127,6 +152,19 @@ function ProposalCard({
       )}
 
       {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+
+      {canModerate && (
+        <div className="mt-2 border-t border-stone-200 pt-2">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={remove}
+            className="text-xs font-medium text-red-600 underline-offset-2 hover:underline disabled:opacity-50"
+          >
+            {t("moderation.action.remove")}
+          </button>
+        </div>
+      )}
     </li>
   );
 }
@@ -137,11 +175,13 @@ export function ProposalList({
   field,
   name,
   onChanged,
+  canModerate = false,
 }: {
   proposals: PendingProposal[];
   field: "hours" | "location";
   name: string;
   onChanged: () => void;
+  canModerate?: boolean;
 }) {
   const { t } = useTranslation();
   if (proposals.length === 0) return null;
@@ -159,6 +199,7 @@ export function ProposalList({
             field={field}
             name={name}
             onChanged={onChanged}
+            canModerate={canModerate}
           />
         ))}
       </ul>
