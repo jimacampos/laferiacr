@@ -126,6 +126,7 @@ export const dictionaries: Record<Language, Messages> = {
     "admin.nav.roles": "Roles",
     "admin.nav.settings": "Ajustes",
     "admin.nav.audit": "Auditoría",
+    "admin.nav.attention": "Atención",
     "admin.dashboard.openReports": "Objetivos con reportes abiertos",
     "admin.dashboard.superAdmins": "Administradores",
     "admin.dashboard.threshold": "Confirmaciones para verificar (N)",
@@ -195,6 +196,17 @@ export const dictionaries: Record<Language, Messages> = {
     "audit.col.action": "Acción",
     "audit.col.target": "Objetivo",
     "audit.col.reason": "Motivo",
+
+    "attention.title": "Ferias que necesitan confirmación",
+    "attention.subtitle":
+      "Cambios sugeridos que esperan suficientes confirmaciones para verificarse.",
+    "attention.empty": "No hay sugerencias esperando confirmación. ¡Todo al día!",
+    "attention.suggestions": "{count} sugerencias pendientes",
+    "attention.suggestionsOne": "1 sugerencia pendiente",
+    "attention.progress": "{net} de {threshold} confirmaciones",
+    "attention.needsMore": "faltan {remaining}",
+    "attention.waitingSince": "Esperando desde {date}",
+    "attention.review": "Revisar",
 
     "admin.controls.title": "Herramientas de moderación",
     "admin.controls.hidden": "Esta feria está oculta del público.",
@@ -328,6 +340,7 @@ export const dictionaries: Record<Language, Messages> = {
     "admin.nav.roles": "Roles",
     "admin.nav.settings": "Settings",
     "admin.nav.audit": "Audit log",
+    "admin.nav.attention": "Attention",
     "admin.dashboard.openReports": "Targets with open reports",
     "admin.dashboard.superAdmins": "Super Admins",
     "admin.dashboard.threshold": "Confirmations to verify (N)",
@@ -397,6 +410,17 @@ export const dictionaries: Record<Language, Messages> = {
     "audit.col.action": "Action",
     "audit.col.target": "Target",
     "audit.col.reason": "Reason",
+
+    "attention.title": "Markets needing confirmation",
+    "attention.subtitle":
+      "Suggested changes waiting for enough confirmations to verify.",
+    "attention.empty": "No suggestions are waiting for confirmation. All caught up!",
+    "attention.suggestions": "{count} pending suggestions",
+    "attention.suggestionsOne": "1 pending suggestion",
+    "attention.progress": "{net} of {threshold} confirmations",
+    "attention.needsMore": "needs {remaining} more",
+    "attention.waitingSince": "Waiting since {date}",
+    "attention.review": "Review",
 
     "admin.controls.title": "Moderation tools",
     "admin.controls.hidden": "This market is hidden from the public.",
