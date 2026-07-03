@@ -1,6 +1,6 @@
 # Moderation & Trust — La Feria CR
 
-**Status:** 🟢 Implemented (Phase 4) · _Last updated: 2026-07-01_
+**Status:** 🟢 Implemented (Phase 4) · _Last updated: 2026-07-03_
 
 How community input becomes trustworthy "verified" data, and how abuse is contained. Combines an
 **automated** confirmation loop ([ADR-0008](../decisions/0008-promotion-automated-confirmation-and-roles.md))
@@ -35,6 +35,18 @@ stateDiagram-v2
   proposer's vote never counts. Promotion requires N confirmations from other accounts; anonymous
   proposals start at 0.
 - **Reputation weighting** (Trusted/mod votes count more) is **deferred to Phase 6**; v1 is 1 user = 1 vote.
+
+## Confirmation backlog (moderator worklist)
+- Moderators (Community Safety+) get a **"markets requiring attention"** view at
+  `/admin/attention` that surfaces the **confirmation backlog**: markets with `pending`
+  proposals that still need more net confirmations to reach **N**. It's a discovery aid for
+  stale community suggestions — distinct from the reports queue (abuse) and read-only.
+- Ordered **oldest/most-stale first**: the market whose longest-waiting pending suggestion has
+  waited longest leads; suggestions within a market are likewise oldest-first. Each row shows
+  the field, progress (`net X of N`, how many more are needed), and how long it's been waiting,
+  and links to the market page where anyone signed in can confirm.
+- Hidden/non-active markets are excluded (their suggestions can't be confirmed publicly). The
+  view only reads state — it never auto-verifies or mutates (BL-020).
 
 ## Conflict resolution
 - Multiple competing proposals for the same field can be open at once; users confirm the one they
