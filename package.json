@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@azure/identity": "^4.13.1",
+    "@azure/monitor-opentelemetry": "^1.18.2",
+    "@next/third-parties": "^16.2.10",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "azure-maps-control": "^3.7.4",

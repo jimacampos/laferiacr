@@ -49,6 +49,9 @@ export function captchaEnabled(): boolean {
 export const RATE_LIMITS = {
   proposal: { max: 10, windowMs: 60 * 60 * 1000 },
   report: { max: 20, windowMs: 60 * 60 * 1000 },
+  // Feedback is sign-in only; this limit is keyed per-user (hashed user id) to curb spam
+  // from a single account.
+  feedback: { max: 5, windowMs: 60 * 60 * 1000 },
 } as const;
 
 export type ContributionAction = keyof typeof RATE_LIMITS;
@@ -59,6 +62,9 @@ export type ProposalField = (typeof PROPOSAL_FIELDS)[number];
 
 /** Max length for a free-text hours proposal. */
 export const HOURS_MAX_LENGTH = 120;
+
+/** Max length for a free-text feedback message (sign-in only channel). */
+export const FEEDBACK_MAX_LENGTH = 2000;
 
 /**
  * Rough Costa Rica bounding box used to reject obviously-invalid location pins

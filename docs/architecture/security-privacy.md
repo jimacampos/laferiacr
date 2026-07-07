@@ -1,6 +1,6 @@
 # Security & Privacy — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-01_
+**Status:** 🟡 Draft · _Last updated: 2026-07-07_
 
 Security and privacy posture for a public, community-edited app handling minimal personal data plus
 **geolocation** and (later) **user photos**. Related: [rbac](rbac.md),
@@ -31,10 +31,18 @@ Security and privacy posture for a public, community-edited app handling minimal
 | Display name | Public-ish | User-chosen; Phase 3 contributions are pseudonymous (names not shown) |
 | IP / device signals | Operational | Abuse prevention; hashed; short retention |
 | Precise geolocation (user) | Sensitive | **Consent-based**, used at moment of action |
+| Feedback message | Personal | Sign-in-only; linked to the author account; shown only to moderators in `/admin/feedback` |
+| Analytics (GA4) | Operational | Client page views + referral source; **sets cookies**; consent banner deferred (BL-031) |
 | Photos (Phase 8) | UGC | Moderated; license terms apply |
 
 **Data minimization:** collect only what's needed to run the contribution loop. No background
 location tracking. Contributor display names are not shown publicly in Phase 3 (OQ-008 default).
+
+**Analytics.** Client traffic analytics use **Google Analytics 4** (loads only when
+`NEXT_PUBLIC_GA_ID` is set), which sets cookies and shares page-view/referral data with Google;
+server request/latency/error telemetry uses **Application Insights** (no marketing cookies). A
+cookie-consent banner / opt-out is **deferred** for the small soft launch and tracked as BL-031 —
+revisit before broad or EU-facing launch.
 
 ## Geolocation consent
 - The browser geolocation prompt is **explicit and purpose-bound** ("use my current location to place

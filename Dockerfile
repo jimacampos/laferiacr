@@ -15,6 +15,10 @@ RUN npm ci
 # --- builder: generate Prisma client + build the standalone server ---
 FROM base AS builder
 ENV NEXT_TELEMETRY_DISABLED=1
+# Public GA4 measurement id (e.g. G-XXXXXXXXXX). NEXT_PUBLIC_* is inlined at build time, so it
+# must be present during `next build`, not just at runtime. Empty by default → GA disabled.
+ARG NEXT_PUBLIC_GA_ID=""
+ENV NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate && npm run build

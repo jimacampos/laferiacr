@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useTranslation } from "@/i18n/I18nProvider";
 import { AdminLink } from "./AdminLink";
 import { AuthStatus } from "./AuthStatus";
@@ -24,6 +26,12 @@ export function Header() {
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/help"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            {t("nav.help")}
+          </Link>
           <AdminLink />
           <LanguageToggle />
           <AuthStatus />

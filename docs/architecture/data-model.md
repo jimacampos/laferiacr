@@ -1,6 +1,6 @@
 # Data Model — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-07_
+**Status:** 🟡 Draft · _Last updated: 2026-07-07 (feedback table)_
 
 Logical data model for the community platform. Storage is **PostgreSQL Flexible Server + PostGIS**
 ([ADR-0004](../decisions/0004-database-postgresql-flexible.md)). This is a design reference, not a
@@ -234,9 +234,16 @@ history and **revert**. Phase 3 adds nullable `actor_id` and `action` (`promote`
 `revert` | `hide`) so break-glass admin actions are reversible and audited.
 
 ### contribution_attempts
-Durable Postgres-backed rate-limit log for anonymous writes (`proposal`, `report`). Stores salted
-`ip_hash`, `action`, and `created_at`; old rows are pruned opportunistically. Operational data with
-short retention, not part of the original design.
+Durable Postgres-backed rate-limit log for anonymous writes (`proposal`, `report`) and the
+sign-in-only `feedback` channel (keyed by hashed user id). Stores salted `ip_hash`, `action`, and
+`created_at`; old rows are pruned opportunistically. Operational data with short retention, not part
+of the original design.
+
+### feedback
+Free-text feedback from a **signed-in** user (pre-launch feedback channel; not anonymous — unlike
+`reports`). Holds `submitted_by` (required FK to `users`, enforced in SQL), the `message`, an
+optional `page_url` context, `status` (`open` | `reviewed` | `archived`), and `created_at`. Reviewed
+in `/admin/feedback` (Community Safety or higher). Added pre-launch (backlog BL-030).
 
 ## Day normalization (carried from v0)
 Spanish day strings (e.g. "Viernes - sábado") are split on `[-,/]| y ` and mapped to canonical

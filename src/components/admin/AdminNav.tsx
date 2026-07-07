@@ -14,6 +14,7 @@ interface NavItem {
 const ITEMS: NavItem[] = [
   { href: "/admin", key: "admin.nav.dashboard" },
   { href: "/admin/reports", key: "admin.nav.reports" },
+  { href: "/admin/feedback", key: "admin.nav.feedback" },
   { href: "/admin/attention", key: "admin.nav.attention" },
   { href: "/admin/roles", key: "admin.nav.roles", superOnly: true },
   { href: "/admin/settings", key: "admin.nav.settings", superOnly: true },

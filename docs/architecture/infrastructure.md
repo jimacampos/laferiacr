@@ -1,6 +1,6 @@
 # Infrastructure — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-06_
+**Status:** 🟡 Draft · _Last updated: 2026-07-07_
 
 Azure footprint, environments, IaC, CI/CD, and **cost control**. Guiding constraint:
 **minimize cost via serverless / scale-to-zero**. Component rationale lives in
@@ -110,6 +110,15 @@ and pulling `DATABASE_URL` from Key Vault; the rule is removed afterward. Deploy
 - App Insights for traces/metrics/logs across SSR + API; **sampling** to control cost.
 - Health/readiness endpoints for ACA probes.
 - Alerts: error-rate, p95 latency, DB CPU/connections, Maps/identity quota, **daily spend**.
+
+**As implemented (pre-launch).** Server-side telemetry is wired via `src/instrumentation.ts`
+(`register()` initializes the **Azure Monitor OpenTelemetry** distro), gated on
+`APPLICATIONINSIGHTS_CONNECTION_STRING` (already injected into the Container App from Key Vault)
+so local dev / CI, where it is unset, run as a no-op. `@azure/monitor-opentelemetry` is marked a
+`serverExternalPackage`. Client-side **audience/traffic** analytics use **Google Analytics 4**
+(`@next/third-parties` in `layout.tsx`, gated on `NEXT_PUBLIC_GA_ID`) — page views + referral
+source (tag shared links with `utm_source`), separate from App Insights' request/latency/error
+telemetry. A cookie-consent banner is deferred (backlog BL-031).
 
 ## Scaling
 - ACA scales on HTTP concurrency (and can scale to zero when idle).
