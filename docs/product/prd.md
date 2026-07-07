@@ -102,18 +102,18 @@ Reframes the home page around the primary job: **find the specific market you're
 Location-based discovery ("near me") is deferred until coordinate coverage grows (only **2 of 66** markets
 have coordinates today).
 - **FR-60 Name-first search:** the home page centers a prominent search that filters markets by **name**
-  (accent-insensitive) as the primary way to find a market. _Phase 4.5 — planned._
+  (accent-insensitive) as the primary way to find a market. _Phase 4.5 — shipped._
 - **FR-61 Redesigned market card:** leads with the **name**; shows **days open**; shows a **location
   indicator only when the market has coordinates** (links to the map). **Region and phone are removed from
-  the card** (phone remains on the market detail page). _Phase 4.5 — planned._
+  the card** (phone remains on the market detail page). _Phase 4.5 — shipped._
 - **FR-62 No time-based default:** the home no longer defaults to a "this weekend" view (scheduled days ≠
-  confirmed open/closed); day filtering is **optional**. _Phase 4.5 — planned._
+  confirmed open/closed); day filtering is **optional**. _Phase 4.5 — shipped._
 - **FR-63 Region demoted:** region is not a primary browse/filter axis on the home page (administrative,
-  not how users locate markets). _Decision: remove vs keep as an optional secondary filter — OQ-013._
+  not how users locate markets). _Decided (OQ-013): removed from the primary UI. Phase 4.5 — shipped._
 - **FR-64 Graceful location absence:** markets without coordinates simply omit the location line and are
-  not penalized in the default name/day ordering. _Phase 4.5 — planned._
+  not penalized in the default name/day ordering. _Phase 4.5 — shipped._
 - **FR-65 Welcoming bilingual hero:** a short ES/EN header/value prop with a light market count
-  ("66 ferias"). _Phase 4.5 — planned._
+  ("66 ferias"). _Phase 4.5 — shipped._
 - **FR-66 "Near me" (deferred):** distance-sorted nearest markets using the visitor's location (with
   explicit geolocation consent, NFR-32), enabled once most markets have coordinates
   (see BL-027/BL-028, OQ-014). _Parked — needs location data._

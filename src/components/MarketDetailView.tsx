@@ -174,7 +174,7 @@ export function MarketDetailView({
           <DayBadges days={market.days} />
         </section>
 
-        <section className="border-t border-stone-100 pt-4">
+        <section id="location" className="border-t border-stone-100 pt-4">
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <h2 className="text-xs font-medium uppercase tracking-wide text-stone-400">
               {t("detail.location")}

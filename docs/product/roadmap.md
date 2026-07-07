@@ -78,7 +78,7 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 > 📋 Executable checklist: [phase-4-tasks.md](phase-4-tasks.md).
 
 ## Phase 4.5 — Home & discovery redesign (name-first) _(near-term UX)_
-**Status:** 🟡 Planned — discovery done (2026-07-07). A near-term UX track that can run alongside/before Phase 5.
+**Status:** 🚧 In progress — discovery done (2026-07-07); **BL-023/024/025/026 shipped** (name-first hero, redesigned cards, no weekend default, region filter removed — OQ-013). A near-term UX track that can run alongside/before Phase 5.
 **Goal:** make the home page a **name-first, search-led** way to find the specific feria you're looking for — and feel less bare — without depending on location data we don't have yet (only **2 of 66** markets have coordinates today).
 - **Name-first search** as the primary find path; short bilingual hero + value prop + light market count.
 - **Redesigned cards:** lead with the **name**; show **days open**; show **location only when present** (📍 link to the map); **drop region + phone** from the card (phone stays on the market detail page).
