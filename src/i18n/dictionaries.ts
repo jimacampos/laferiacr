@@ -136,8 +136,13 @@ export const dictionaries: Record<Language, Messages> = {
     "footer.privacy":
       "Usamos analítica (Google Analytics) con cookies para entender el tráfico del sitio.",
 
+    "nav.home": "Inicio",
     "nav.admin": "Moderación",
     "nav.help": "Ayuda",
+    "nav.feedback": "Comentarios",
+    "nav.menu.open": "Abrir menú",
+    "nav.menu.close": "Cerrar menú",
+    "nav.primary": "Navegación principal",
 
     "role.member": "Miembro",
     "role.trusted": "De confianza",
@@ -438,8 +443,13 @@ export const dictionaries: Record<Language, Messages> = {
     "footer.privacy":
       "We use analytics (Google Analytics) with cookies to understand site traffic.",
 
+    "nav.home": "Home",
     "nav.admin": "Moderation",
     "nav.help": "Help",
+    "nav.feedback": "Feedback",
+    "nav.menu.open": "Open menu",
+    "nav.menu.close": "Close menu",
+    "nav.primary": "Primary navigation",
 
     "role.member": "Member",
     "role.trusted": "Trusted",
