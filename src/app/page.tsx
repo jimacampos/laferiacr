@@ -6,6 +6,6 @@ import { getMarketsData } from "@/lib/markets";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const { ferias, regions } = await getMarketsData();
-  return <HomeClient ferias={ferias} regions={regions} />;
+  const { ferias } = await getMarketsData();
+  return <HomeClient ferias={ferias} />;
 }

@@ -66,6 +66,12 @@ export async function getMarketsData(): Promise<MarketsData> {
   const { prisma } = await import("./prisma");
   const rows = await prisma.market.findMany({ where: { status: "active" } });
 
+  // `location` is an Unsupported PostGIS column, so findMany can't project it. Fetch the
+  // set of active markets that have coordinates separately to drive the card's 📍 indicator.
+  const located = await prisma.$queryRaw<{ slug: string }[]>`
+    SELECT slug FROM markets WHERE status = 'active' AND location IS NOT NULL`;
+  const locatedSlugs = new Set(located.map((r) => r.slug));
+
   const ferias: Feria[] = rows
     .map((row) => ({
       id: row.slug,
@@ -75,6 +81,7 @@ export async function getMarketsData(): Promise<MarketsData> {
       daysLabel: row.daysLabel,
       administrator: row.organizer ?? "",
       phones: row.phones,
+      hasLocation: locatedSlugs.has(row.slug),
     }))
     .sort(byName);
 

@@ -28,6 +28,12 @@ export interface Feria {
   daysLabel: string;
   administrator: string;
   phones: string[];
+  /**
+   * Whether the market has known coordinates. Drives the name-first card's
+   * lightweight 📍 indicator (Phase 4.5); true only when a location exists.
+   * Optional so the static v0 dataset (no coordinates) stays valid.
+   */
+  hasLocation?: boolean;
 }
 
 export interface FeriasData {

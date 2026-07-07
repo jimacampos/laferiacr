@@ -17,19 +17,20 @@ export const dictionaries: Record<Language, Messages> = {
     "language.toggle": "English",
     "language.label": "Cambiar idioma",
 
-    "filters.heading": "Buscar ferias",
+    "hero.title": "Encontrá tu feria",
+    "hero.subtitle":
+      "Buscá por nombre las ferias del agricultor de Costa Rica.",
+    "hero.searchLabel": "Buscar feria por nombre",
+    "hero.searchPlaceholder": "Buscá por nombre… (ej. Cartago, Zapote)",
+    "hero.count.one": "{count} feria en Costa Rica",
+    "hero.count.many": "{count} ferias en Costa Rica",
+
     "filters.day": "Día",
-    "filters.region": "Región",
-    "filters.search": "Buscar",
-    "filters.searchPlaceholder": "Buscar por lugar…",
-    "filters.allRegions": "Todas las regiones",
     "filters.clear": "Limpiar filtros",
 
     "day.weekend": "Este fin de semana",
     "day.all": "Cualquier día",
 
-    "results.weekend": "Ferias de este fin de semana",
-    "results.all": "Todas las ferias",
     "results.list": "Ferias",
     "results.one": "{count} feria",
     "results.many": "{count} ferias",
@@ -37,6 +38,8 @@ export const dictionaries: Record<Language, Messages> = {
     "card.days": "Días",
     "card.organizer": "Organiza",
     "card.call": "Llamar a {name}",
+    "card.location": "Ver ubicación",
+    "card.viewMap": "Ver {name} en el mapa",
 
     "detail.back": "Volver a las ferias",
     "detail.hours": "Horario",
@@ -250,19 +253,19 @@ export const dictionaries: Record<Language, Messages> = {
     "language.toggle": "Español",
     "language.label": "Change language",
 
-    "filters.heading": "Find markets",
+    "hero.title": "Find your market",
+    "hero.subtitle": "Search Costa Rica's farmers markets by name.",
+    "hero.searchLabel": "Search markets by name",
+    "hero.searchPlaceholder": "Search by name… (e.g. Cartago, Zapote)",
+    "hero.count.one": "{count} market in Costa Rica",
+    "hero.count.many": "{count} markets in Costa Rica",
+
     "filters.day": "Day",
-    "filters.region": "Region",
-    "filters.search": "Search",
-    "filters.searchPlaceholder": "Search by place…",
-    "filters.allRegions": "All regions",
     "filters.clear": "Clear filters",
 
     "day.weekend": "This weekend",
     "day.all": "Any day",
 
-    "results.weekend": "Markets open this weekend",
-    "results.all": "All markets",
     "results.list": "Markets",
     "results.one": "{count} market",
     "results.many": "{count} markets",
@@ -270,6 +273,8 @@ export const dictionaries: Record<Language, Messages> = {
     "card.days": "Days",
     "card.organizer": "Organized by",
     "card.call": "Call {name}",
+    "card.location": "View location",
+    "card.viewMap": "View {name} on the map",
 
     "detail.back": "Back to markets",
     "detail.hours": "Hours",

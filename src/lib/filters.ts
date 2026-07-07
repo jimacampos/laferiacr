@@ -13,7 +13,7 @@ export interface FeriaFilters {
 }
 
 export const DEFAULT_FILTERS: FeriaFilters = {
-  day: "weekend",
+  day: "all",
   regionId: "all",
   query: "",
 };
