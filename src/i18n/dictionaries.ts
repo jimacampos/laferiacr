@@ -125,6 +125,14 @@ export const dictionaries: Record<Language, Messages> = {
     "role.trusted": "De confianza",
     "role.community_safety": "Seguridad comunitaria",
     "role.super_admin": "Administrador",
+    "role.member.desc":
+      "Persona con sesión iniciada. Puede sugerir cambios (horario/ubicación), agregar ferias, confirmar o rechazar sugerencias y enviar reportes.",
+    "role.trusted.desc":
+      "Colaborador de confianza (otorgado a mano). Por ahora tiene las mismas capacidades que Miembro; el mayor peso en las confirmaciones llegará en una fase posterior.",
+    "role.community_safety.desc":
+      "Moderación. Puede ver la cola de moderación, resolver reportes, quitar u ocultar contenido, ocultar ferias, suspender cuentas temporalmente, revertir cambios abusivos y ver el registro de auditoría.",
+    "role.super_admin.desc":
+      "Dueño de la plataforma. Todo lo de Seguridad comunitaria, más poderes estructurales: sobrescribir valores directamente, gestionar roles y configurar el umbral de confirmación (N) y las políticas.",
 
     "admin.title": "Panel de moderación",
     "admin.subtitle": "Mantené segura la información de la comunidad.",
@@ -161,6 +169,7 @@ export const dictionaries: Record<Language, Messages> = {
     "moderation.error": "No se pudo completar la acción.",
 
     "roles.title": "Gestión de roles",
+    "roles.legendTitle": "Qué puede hacer cada rol",
     "roles.searchPlaceholder": "Buscar por correo o nombre…",
     "roles.search": "Buscar",
     "roles.searching": "Buscando…",
@@ -347,6 +356,14 @@ export const dictionaries: Record<Language, Messages> = {
     "role.trusted": "Trusted",
     "role.community_safety": "Community Safety",
     "role.super_admin": "Super Admin",
+    "role.member.desc":
+      "Signed-in user. Can propose edits (hours/location), submit new markets, confirm or reject suggestions, and file reports.",
+    "role.trusted.desc":
+      "A proven contributor (granted manually). Same abilities as Member for now — extra weight on confirmations comes in a later phase.",
+    "role.community_safety.desc":
+      "Moderator. Can view the moderation queue, resolve reports, remove or hide content, hide markets, temp-ban users, revert abusive changes, and view the audit log.",
+    "role.super_admin.desc":
+      "Platform owner. Everything Community Safety can do, plus structural powers: override field values directly, manage roles, and configure the confirmation threshold (N) and policy.",
 
     "admin.title": "Moderation panel",
     "admin.subtitle": "Keep the community's information safe.",
@@ -383,6 +400,7 @@ export const dictionaries: Record<Language, Messages> = {
     "moderation.error": "Couldn't complete the action.",
 
     "roles.title": "Role management",
+    "roles.legendTitle": "What each role can do",
     "roles.searchPlaceholder": "Search by email or name…",
     "roles.search": "Search",
     "roles.searching": "Searching…",

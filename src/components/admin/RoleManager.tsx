@@ -13,6 +13,8 @@ import { BAN_DURATIONS } from "@/lib/contributions/bansPolicy";
 import { pageBounds } from "@/lib/contributions/pagination";
 import { ROLES } from "@/lib/contributions/rolesPolicy";
 
+import { RoleLegend } from "./RoleLegend";
+
 // Roles a Super Admin can grant/revoke (everything except the implicit `member`).
 const GRANTABLE_ROLES = ROLES.filter((r) => r !== "member");
 
@@ -218,6 +220,8 @@ export function RoleManager({ currentUserId }: { currentUserId: string }) {
   return (
     <section className="flex flex-col gap-4">
       <h2 className="text-lg font-semibold text-stone-900">{t("roles.title")}</h2>
+
+      <RoleLegend />
 
       <form onSubmit={submitSearch} className="flex flex-wrap gap-2">
         <input
