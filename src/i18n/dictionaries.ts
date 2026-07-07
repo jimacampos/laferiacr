@@ -131,8 +131,13 @@ export const dictionaries: Record<Language, Messages> = {
     "footer.source": "Datos: {source}",
     "footer.updated": "Actualizado: {date}",
     "footer.note": "Los horarios pueden variar. Confirmá con la feria antes de visitarla.",
+    "footer.help": "Cómo usar el sitio",
+    "footer.feedback": "Enviar comentarios",
+    "footer.privacy":
+      "Usamos analítica (Google Analytics) con cookies para entender el tráfico del sitio.",
 
     "nav.admin": "Moderación",
+    "nav.help": "Ayuda",
 
     "role.member": "Miembro",
     "role.trusted": "De confianza",
@@ -154,14 +159,29 @@ export const dictionaries: Record<Language, Messages> = {
     "admin.backToSite": "Volver al sitio",
     "admin.nav.dashboard": "Resumen",
     "admin.nav.reports": "Reportes",
+    "admin.nav.feedback": "Comentarios",
     "admin.nav.roles": "Roles",
     "admin.nav.settings": "Ajustes",
     "admin.nav.audit": "Auditoría",
     "admin.nav.attention": "Atención",
     "admin.dashboard.openReports": "Objetivos con reportes abiertos",
+    "admin.dashboard.openFeedback": "Comentarios sin revisar",
     "admin.dashboard.superAdmins": "Administradores",
     "admin.dashboard.threshold": "Confirmaciones para verificar (N)",
     "admin.dashboard.reportsCta": "Ir a la cola de reportes",
+    "admin.dashboard.feedbackCta": "Ver comentarios",
+
+    "feedbackAdmin.title": "Comentarios de usuarios",
+    "feedbackAdmin.empty": "Todavía no hay comentarios.",
+    "feedbackAdmin.refresh": "Actualizar",
+    "feedbackAdmin.markReviewed": "Marcar como revisado",
+    "feedbackAdmin.reopen": "Reabrir",
+    "feedbackAdmin.archive": "Archivar",
+    "feedbackAdmin.unknownAuthor": "Desconocido",
+    "feedbackAdmin.error": "No se pudo actualizar.",
+    "feedbackAdmin.status.open": "Sin revisar",
+    "feedbackAdmin.status.reviewed": "Revisado",
+    "feedbackAdmin.status.archived": "Archivado",
 
     "moderation.queue.title": "Cola de reportes",
     "moderation.queue.empty": "No hay reportes abiertos. ¡Todo tranquilo!",
@@ -253,6 +273,45 @@ export const dictionaries: Record<Language, Messages> = {
     "admin.controls.remove": "Quitar",
     "admin.controls.removed": "Sugerencia quitada.",
     "admin.controls.error": "No se pudo completar la acción.",
+
+    "feedback.title": "Enviá tus comentarios",
+    "feedback.intro":
+      "¿Encontraste un error, tenés una idea o algo no funciona? Contanos. Leemos todos los comentarios.",
+    "feedback.label": "Tu mensaje",
+    "feedback.placeholder": "Escribí tu comentario, idea o problema…",
+    "feedback.submit": "Enviar comentarios",
+    "feedback.submitting": "Enviando…",
+    "feedback.thanks": "¡Gracias! Recibimos tus comentarios.",
+    "feedback.sendAnother": "Enviar otro comentario",
+    "feedback.error": "No se pudo enviar. Intentá de nuevo.",
+    "feedback.rateLimited": "Demasiados envíos. Probá más tarde.",
+    "feedback.signInPrompt":
+      "Iniciá sesión para enviar comentarios. Así podemos responderte si hace falta.",
+
+    "help.title": "Cómo usar La Feria CR",
+    "help.intro":
+      "Esta es una guía sencilla para encontrar ferias y ayudar a mantener la información al día. La mayoría de las acciones toman unos pocos toques en tu teléfono.",
+    "help.account.title": "Crear una cuenta e iniciar sesión",
+    "help.account.body":
+      "No necesitás cuenta para buscar ferias ni para sugerir cambios. Sí necesitás cuenta para confirmar los cambios de otras personas y para enviar comentarios.\n\nTocá «Iniciar sesión» arriba y entrá con tu correo (te enviamos un código) o con Google cuando esté disponible. Guardamos solo la información mínima de tu cuenta.",
+    "help.suggestHours.title": "Sugerir un horario",
+    "help.suggestHours.body":
+      "¿El horario está mal o falta? Abrí la feria, tocá «Sugerir horario», escribí el horario correcto (por ejemplo, 6am–1pm) y enviá. No necesitás cuenta. Tu sugerencia queda como «Necesita confirmación» hasta que otras personas la confirmen.",
+    "help.suggestLocation.title": "Sugerir una ubicación",
+    "help.suggestLocation.body":
+      "¿Falta el punto en el mapa o está mal? Abrí la feria, tocá «Sugerir ubicación» y colocá el pin tocando el mapa, o usá «Usar mi ubicación» si estás en la feria. No guardamos tu ubicación personal; solo la usamos para colocar ese pin. No necesitás cuenta.",
+    "help.confirm.title": "Confirmar o rechazar cambios",
+    "help.confirm.body":
+      "Cuando alguien sugiere un cambio, hace falta que varias personas lo confirmen antes de marcarlo como «Verificado». Iniciá sesión, buscá una sugerencia y tocá «Confirmar» si sabés que es correcta, o «Rechazar» si es incorrecta. Cuando se juntan suficientes confirmaciones, se verifica automáticamente. Pedimos cuenta para confirmar para que la insignia «Verificado» sea confiable.",
+    "help.badges.title": "Qué significan las insignias",
+    "help.badges.body":
+      "✅ Verificado — confirmado por la comunidad (o de la lista oficial 2026).\n🕓 Necesita confirmación — sugerido, esperando confirmaciones.\n🏛️ Oficial — de la lista oficial de junio 2026.\n👥 Agregada por la comunidad — agregada por personas como vos.\nActualizado — cuándo cambió la información por última vez.",
+    "help.report.title": "Reportar un problema",
+    "help.report.body":
+      "¿Viste algo ofensivo, falso o spam? Tocá «Reportar». Nuestro equipo de Seguridad comunitaria revisa los reportes y puede quitar el contenido dañino.",
+    "help.feedback.title": "¿Otros comentarios?",
+    "help.feedback.body":
+      "¿Tenés una idea o encontraste un problema que no es una feria específica? Contanos.",
   },
   en: {
     "app.title": "La Feria CR",
@@ -374,8 +433,13 @@ export const dictionaries: Record<Language, Messages> = {
     "footer.source": "Data: {source}",
     "footer.updated": "Updated: {date}",
     "footer.note": "Hours may change. Confirm with the market before visiting.",
+    "footer.help": "How to use the site",
+    "footer.feedback": "Send feedback",
+    "footer.privacy":
+      "We use analytics (Google Analytics) with cookies to understand site traffic.",
 
     "nav.admin": "Moderation",
+    "nav.help": "Help",
 
     "role.member": "Member",
     "role.trusted": "Trusted",
@@ -397,14 +461,29 @@ export const dictionaries: Record<Language, Messages> = {
     "admin.backToSite": "Back to site",
     "admin.nav.dashboard": "Overview",
     "admin.nav.reports": "Reports",
+    "admin.nav.feedback": "Feedback",
     "admin.nav.roles": "Roles",
     "admin.nav.settings": "Settings",
     "admin.nav.audit": "Audit log",
     "admin.nav.attention": "Attention",
     "admin.dashboard.openReports": "Targets with open reports",
+    "admin.dashboard.openFeedback": "Unreviewed feedback",
     "admin.dashboard.superAdmins": "Super Admins",
     "admin.dashboard.threshold": "Confirmations to verify (N)",
     "admin.dashboard.reportsCta": "Go to the reports queue",
+    "admin.dashboard.feedbackCta": "View feedback",
+
+    "feedbackAdmin.title": "User feedback",
+    "feedbackAdmin.empty": "No feedback yet.",
+    "feedbackAdmin.refresh": "Refresh",
+    "feedbackAdmin.markReviewed": "Mark reviewed",
+    "feedbackAdmin.reopen": "Reopen",
+    "feedbackAdmin.archive": "Archive",
+    "feedbackAdmin.unknownAuthor": "Unknown",
+    "feedbackAdmin.error": "Couldn't update.",
+    "feedbackAdmin.status.open": "Unreviewed",
+    "feedbackAdmin.status.reviewed": "Reviewed",
+    "feedbackAdmin.status.archived": "Archived",
 
     "moderation.queue.title": "Reports queue",
     "moderation.queue.empty": "No open reports. All clear!",
@@ -496,6 +575,45 @@ export const dictionaries: Record<Language, Messages> = {
     "admin.controls.remove": "Remove",
     "admin.controls.removed": "Suggestion removed.",
     "admin.controls.error": "Couldn't complete the action.",
+
+    "feedback.title": "Send us feedback",
+    "feedback.intro":
+      "Found a bug, have an idea, or something not working? Tell us. We read every piece of feedback.",
+    "feedback.label": "Your message",
+    "feedback.placeholder": "Write your comment, idea, or problem…",
+    "feedback.submit": "Send feedback",
+    "feedback.submitting": "Sending…",
+    "feedback.thanks": "Thanks! We got your feedback.",
+    "feedback.sendAnother": "Send more feedback",
+    "feedback.error": "Couldn't send. Please try again.",
+    "feedback.rateLimited": "Too many submissions. Try again later.",
+    "feedback.signInPrompt":
+      "Sign in to send feedback. That way we can reply if needed.",
+
+    "help.title": "How to use La Feria CR",
+    "help.intro":
+      "A simple guide to finding markets and helping keep the info up to date. Most actions take a few taps on your phone.",
+    "help.account.title": "Create an account & sign in",
+    "help.account.body":
+      "You don't need an account to browse markets or to suggest changes. You do need one to confirm other people's changes and to send feedback.\n\nTap \u201CSign in\u201D at the top and use your email (we send you a code) or Google when available. We store only the minimal info for your account.",
+    "help.suggestHours.title": "Suggest hours",
+    "help.suggestHours.body":
+      "Hours wrong or missing? Open the market, tap \u201CSuggest hours\u201D, type the correct hours (e.g. 6am–1pm), and submit. No account needed. Your suggestion sits as \u201CNeeds confirmation\u201D until other people confirm it.",
+    "help.suggestLocation.title": "Suggest a location",
+    "help.suggestLocation.body":
+      "Missing or wrong pin on the map? Open the market, tap \u201CSuggest location\u201D, and drop the pin by tapping the map, or use \u201CUse my location\u201D while you're at the market. We don't store your personal location \u2014 we only use it to place that pin. No account needed.",
+    "help.confirm.title": "Confirm or reject changes",
+    "help.confirm.body":
+      "When someone suggests a change, it needs a few people to confirm it before it's marked \u201CVerified\u201D. Sign in, find a suggestion, and tap \u201CConfirm\u201D if you know it's right, or \u201CReject\u201D if it's wrong. Once enough people confirm, it's verified automatically. We require an account to confirm so the \u201CVerified\u201D badge stays trustworthy.",
+    "help.badges.title": "What the badges mean",
+    "help.badges.body":
+      "✅ Verified — confirmed by the community (or from the official 2026 list).\n🕓 Needs confirmation — suggested, waiting for confirmations.\n🏛️ Official — from the official June 2026 list.\n👥 Community-added — added by users like you.\nUpdated — when the info last changed.",
+    "help.report.title": "Report a problem",
+    "help.report.body":
+      "See something offensive, fake, or spammy? Tap \u201CReport\u201D. Our Community Safety team reviews reports and can remove harmful content.",
+    "help.feedback.title": "Other feedback?",
+    "help.feedback.body":
+      "Have an idea or found a problem that isn't about a specific market? Let us know.",
   },
 };
 

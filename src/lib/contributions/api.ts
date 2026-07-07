@@ -62,3 +62,10 @@ export function submitReport(
 ): Promise<ApiResult> {
   return postJson(`/api/reports`, { targetType, targetId, reason, captchaToken });
 }
+
+export function submitFeedback(
+  message: string,
+  pageUrl?: string,
+): Promise<ApiResult<{ status: string }>> {
+  return postJson(`/api/feedback`, { message, pageUrl });
+}

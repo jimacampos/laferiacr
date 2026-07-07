@@ -184,7 +184,7 @@ model UserRole {
 model ContributionAttempt {
   id        String   @id @default(uuid()) @db.Uuid
   ipHash    String   @map("ip_hash")
-  /// 'proposal' | 'report'.
+  /// 'proposal' | 'report' | 'feedback' (feedback is keyed by hashed user id).
   action    String
   createdAt DateTime @default(now()) @map("created_at")
 
@@ -251,4 +251,24 @@ model AppConfig {
   updatedBy String?  @map("updated_by") @db.Uuid
 
   @@map("app_config")
+}
+
+/// Free-text feedback from a signed-in user (pre-launch feedback channel). Unlike anonymous
+/// reports, sending feedback requires an account, so `submittedBy` is always set. Reviewed in
+/// the /admin area. FK to `users` is enforced in SQL (see migration), mirroring the
+/// reports/moderation precedent to keep the `User` model clean.
+model Feedback {
+  id          String   @id @default(uuid()) @db.Uuid
+  /// Author account (required — feedback is sign-in only).
+  submittedBy String   @map("submitted_by") @db.Uuid
+  message     String
+  /// Page the user was on when they sent feedback (context for triage); optional.
+  pageUrl     String?  @map("page_url")
+  /// 'open' | 'reviewed' | 'archived'.
+  status      String   @default("open")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([status, createdAt])
+  @@index([submittedBy])
+  @@map("feedback")
 }

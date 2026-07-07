@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     "@prisma/client",
     "pg",
     "@azure/identity",
+    "@azure/monitor-opentelemetry",
   ],
 };
 

@@ -118,6 +118,7 @@ jobs:
           az acr build \
             --registry "${{ steps.acr.outputs.name }}" \
             --image "laferiacr:${GITHUB_SHA}" \
+            --build-arg "NEXT_PUBLIC_GA_ID=${{ vars.NEXT_PUBLIC_GA_ID }}" \
             --file Dockerfile .
 
       - name: Deploy application revision

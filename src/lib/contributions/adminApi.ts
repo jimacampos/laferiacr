@@ -110,6 +110,36 @@ export function setConfigValue(
   return post("/api/admin/config", { key, value });
 }
 
+// --- Feedback --------------------------------------------------------------
+
+/** Feedback row as serialized over JSON (createdAt is an ISO string). */
+export interface FeedbackRow {
+  id: string;
+  message: string;
+  pageUrl: string | null;
+  status: string;
+  createdAt: string;
+  author: { displayName: string | null; email: string | null };
+}
+
+export function listFeedback(
+  limit = 100,
+  offset = 0,
+): Promise<ApiResult<{ queue: FeedbackRow[] }>> {
+  const params = new URLSearchParams({
+    limit: String(limit),
+    offset: String(offset),
+  });
+  return request(`/api/admin/feedback?${params.toString()}`);
+}
+
+export function setFeedbackStatus(
+  id: string,
+  status: "open" | "reviewed" | "archived",
+): Promise<ApiResult<{ status: string }>> {
+  return post("/api/admin/feedback", { id, status });
+}
+
 // --- Re-exported view types (for client components) ------------------------
 
 export type { QueueItem, AuditEntry, ConfigSetting, UserSummary, UserPage };
