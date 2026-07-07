@@ -1,6 +1,6 @@
 # Infrastructure — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-07_
+**Status:** 🟡 Draft · _Last updated: 2026-07-07 (GA4 live on dev)_
 
 Azure footprint, environments, IaC, CI/CD, and **cost control**. Guiding constraint:
 **minimize cost via serverless / scale-to-zero**. Component rationale lives in
@@ -119,6 +119,15 @@ so local dev / CI, where it is unset, run as a no-op. `@azure/monitor-openteleme
 (`@next/third-parties` in `layout.tsx`, gated on `NEXT_PUBLIC_GA_ID`) — page views + referral
 source (tag shared links with `utm_source`), separate from App Insights' request/latency/error
 telemetry. A cookie-consent banner is deferred (backlog BL-031).
+
+> **`NEXT_PUBLIC_GA_ID` is inlined at _build_ time, not read at runtime.** `next build` bakes
+> `NEXT_PUBLIC_*` values into the client bundle, so it must be present during `az acr build`, not
+> just as a Container App env var. It is wired through the **Dockerfile** (`ARG`/`ENV
+> NEXT_PUBLIC_GA_ID` before `npm run build`) and passed by CD via
+> `az acr build --build-arg "NEXT_PUBLIC_GA_ID=${{ vars.NEXT_PUBLIC_GA_ID }}"`, sourced from the
+> per-**environment** GitHub Actions variable. Empty → the GA component isn't rendered (analytics
+> off). **Live on `dev`** (measurement ID `G-4TG80GPEVP`, verified present in the served HTML);
+> **prod stays untracked** until the variable is set on that environment.
 
 ## Scaling
 - ACA scales on HTTP concurrency (and can scale to zero when idle).
