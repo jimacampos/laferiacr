@@ -1,6 +1,6 @@
 # Infrastructure — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-01_
+**Status:** 🟡 Draft · _Last updated: 2026-07-06_
 
 Azure footprint, environments, IaC, CI/CD, and **cost control**. Guiding constraint:
 **minimize cost via serverless / scale-to-zero**. Component rationale lives in
@@ -85,7 +85,8 @@ flowchart LR
 ```
 
 - **CI:** `npm run lint` + `npm run build` (+ tests as added).
-- **CD:** build/push image to ACR, deploy revision to Container Apps, run **DB migrations**, smoke-test.
+- **CD:** build/push image to ACR, deploy revision to Container Apps, run **DB migrations** (only
+  when schema/seed inputs changed), smoke-test.
 - Federated credentials (OIDC) — **no long-lived cloud secrets** in GitHub.
 - Environment protection rules gate prod.
 
@@ -96,11 +97,14 @@ and is gated by a GitHub `environment` (`dev`/`prod`). The one-time deploy ident
 (`repo:<owner>/<repo>:environment:<env>`), and it is granted **Contributor** (so the OIDC-only
 `az acr build` works — `az acr login` can't, and `AcrPush` lacks `scheduleRun`) plus **Key Vault
 Secrets User** on the resource group. Because the app image and ACR have a chicken-and-egg dependency,
-the first deploy uses a **placeholder image** to create the registry, then the workflow `az acr build`s
-the real image (tagged with the commit SHA) and redeploys. Migrations run with `prisma migrate deploy`,
-temporarily opening the Postgres firewall to the runner IP and pulling `DATABASE_URL` from Key Vault;
-the rule is removed afterward. Deploys default to region **`centralus`** (known-good quota on this
-subscription; override with `AZURE_LOCATION`).
+the **first** deploy for an environment (when no registry exists yet) bootstraps the infra with a
+**placeholder image** to create the registry; every later run finds the ACR and skips that step,
+going straight to `az acr build`ing the real image (tagged with the commit SHA) and a single
+authoritative redeploy (no redundant double deploy). Migrations (`prisma migrate deploy`) and the
+idempotent seed run **only when the Prisma schema/migrations or seed data (`src/data/ferias.json`)
+changed** (manual runs always run them) — temporarily opening the Postgres firewall to the runner IP
+and pulling `DATABASE_URL` from Key Vault; the rule is removed afterward. Deploys default to region
+**`centralus`** (known-good quota on this subscription; override with `AZURE_LOCATION`).
 
 ## Observability
 - App Insights for traces/metrics/logs across SSR + API; **sampling** to control cost.

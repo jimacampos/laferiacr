@@ -7,6 +7,7 @@ import { MarketMap } from "@/components/MarketMap";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { voteProposal } from "@/lib/contributions/api";
 import { removeProposal } from "@/lib/contributions/adminApi";
+import { voteErrorKey } from "@/lib/contributions/voteErrors";
 import type { LocationValue, PendingProposal } from "@/lib/contributions/types";
 
 const ENTRA_PROVIDER = "microsoft-entra-id";
@@ -43,7 +44,7 @@ function ProposalCard({
     const res = await voteProposal(proposal.id, kind);
     setBusy(false);
     if (!res.ok) {
-      setError(t("contribute.error"));
+      setError(t(voteErrorKey(res.error)));
       return;
     }
     if (res.data?.promoted) setPromoted(true);
@@ -71,8 +72,12 @@ function ProposalCard({
     );
   }
 
-  const remainingLabel =
-    proposal.remaining <= 1
+  const confirmedByViewer = proposal.viewerVote === "confirm";
+  const remainingLabel = confirmedByViewer
+    ? proposal.remaining <= 1
+      ? t("proposals.confirmedWaitingOne")
+      : t("proposals.confirmedWaiting", { count: String(proposal.remaining) })
+    : proposal.remaining <= 1
       ? t("proposals.remainingOne")
       : t("proposals.remaining", { count: String(proposal.remaining) });
 
