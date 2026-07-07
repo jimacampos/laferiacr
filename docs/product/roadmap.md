@@ -1,6 +1,6 @@
 # Roadmap — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-01_
+**Status:** 🟡 Draft · _Last updated: 2026-07-07_
 
 Phased delivery from the shipped static directory (v0) to a community-maintained, photo-rich guide.
 No dates — phases are ordered by dependency and value. Requirements are in [prd.md](prd.md);
@@ -12,6 +12,7 @@ flowchart LR
   P1 --> P2[2 · Accounts + market detail]
   P2 --> P3[3 · ⭐ Hours + location]
   P3 --> P4[4 · Roles & moderation]
+  P4 --> P45[4.5 · Home & discovery]
   P4 --> P5[5 · Add new markets]
   P3 --> P6[6 · Trust & accessibility]
   P4 --> P6
@@ -76,6 +77,17 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 
 > 📋 Executable checklist: [phase-4-tasks.md](phase-4-tasks.md).
 
+## Phase 4.5 — Home & discovery redesign (name-first) _(near-term UX)_
+**Status:** 🟡 Planned — discovery done (2026-07-07). A near-term UX track that can run alongside/before Phase 5.
+**Goal:** make the home page a **name-first, search-led** way to find the specific feria you're looking for — and feel less bare — without depending on location data we don't have yet (only **2 of 66** markets have coordinates today).
+- **Name-first search** as the primary find path; short bilingual hero + value prop + light market count.
+- **Redesigned cards:** lead with the **name**; show **days open**; show **location only when present** (📍 link to the map); **drop region + phone** from the card (phone stays on the market detail page).
+- **Drop the "this weekend" default** (scheduled days ≠ confirmed open/closed) — day filtering becomes optional.
+- **Demote region** (administrative, not how users think — the name already implies the place); remove from the primary UI (OQ-013).
+- **Deferred (needs data):** "near me"/distance ranking and any map-first view, pending location coverage / a decision to geocode the official list (BL-027, BL-028, OQ-014).
+- **Exit criteria:** a returning user can find a specific market by name in seconds; the home leads with names and shows days (and location where known), with region/phone no longer competing for attention.
+- Backlog: BL-023…BL-028; decisions OQ-013, OQ-014.
+
 ## Phase 5 — Add new markets (community-submitted)
 **Goal:** grow beyond the official list.
 - "Add a market" flow; **duplicate detection** (name + proximity).
@@ -110,6 +122,7 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 - Everything depends on **Phase 1** (data + platform).
 - Contributions (**3**) require accounts/detail (**2**).
 - Governance (**4**) and new markets (**5**) build on contributions (**3**); **5** needs roles (**4**).
+- **Home & discovery (4.5)** is a near-term UX track, independent of the numbered feature phases; its "near me" piece is deferred until location coverage grows.
 - Hardening (**6**) builds on **3** + **4**; PWA (**7**) builds on **3**; Photos (**8**) need roles
   (**4**) for moderation and benefit from hardening (**6**).
 

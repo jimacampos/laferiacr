@@ -1,6 +1,6 @@
 # Product Requirements (PRD) — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-01_
+**Status:** 🟡 Draft · _Last updated: 2026-07-07_
 
 This PRD describes **what** we build, grouped by release. The **order** of delivery is in
 [roadmap.md](roadmap.md); the **how** is in the [architecture](../architecture/overview.md) docs.
@@ -16,6 +16,7 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
 | **v0** | Static directory (read-only) | ✅ Shipped |
 | **Community v1** | Hours + location, propose → confirm → verify | 🟡 On dev (Phases 1–3 done & live on dev; prod deferred) |
 | **Governance** | Roles, moderation, community-submitted markets | 🚧 In progress (Phase 4 on dev; Phase 5 planned) |
+| **Discovery** | Name-first home & search | 🟡 Planned (Phase 4.5) |
 | **Hardening** | Trust weighting + accessibility | Planned (Phase 6) |
 | **Engagement** | PWA + notifications | Planned (Phase 7) |
 | **Rich content** | Photos & beyond | Planned (Phase 8) |
@@ -93,6 +94,29 @@ flag-gated CAPTCHA seam, and reversible `change_history`.)_
   similarity and proximity before publishing. _Phase 5 — planned._
 - **FR-25 Provenance:** markets are labeled **"Official (2026 list)"** or **"Community-added"**.
   _Phase 5 — planned._
+
+---
+
+## Home & discovery — name-first browse (Phase 4.5)
+Reframes the home page around the primary job: **find the specific market you're looking for, by name.**
+Location-based discovery ("near me") is deferred until coordinate coverage grows (only **2 of 66** markets
+have coordinates today).
+- **FR-60 Name-first search:** the home page centers a prominent search that filters markets by **name**
+  (accent-insensitive) as the primary way to find a market. _Phase 4.5 — planned._
+- **FR-61 Redesigned market card:** leads with the **name**; shows **days open**; shows a **location
+  indicator only when the market has coordinates** (links to the map). **Region and phone are removed from
+  the card** (phone remains on the market detail page). _Phase 4.5 — planned._
+- **FR-62 No time-based default:** the home no longer defaults to a "this weekend" view (scheduled days ≠
+  confirmed open/closed); day filtering is **optional**. _Phase 4.5 — planned._
+- **FR-63 Region demoted:** region is not a primary browse/filter axis on the home page (administrative,
+  not how users locate markets). _Decision: remove vs keep as an optional secondary filter — OQ-013._
+- **FR-64 Graceful location absence:** markets without coordinates simply omit the location line and are
+  not penalized in the default name/day ordering. _Phase 4.5 — planned._
+- **FR-65 Welcoming bilingual hero:** a short ES/EN header/value prop with a light market count
+  ("66 ferias"). _Phase 4.5 — planned._
+- **FR-66 "Near me" (deferred):** distance-sorted nearest markets using the visitor's location (with
+  explicit geolocation consent, NFR-32), enabled once most markets have coordinates
+  (see BL-027/BL-028, OQ-014). _Parked — needs location data._
 
 ---
 
