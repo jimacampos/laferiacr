@@ -1,6 +1,6 @@
 # Personas — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-06-30_
+**Status:** 🟡 Draft · _Last updated: 2026-07-07_
 
 Personas guide product and accessibility decisions. La Feria CR must serve both confident
 smartphone users and people who find apps intimidating. Quotes are illustrative.
@@ -15,7 +15,8 @@ smartphone users and people who find apps intimidating. Quotes are illustrative.
 - **Frustrations:** Outdated info; driving to a market that wasn't open.
 - **How she helps:** Happy to **propose** corrections and **confirm** others' edits; will create an
   account if it's quick.
-- **Design implications:** Fast filters, map, "this weekend" default, low-friction proposing.
+- **Design implications:** Fast **name-first search**, clear days per market, low-friction proposing;
+  map / "near me" deferred until coordinate coverage grows (BL-027).
 
 > "If I see the hours are wrong, I'll fix them — but it has to take ten seconds."
 

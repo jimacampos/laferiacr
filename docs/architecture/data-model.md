@@ -1,6 +1,6 @@
 # Data Model — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-01_
+**Status:** 🟡 Draft · _Last updated: 2026-07-07_
 
 Logical data model for the community platform. Storage is **PostgreSQL Flexible Server + PostGIS**
 ([ADR-0004](../decisions/0004-database-postgresql-flexible.md)). This is a design reference, not a
@@ -240,7 +240,8 @@ short retention, not part of the original design.
 
 ## Day normalization (carried from v0)
 Spanish day strings (e.g. "Viernes - sábado") are split on `[-,/]| y ` and mapped to canonical
-ordered keys `mon…sun`. `WEEKEND_DAYS = {fri,sat,sun}` drives the "this weekend" default. Logic lives
+ordered keys `mon…sun`. `WEEKEND_DAYS = {fri,sat,sun}` drives the optional "this weekend" filter (no
+longer the home default since Phase 4.5 / BL-025). Logic lives
 in `scripts/generate_data.py` and is reused when seeding.
 
 ## Promotion & versioning
