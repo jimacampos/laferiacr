@@ -34,6 +34,12 @@ and slower connections. See personas in [product/personas.md](product/personas.m
   entry) since maps are hard for some users and assistive tech.
 - **Motion:** respect `prefers-reduced-motion`.
 - **Bilingual:** language toggle is easy to find; `lang` attributes set correctly for assistive tech.
+- **Primary navigation (header):** a sticky site header whose brand mark/wordmark is a link to home
+  (`/`) with an accessible label. Primary links live in a `<nav aria-label>`; the current route is
+  marked with `aria-current="page"` and a visible active style (not color alone). On small screens the
+  links collapse behind a **menu disclosure** button (`aria-expanded` + `aria-controls`) that opens a
+  full-width list-row panel; it closes on navigation. The moderator-only entry is resolved server-side,
+  never from a client claim.
 - **Directory navigation (home):** the day filter is a **disclosure** (`aria-expanded` toggle) so it can
   be collapsed; the market list is **paginated** with a `<nav aria-label>` pager whose current page uses
   `aria-current="page"` and whose prev/next are disabled at the ends. The A–Z jump index is a `<nav>` of
