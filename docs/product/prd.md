@@ -16,7 +16,7 @@ Requirement IDs: `FR-#` functional, `NFR-#` non-functional. User stories use
 | **v0** | Static directory (read-only) | ✅ Shipped |
 | **Community v1** | Hours + location, propose → confirm → verify | 🟡 On dev (Phases 1–3 done & live on dev; prod deferred) |
 | **Governance** | Roles, moderation, community-submitted markets | 🚧 In progress (Phase 4 on dev; Phase 5 planned) |
-| **Discovery** | Name-first home & search | 🟡 Planned (Phase 4.5) |
+| **Discovery** | Name-first home & search | 🚧 In progress (Phase 4.5 — name-first shipped; polish ongoing) |
 | **Hardening** | Trust weighting + accessibility | Planned (Phase 6) |
 | **Engagement** | PWA + notifications | Planned (Phase 7) |
 | **Rich content** | Photos & beyond | Planned (Phase 8) |
@@ -117,6 +117,12 @@ have coordinates today).
 - **FR-66 "Near me" (deferred):** distance-sorted nearest markets using the visitor's location (with
   explicit geolocation consent, NFR-32), enabled once most markets have coordinates
   (see BL-027/BL-028, OQ-014). _Parked — needs location data._
+- **FR-67 Scannable A–Z directory + live search feedback:** the market list is grouped into
+  **alphabetical sections** with a compact **A–Z jump index** (present letters link to their section;
+  absent letters are disabled), so a 66-name directory is browsable without scrolling blindly. The
+  search is **always reachable** (sticky) with a **clear (✕)** control and a **`/` keyboard shortcut**
+  to focus it; matched name substrings are **highlighted** in results, with a live result count and a
+  query-aware empty state. _Phase 4.5 — shipped (home-redesign polish pass)._
 
 ---
 

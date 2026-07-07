@@ -5,19 +5,32 @@ import Link from "next/link";
 import type { Feria } from "@/data/types";
 import { useTranslation } from "@/i18n/I18nProvider";
 import { feriaHasLocation, marketMapHref } from "@/lib/home";
+import { highlightSegments } from "@/lib/search";
 import { DayBadges } from "./DayBadges";
 
-export function MarketCard({ feria }: { feria: Feria }) {
+export function MarketCard({ feria, query = "" }: { feria: Feria; query?: string }) {
   const { t } = useTranslation();
+  const segments = highlightSegments(feria.name, query);
 
   return (
-    <article className="relative flex h-full flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm transition hover:shadow-md focus-within:ring-2 focus-within:ring-emerald-500">
+    <article className="group relative flex h-full flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-4 shadow-sm transition duration-150 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md focus-within:ring-2 focus-within:ring-emerald-500">
       <h3 className="text-lg font-bold text-stone-900 sm:text-xl">
         <Link
           href={`/market/${feria.id}`}
-          className="transition after:absolute after:inset-0 hover:text-emerald-700 focus-visible:outline-none"
+          className="transition after:absolute after:inset-0 group-hover:text-emerald-700 focus-visible:outline-none"
         >
-          {feria.name}
+          {segments.map((segment, index) =>
+            segment.match ? (
+              <mark
+                key={index}
+                className="rounded bg-emerald-100 text-emerald-900"
+              >
+                {segment.text}
+              </mark>
+            ) : (
+              <span key={index}>{segment.text}</span>
+            ),
+          )}
         </Link>
       </h3>
 

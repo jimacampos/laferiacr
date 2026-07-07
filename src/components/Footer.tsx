@@ -8,7 +8,7 @@ export function Footer() {
 
   return (
     <footer className="border-t border-stone-200 bg-white">
-      <div className="mx-auto max-w-3xl space-y-1 px-4 py-6 text-center text-xs text-stone-500">
+      <div className="mx-auto max-w-5xl space-y-1 px-4 py-6 text-center text-xs text-stone-500">
         <p>{t("footer.note")}</p>
         <p>
           {t("footer.source", { source: dataSource })} ·{" "}

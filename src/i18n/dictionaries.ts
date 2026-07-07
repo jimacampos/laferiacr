@@ -22,8 +22,9 @@ export const dictionaries: Record<Language, Messages> = {
       "Buscá por nombre las ferias del agricultor de Costa Rica.",
     "hero.searchLabel": "Buscar feria por nombre",
     "hero.searchPlaceholder": "Buscá por nombre… (ej. Cartago, Zapote)",
-    "hero.count.one": "{count} feria en Costa Rica",
-    "hero.count.many": "{count} ferias en Costa Rica",
+    "hero.stats": "{markets} ferias · {regions} regiones",
+
+    "search.clear": "Limpiar búsqueda",
 
     "filters.day": "Día",
     "filters.clear": "Limpiar filtros",
@@ -34,6 +35,8 @@ export const dictionaries: Record<Language, Messages> = {
     "results.list": "Ferias",
     "results.one": "{count} feria",
     "results.many": "{count} ferias",
+    "list.jumpTo": "Ir a la letra {letter}",
+    "list.index": "Índice alfabético",
 
     "card.days": "Días",
     "card.organizer": "Organiza",
@@ -116,7 +119,9 @@ export const dictionaries: Record<Language, Messages> = {
     "report.thanks": "Gracias por avisar.",
 
     "empty.title": "No hay ferias que coincidan",
-    "empty.message": "Probá con otro día, región o término de búsqueda.",
+    "empty.message": "Probá con otro día o término de búsqueda.",
+    "empty.query": "No encontramos ferias para «{query}».",
+    "empty.clear": "Ver todas las ferias",
 
     "footer.source": "Datos: {source}",
     "footer.updated": "Actualizado: {date}",
@@ -257,8 +262,9 @@ export const dictionaries: Record<Language, Messages> = {
     "hero.subtitle": "Search Costa Rica's farmers markets by name.",
     "hero.searchLabel": "Search markets by name",
     "hero.searchPlaceholder": "Search by name… (e.g. Cartago, Zapote)",
-    "hero.count.one": "{count} market in Costa Rica",
-    "hero.count.many": "{count} markets in Costa Rica",
+    "hero.stats": "{markets} markets · {regions} regions",
+
+    "search.clear": "Clear search",
 
     "filters.day": "Day",
     "filters.clear": "Clear filters",
@@ -269,6 +275,8 @@ export const dictionaries: Record<Language, Messages> = {
     "results.list": "Markets",
     "results.one": "{count} market",
     "results.many": "{count} markets",
+    "list.jumpTo": "Jump to {letter}",
+    "list.index": "Alphabetical index",
 
     "card.days": "Days",
     "card.organizer": "Organized by",
@@ -349,7 +357,9 @@ export const dictionaries: Record<Language, Messages> = {
     "report.thanks": "Thanks for letting us know.",
 
     "empty.title": "No markets match",
-    "empty.message": "Try a different day, region, or search term.",
+    "empty.message": "Try a different day or search term.",
+    "empty.query": "No markets found for “{query}”.",
+    "empty.clear": "Show all markets",
 
     "footer.source": "Data: {source}",
     "footer.updated": "Updated: {date}",
