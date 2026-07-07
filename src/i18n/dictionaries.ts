@@ -95,6 +95,16 @@ export const dictionaries: Record<Language, Messages> = {
     "proposals.votes": "{confirm} confirman · {reject} rechazan",
     "proposals.newLocation": "Nueva ubicación sugerida",
     "proposals.working": "Un momento…",
+    "proposals.confirmedWaiting":
+      "Ya confirmaste — faltan {count} confirmaciones de otras personas",
+    "proposals.confirmedWaitingOne":
+      "Ya confirmaste — falta 1 confirmación de otra persona",
+    "proposals.error.signIn": "Iniciá sesión para confirmar.",
+    "proposals.error.banned": "Tu cuenta está suspendida temporalmente.",
+    "proposals.error.notFound": "Esta sugerencia ya no está disponible.",
+    "proposals.error.notOpen": "Esta sugerencia ya fue resuelta.",
+    "proposals.error.selfVote": "No podés confirmar tu propia sugerencia.",
+    "proposals.error.network": "Problema de conexión. Intentá de nuevo.",
 
     "report.button": "Reportar",
     "report.market": "Reportar esta feria",
@@ -309,6 +319,14 @@ export const dictionaries: Record<Language, Messages> = {
     "proposals.votes": "{confirm} confirm · {reject} reject",
     "proposals.newLocation": "Suggested new location",
     "proposals.working": "One moment…",
+    "proposals.confirmedWaiting": "You've confirmed — waiting on {count} more people",
+    "proposals.confirmedWaitingOne": "You've confirmed — waiting on 1 more person",
+    "proposals.error.signIn": "Sign in to confirm.",
+    "proposals.error.banned": "Your account is temporarily suspended.",
+    "proposals.error.notFound": "This suggestion is no longer available.",
+    "proposals.error.notOpen": "This suggestion has already been resolved.",
+    "proposals.error.selfVote": "You can't confirm your own suggestion.",
+    "proposals.error.network": "Connection problem. Please try again.",
 
     "report.button": "Report",
     "report.market": "Report this market",
