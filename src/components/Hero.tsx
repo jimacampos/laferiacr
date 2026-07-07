@@ -6,13 +6,11 @@ import { useTranslation } from "@/i18n/I18nProvider";
 import { BrandMark } from "./BrandMark";
 
 interface HeroProps {
-  count: number;
-  regions: number;
   query: string;
   onQueryChange: (query: string) => void;
 }
 
-export function Hero({ count, regions, query, onQueryChange }: HeroProps) {
+export function Hero({ query, onQueryChange }: HeroProps) {
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -118,14 +116,6 @@ export function Hero({ count, regions, query, onQueryChange }: HeroProps) {
             </kbd>
           )}
         </div>
-
-        <p className="mt-4 flex flex-wrap items-center gap-x-1.5 text-sm text-stone-500">
-          <span
-            aria-hidden="true"
-            className="inline-block size-2 rounded-full bg-emerald-500"
-          />
-          {t("hero.stats", { markets: count, regions })}
-        </p>
       </div>
     </section>
   );

@@ -3,13 +3,16 @@ import { describe, expect, it } from "vitest";
 import type { Feria } from "@/data/types";
 
 import {
-  countRegions,
   feriaHasLocation,
   feriaLetter,
   groupFeriasByLetter,
+  letterFirstPage,
   letterSectionId,
   marketMapHref,
+  pageCount,
+  paginate,
   presentLetters,
+  sortFeriasByName,
 } from "./home";
 
 const baseFeria: Feria = {
@@ -96,18 +99,58 @@ describe("letterSectionId", () => {
   });
 });
 
-describe("countRegions", () => {
-  it("counts distinct regions", () => {
-    expect(
-      countRegions([
-        make("a", "A", "san-jose"),
-        make("b", "B", "san-jose"),
-        make("c", "C", "cartago"),
-      ]),
-    ).toBe(2);
+describe("sortFeriasByName", () => {
+  it("returns a flat list in section order (A–Z then #)", () => {
+    const sorted = sortFeriasByName([
+      make("c", "9 de Marzo"),
+      make("a", "Zapote"),
+      make("b", "ávila"),
+    ]);
+    expect(sorted.map((f) => f.name)).toEqual(["ávila", "Zapote", "9 de Marzo"]);
+  });
+});
+
+describe("pageCount", () => {
+  it("computes ceil(total / perPage)", () => {
+    expect(pageCount(66, 10)).toBe(7);
+    expect(pageCount(10, 10)).toBe(1);
+    expect(pageCount(11, 10)).toBe(2);
   });
 
-  it("is 0 for an empty list", () => {
-    expect(countRegions([])).toBe(0);
+  it("is 0 for an empty or invalid input", () => {
+    expect(pageCount(0, 10)).toBe(0);
+    expect(pageCount(5, 0)).toBe(0);
+  });
+});
+
+describe("paginate", () => {
+  const items = [1, 2, 3, 4, 5];
+
+  it("slices the requested 1-based page", () => {
+    expect(paginate(items, 1, 2)).toEqual([1, 2]);
+    expect(paginate(items, 2, 2)).toEqual([3, 4]);
+    expect(paginate(items, 3, 2)).toEqual([5]);
+  });
+
+  it("yields an empty slice for out-of-range pages", () => {
+    expect(paginate(items, 4, 2)).toEqual([]);
+  });
+});
+
+describe("letterFirstPage", () => {
+  it("maps each letter to the 1-based page of its first market", () => {
+    const sorted = sortFeriasByName([
+      make("a", "Alajuela"),
+      make("b", "Belén"),
+      make("c", "Cartago"),
+      make("d", "Desamparados"),
+      make("e", "Escazú"),
+    ]);
+    const pages = letterFirstPage(sorted, 2);
+    expect(pages.get("A")).toBe(1);
+    expect(pages.get("B")).toBe(1);
+    expect(pages.get("C")).toBe(2);
+    expect(pages.get("D")).toBe(2);
+    expect(pages.get("E")).toBe(3);
   });
 });

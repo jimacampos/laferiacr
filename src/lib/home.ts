@@ -68,8 +68,43 @@ export function letterSectionId(letter: string): string {
   return letter === NON_ALPHA_LETTER ? "letter-num" : `letter-${letter}`;
 }
 
-/** Count of distinct regions represented, for the hero stats line. */
-export function countRegions(ferias: Pick<Feria, "regionId">[]): number {
-  return new Set(ferias.map((feria) => feria.regionId)).size;
+/**
+ * Flatten markets into a single alphabetically-sorted list (letters A–Z, then "#" last),
+ * matching the section order used by the directory. This is the canonical order paginated
+ * by the home page.
+ */
+export function sortFeriasByName(ferias: Feria[]): Feria[] {
+  return groupFeriasByLetter(ferias).flatMap((group) => group.ferias);
+}
+
+/** Total number of pages needed to show `total` items `perPage` at a time (0 when empty). */
+export function pageCount(total: number, perPage: number): number {
+  if (perPage <= 0 || total <= 0) return 0;
+  return Math.ceil(total / perPage);
+}
+
+/** The slice of items shown on a 1-based `page` (out-of-range pages yield an empty slice). */
+export function paginate<T>(items: T[], page: number, perPage: number): T[] {
+  if (perPage <= 0) return [];
+  const start = (page - 1) * perPage;
+  return items.slice(start, start + perPage);
+}
+
+/**
+ * Map each present letter to the 1-based page its first market falls on, so the A–Z index
+ * can jump straight to the right page. Expects `sorted` in canonical name order (letters
+ * are contiguous), e.g. the output of {@link sortFeriasByName}.
+ */
+export function letterFirstPage(
+  sorted: Feria[],
+  perPage: number,
+): Map<string, number> {
+  const pages = new Map<string, number>();
+  if (perPage <= 0) return pages;
+  sorted.forEach((feria, index) => {
+    const letter = feriaLetter(feria);
+    if (!pages.has(letter)) pages.set(letter, Math.floor(index / perPage) + 1);
+  });
+  return pages;
 }
 

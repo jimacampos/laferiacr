@@ -1,16 +1,22 @@
 "use client";
 
 import { useTranslation } from "@/i18n/I18nProvider";
-import { ALPHABET, letterSectionId } from "@/lib/home";
+import { ALPHABET } from "@/lib/home";
 
 const NON_ALPHA_LETTER = "#";
 
 /**
- * Compact A–Z (+ "#") jump index for the name-first directory. Present letters link to their
- * section anchor; absent letters render as disabled, muted labels so the alphabet stays a
- * stable, scannable shape regardless of the current filter.
+ * Compact A–Z (+ "#") jump index for the name-first directory. Present letters jump to the
+ * page + section for that letter; absent letters render as disabled, muted labels so the
+ * alphabet stays a stable, scannable shape regardless of the current filter.
  */
-export function AlphaIndex({ present }: { present: Set<string> }) {
+export function AlphaIndex({
+  present,
+  onSelect,
+}: {
+  present: Set<string>;
+  onSelect: (letter: string) => void;
+}) {
   const { t } = useTranslation();
   const letters = [...ALPHABET, NON_ALPHA_LETTER];
 
@@ -33,14 +39,15 @@ export function AlphaIndex({ present }: { present: Set<string> }) {
           );
         }
         return (
-          <a
+          <button
             key={letter}
-            href={`#${letterSectionId(letter)}`}
+            type="button"
+            onClick={() => onSelect(letter)}
             aria-label={t("list.jumpTo", { letter })}
             className="flex size-8 shrink-0 items-center justify-center rounded-lg text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
           >
             {letter}
-          </a>
+          </button>
         );
       })}
     </nav>

@@ -34,10 +34,12 @@ and slower connections. See personas in [product/personas.md](product/personas.m
   entry) since maps are hard for some users and assistive tech.
 - **Motion:** respect `prefers-reduced-motion`.
 - **Bilingual:** language toggle is easy to find; `lang` attributes set correctly for assistive tech.
-- **Directory navigation (home):** the A–Z jump index is a real list of anchor **links** to alphabetical
-  sections (keyboard-focusable; absent letters are inert/greyed, not focus traps); each section has a
-  visible letter heading and `scroll-mt` so anchored jumps clear the sticky search bar. The `/`
-  search shortcut is a convenience only — it's suppressed while typing in a field and never the sole
+- **Directory navigation (home):** the day filter is a **disclosure** (`aria-expanded` toggle) so it can
+  be collapsed; the market list is **paginated** with a `<nav aria-label>` pager whose current page uses
+  `aria-current="page"` and whose prev/next are disabled at the ends. The A–Z jump index is a `<nav>` of
+  **buttons** that switch to the page containing a letter and scroll to its section (absent letters are
+  inert/greyed `aria-hidden` labels, never focus traps); each section has a visible letter heading. The
+  `/` search shortcut is a convenience only — it's suppressed while typing in a field and never the sole
   way to reach search (the input is always visible and tab-reachable). Name-match **highlighting** uses
   semantic `<mark>` (meaning survives with styles off) and must keep sufficient contrast.
 

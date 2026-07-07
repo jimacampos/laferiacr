@@ -22,7 +22,6 @@ export const dictionaries: Record<Language, Messages> = {
       "Buscá por nombre las ferias del agricultor de Costa Rica.",
     "hero.searchLabel": "Buscar feria por nombre",
     "hero.searchPlaceholder": "Buscá por nombre… (ej. Cartago, Zapote)",
-    "hero.stats": "{markets} ferias · {regions} regiones",
 
     "search.clear": "Limpiar búsqueda",
 
@@ -37,6 +36,12 @@ export const dictionaries: Record<Language, Messages> = {
     "results.many": "{count} ferias",
     "list.jumpTo": "Ir a la letra {letter}",
     "list.index": "Índice alfabético",
+
+    "pager.label": "Paginación",
+    "pager.prev": "Anterior",
+    "pager.next": "Siguiente",
+    "pager.page": "Página {page} de {total}",
+    "pager.goToPage": "Ir a la página {page}",
 
     "card.days": "Días",
     "card.organizer": "Organiza",
@@ -262,7 +267,6 @@ export const dictionaries: Record<Language, Messages> = {
     "hero.subtitle": "Search Costa Rica's farmers markets by name.",
     "hero.searchLabel": "Search markets by name",
     "hero.searchPlaceholder": "Search by name… (e.g. Cartago, Zapote)",
-    "hero.stats": "{markets} markets · {regions} regions",
 
     "search.clear": "Clear search",
 
@@ -277,6 +281,12 @@ export const dictionaries: Record<Language, Messages> = {
     "results.many": "{count} markets",
     "list.jumpTo": "Jump to {letter}",
     "list.index": "Alphabetical index",
+
+    "pager.label": "Pagination",
+    "pager.prev": "Previous",
+    "pager.next": "Next",
+    "pager.page": "Page {page} of {total}",
+    "pager.goToPage": "Go to page {page}",
 
     "card.days": "Days",
     "card.organizer": "Organized by",

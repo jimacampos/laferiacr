@@ -78,13 +78,13 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 > 📋 Executable checklist: [phase-4-tasks.md](phase-4-tasks.md).
 
 ## Phase 4.5 — Home & discovery redesign (name-first) _(near-term UX)_
-**Status:** 🚧 In progress — discovery done (2026-07-07); **BL-023/024/025/026 shipped** (name-first hero, redesigned cards, no weekend default, region filter removed — OQ-013), plus a **home-redesign polish pass** (BL-029: brand wordmark + SVG motif, A–Z jump index, live search highlighting, wider grid). A near-term UX track that can run alongside/before Phase 5.
+**Status:** 🚧 In progress — discovery done (2026-07-07); **BL-023/024/025/026 shipped** (name-first hero, redesigned cards, no weekend default, region filter removed — OQ-013), plus a **home-redesign polish pass** (BL-029: brand wordmark + SVG motif, paginated A–Z directory with a bottom jump index, collapsible day filter, live search highlighting, wider grid). A near-term UX track that can run alongside/before Phase 5.
 **Goal:** make the home page a **name-first, search-led** way to find the specific feria you're looking for — and feel less bare — without depending on location data we don't have yet (only **2 of 66** markets have coordinates today).
 - **Name-first search** as the primary find path; short bilingual hero + value prop + light market count.
 - **Redesigned cards:** lead with the **name**; show **days open**; show **location only when present** (📍 link to the map); **drop region + phone** from the card (phone stays on the market detail page).
 - **Drop the "this weekend" default** (scheduled days ≠ confirmed open/closed) — day filtering becomes optional.
 - **Demote region** (administrative, not how users think — the name already implies the place); remove from the primary UI (OQ-013).
-- **Cohesive visual + scannability polish (BL-029):** a shared brand wordmark + hand-built SVG motif, an **A–Z jump index** with alphabetical sections, **live search highlighting** (matched substrings, clear ✕, `/`-to-focus, query-aware empty state), and a wider multi-column grid — so the home feels intentionally designed within our no-photos/no-coords data reality.
+- **Cohesive visual + scannability polish (BL-029):** a shared brand wordmark + hand-built SVG motif, a **paginated A–Z directory** (10 per page) with an **A–Z jump index at the bottom** that jumps to the right page, a **collapsible day filter**, and **live search highlighting** (matched substrings, clear ✕, `/`-to-focus, query-aware empty state) — so the home feels intentionally designed within our no-photos/no-coords data reality.
 - **Deferred (needs data):** "near me"/distance ranking and any map-first view, pending location coverage / a decision to geocode the official list (BL-027, BL-028, OQ-014).
 - **Exit criteria:** a returning user can find a specific market by name in seconds; the home leads with names and shows days (and location where known), with region/phone no longer competing for attention.
 - Backlog: BL-023…BL-029; decisions OQ-013, OQ-014.
