@@ -40,6 +40,7 @@ function market(
     suggestions: suggestions.map((s) => ({
       proposalId: s.proposalId,
       field: "hours",
+      value: `hours ${s.proposalId}`,
       net: 0,
       remaining: 2,
       createdAt: s.createdAt,
@@ -91,5 +92,18 @@ describe("orderAttentionMarkets", () => {
     const snapshot = input.map((m) => m.marketId);
     orderAttentionMarkets(input);
     expect(input.map((m) => m.marketId)).toEqual(snapshot);
+  });
+
+  it("preserves each suggestion's proposed value through ordering", () => {
+    const ordered = orderAttentionMarkets([
+      market("m", [
+        { proposalId: "late", createdAt: "2026-02-01T00:00:00Z" },
+        { proposalId: "early", createdAt: "2026-01-01T00:00:00Z" },
+      ]),
+    ]);
+    expect(ordered[0].suggestions.map((s) => s.value)).toEqual([
+      "hours early",
+      "hours late",
+    ]);
   });
 });

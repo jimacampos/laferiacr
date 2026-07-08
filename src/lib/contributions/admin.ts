@@ -113,6 +113,78 @@ export async function overrideField(
 }
 
 /**
+ * Break-glass approval of a single pending proposal by a super_admin, from the attention queue.
+ * Promotes it immediately (bypassing the N-confirmation threshold): writes the proposal's value
+ * onto the market, marks the proposal `verified`, supersedes competing proposals for the same
+ * field, records a change_history entry (action='override', linked via causedByProposal for
+ * provenance) and a moderation audit entry (targetType='proposal'). Returns false when the
+ * proposal doesn't exist or is no longer pending.
+ */
+export async function approveProposal(
+  actorId: string,
+  proposalId: string,
+  reason?: string | null,
+): Promise<boolean> {
+  return prisma.$transaction(async (tx) => {
+    const proposal = await tx.proposal.findUnique({
+      where: { id: proposalId },
+      select: {
+        id: true,
+        marketId: true,
+        field: true,
+        proposedValue: true,
+        status: true,
+      },
+    });
+    if (!proposal || proposal.status !== "pending") return false;
+    if (proposal.field !== "hours" && proposal.field !== "location") return false;
+
+    const field = proposal.field;
+    const value = proposal.proposedValue as Prisma.InputJsonValue;
+
+    const oldValue = await readFieldValue(tx, proposal.marketId, field);
+    await writeFieldValue(tx, proposal.marketId, field, value as Prisma.JsonValue);
+
+    await tx.proposal.update({
+      where: { id: proposal.id },
+      data: { status: "verified" },
+    });
+    await tx.changeHistory.create({
+      data: {
+        marketId: proposal.marketId,
+        field,
+        oldValue: oldValue ?? Prisma.JsonNull,
+        newValue: value,
+        actorId,
+        causedByProposal: proposal.id,
+        action: "override",
+      },
+    });
+    await tx.proposal.updateMany({
+      where: {
+        marketId: proposal.marketId,
+        field,
+        id: { not: proposal.id },
+        status: { in: ["pending", "verified"] },
+      },
+      data: { status: "superseded" },
+    });
+    await recordModerationAction(
+      {
+        actorId,
+        action: "override_field",
+        targetType: "proposal",
+        targetId: proposal.id,
+        reason,
+        metadata: { field, marketId: proposal.marketId },
+      },
+      tx,
+    );
+    return true;
+  });
+}
+
+/**
  * Revert a market field to the value it held before the most recent change, using the
  * latest change_history entry's `old_value`. Records the revert itself (action='revert').
  * Returns false when there is no history to revert.

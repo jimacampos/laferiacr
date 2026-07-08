@@ -266,6 +266,13 @@ export const dictionaries: Record<Language, Messages> = {
     "attention.needsMore": "faltan {remaining}",
     "attention.waitingSince": "Esperando desde {date}",
     "attention.review": "Revisar",
+    "attention.approve": "Aprobar",
+    "attention.approving": "Aprobando…",
+    "attention.approved": "¡Aprobada y publicada!",
+    "attention.approveError": "No se pudo aprobar. Inténtalo de nuevo.",
+    "attention.viewOnMap": "Ver en Google Maps",
+    "attention.approveHint":
+      "Aprobar publica este valor en la feria de inmediato (sin esperar confirmaciones).",
 
     "admin.controls.title": "Herramientas de moderación",
     "admin.controls.hidden": "Esta feria está oculta del público.",
@@ -575,6 +582,13 @@ export const dictionaries: Record<Language, Messages> = {
     "attention.needsMore": "needs {remaining} more",
     "attention.waitingSince": "Waiting since {date}",
     "attention.review": "Review",
+    "attention.approve": "Approve",
+    "attention.approving": "Approving…",
+    "attention.approved": "Approved and published!",
+    "attention.approveError": "Couldn't approve. Please try again.",
+    "attention.viewOnMap": "View on Google Maps",
+    "attention.approveHint":
+      "Approving publishes this value to the market right away (no confirmations needed).",
 
     "admin.controls.title": "Moderation tools",
     "admin.controls.hidden": "This market is hidden from the public.",
