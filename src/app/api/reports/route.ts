@@ -35,7 +35,9 @@ export async function POST(request: Request) {
   };
 
   if (
-    (targetType !== "market" && targetType !== "proposal") ||
+    (targetType !== "market" &&
+      targetType !== "proposal" &&
+      targetType !== "submission") ||
     typeof targetId !== "string" ||
     targetId.length === 0
   ) {
@@ -66,6 +68,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "target_not_found" }, { status: 404 });
     }
     resolvedTargetId = marketId;
+  } else if (targetType === "submission") {
+    const submission = await prisma.marketSubmission.findUnique({
+      where: { id: targetId },
+      select: { id: true },
+    });
+    if (!submission) {
+      return NextResponse.json({ error: "target_not_found" }, { status: 404 });
+    }
   } else {
     const proposal = await prisma.proposal.findUnique({
       where: { id: targetId },

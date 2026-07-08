@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useTranslation } from "@/i18n/I18nProvider";
 import {
   removeProposal,
+  removeSubmission,
   resolveReports,
   type QueueItem,
 } from "@/lib/contributions/adminApi";
@@ -30,12 +31,16 @@ function QueueRow({
   const typeLabel =
     item.targetType === "market"
       ? t("moderation.queue.market")
-      : t("moderation.queue.proposal");
+      : item.targetType === "submission"
+        ? t("moderation.queue.submission")
+        : t("moderation.queue.proposal");
 
   const title =
     item.targetType === "market"
       ? (item.marketName ?? item.targetId)
-      : `${item.marketName ?? ""} · ${item.proposalField ?? ""}`.trim();
+      : item.targetType === "submission"
+        ? (item.submissionName ?? item.targetId)
+        : `${item.marketName ?? ""} · ${item.proposalField ?? ""}`.trim();
 
   async function act(fn: () => Promise<{ ok: boolean }>) {
     setBusy(true);
@@ -69,13 +74,22 @@ function QueueRow({
             {item.latestReason ?? t("moderation.queue.noReason")}
           </p>
         </div>
-        {item.marketSlug && (
+        {item.targetType === "submission" ? (
           <Link
-            href={`/market/${item.marketSlug}`}
+            href={`/markets/pending/${item.targetId}`}
             className="shrink-0 text-sm font-medium text-emerald-700 hover:underline"
           >
             {t("moderation.queue.view")}
           </Link>
+        ) : (
+          item.marketSlug && (
+            <Link
+              href={`/market/${item.marketSlug}`}
+              className="shrink-0 text-sm font-medium text-emerald-700 hover:underline"
+            >
+              {t("moderation.queue.view")}
+            </Link>
+          )
         )}
       </div>
 
@@ -128,6 +142,16 @@ function QueueRow({
             type="button"
             disabled={busy}
             onClick={() => act(() => removeProposal(item.targetId, trimmedReason))}
+            className="rounded-full bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 transition hover:bg-red-100 disabled:opacity-50"
+          >
+            {t("moderation.action.remove")}
+          </button>
+        )}
+        {item.targetType === "submission" && (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => act(() => removeSubmission(item.targetId, trimmedReason))}
             className="rounded-full bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 transition hover:bg-red-100 disabled:opacity-50"
           >
             {t("moderation.action.remove")}

@@ -39,6 +39,12 @@ export function Header() {
       <NavLink href="/" exact onNavigate={closeMenu}>
         {t("nav.home")}
       </NavLink>
+      <NavLink href="/markets/new" onNavigate={closeMenu}>
+        {t("nav.addMarket")}
+      </NavLink>
+      <NavLink href="/markets/pending" onNavigate={closeMenu}>
+        {t("nav.pending")}
+      </NavLink>
       <NavLink href="/help" onNavigate={closeMenu}>
         {t("nav.help")}
       </NavLink>
@@ -53,6 +59,12 @@ export function Header() {
     <>
       <NavLink href="/" exact variant="row" onNavigate={closeMenu}>
         {t("nav.home")}
+      </NavLink>
+      <NavLink href="/markets/new" variant="row" onNavigate={closeMenu}>
+        {t("nav.addMarket")}
+      </NavLink>
+      <NavLink href="/markets/pending" variant="row" onNavigate={closeMenu}>
+        {t("nav.pending")}
       </NavLink>
       <NavLink href="/help" variant="row" onNavigate={closeMenu}>
         {t("nav.help")}

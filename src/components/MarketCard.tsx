@@ -41,6 +41,12 @@ export function MarketCard({ feria, query = "" }: { feria: Feria; query?: string
         <DayBadges days={feria.days} />
       </div>
 
+      {feria.source === "community" && (
+        <span className="inline-flex w-fit items-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-xs font-medium text-sky-700 ring-1 ring-sky-200">
+          {t("provenance.communityShort")}
+        </span>
+      )}
+
       {feriaHasLocation(feria) && (
         <div className="mt-auto pt-1">
           <Link

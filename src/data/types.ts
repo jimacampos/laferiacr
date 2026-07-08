@@ -44,6 +44,12 @@ export interface Feria {
    * Optional so the static v0 dataset (no coordinates) stays valid.
    */
   hasLocation?: boolean;
+  /**
+   * Provenance: 'official' (June 2026 seed list) or 'community' (added later via the Phase 5
+   * submission flow). Optional so the static v0 dataset (all official) stays valid; the card
+   * shows a "Community-added" badge when this is 'community'.
+   */
+  source?: string;
 }
 
 export interface FeriasData {

@@ -86,6 +86,7 @@ export async function getMarketsData(): Promise<MarketsData> {
       administrator: row.organizer ?? "",
       phones: row.phones,
       hasLocation: locatedSlugs.has(row.slug),
+      source: row.source,
     }))
     .sort(byName);
 

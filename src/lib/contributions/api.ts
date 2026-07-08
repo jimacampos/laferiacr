@@ -55,12 +55,74 @@ export function voteProposal(
 }
 
 export function submitReport(
-  targetType: "market" | "proposal",
+  targetType: "market" | "proposal" | "submission",
   targetId: string,
   reason?: string,
   captchaToken?: string,
 ): Promise<ApiResult> {
   return postJson(`/api/reports`, { targetType, targetId, reason, captchaToken });
+}
+
+/** Payload for creating a new-market submission (Phase 5). */
+export interface SubmissionInput {
+  name: string;
+  regionId: string;
+  regionName: string;
+  days: string[];
+  daysLabel?: string;
+  hoursText?: string | null;
+  referenceText?: string | null;
+  mapUrl?: string | null;
+  organizer?: string | null;
+  phones?: string[];
+  location?: LocationValue | null;
+  captchaToken?: string;
+}
+
+/** A likely-duplicate market returned by the create/check endpoints (soft warning). */
+export interface DuplicateCandidate {
+  slug: string;
+  name: string;
+  regionName: string | null;
+  nameScore: number;
+  distanceMeters: number | null;
+}
+
+export function submitMarketSubmission(
+  input: SubmissionInput,
+): Promise<ApiResult<{ id: string; duplicates: DuplicateCandidate[] }>> {
+  return postJson(`/api/market-submissions`, input);
+}
+
+export function voteSubmission(
+  submissionId: string,
+  vote: "confirm" | "reject",
+): Promise<
+  ApiResult<{ status: string; promoted: boolean; marketSlug: string | null }>
+> {
+  return postJson(
+    `/api/market-submissions/${encodeURIComponent(submissionId)}/${vote}`,
+  );
+}
+
+/** Live soft-duplicate check for the new-market form (GET; never blocks). */
+export async function checkDuplicates(
+  name: string,
+  location?: LocationValue | null,
+): Promise<DuplicateCandidate[]> {
+  const params = new URLSearchParams({ name });
+  if (location) {
+    params.set("lat", String(location.lat));
+    params.set("lng", String(location.lng));
+  }
+  try {
+    const res = await fetch(`/api/market-submissions/duplicates?${params}`);
+    if (!res.ok) return [];
+    const data = (await res.json()) as { duplicates?: DuplicateCandidate[] };
+    return data.duplicates ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export function submitFeedback(
