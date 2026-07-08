@@ -1,6 +1,6 @@
 # Moderation & Trust — La Feria CR
 
-**Status:** 🟢 Implemented (Phase 4) · _Last updated: 2026-07-03_
+**Status:** 🟢 Implemented (Phase 4) · _Last updated: 2026-07-09 (Phase 5: submissions reportable + removable)_
 
 How community input becomes trustworthy "verified" data, and how abuse is contained. Combines an
 **automated** confirmation loop ([ADR-0008](../decisions/0008-promotion-automated-confirmation-and-roles.md))
@@ -77,12 +77,13 @@ flowchart LR
   DIS --> AUD
 ```
 
-- Anyone (incl. anonymous) can report a market or proposal.
+- Anyone (incl. anonymous) can report a market, proposal, or community **submission**.
 - **Community Safety triages the queue (Phase 4):** open reports are grouped by target and ranked by
   open-report **count**, then recency. A moderator **resolves** (actioned) or **dismisses** all open
-  reports on a target, can **remove** an abusive proposal, **hide/unhide** a market, and **temp-ban**
-  the author; a Super Admin can additionally **override/revert** a field. Every action **dual-writes**
-  `moderation_actions` (who/what/why) and, for field changes, `change_history` (for revert).
+  reports on a target, can **remove** an abusive proposal, **hide/unhide** a market, **remove** a
+  community submission (Phase 5), and **temp-ban** the author; a Super Admin can additionally
+  **override/revert** a field. Every action **dual-writes** `moderation_actions` (who/what/why) and,
+  for field changes, `change_history` (for revert).
 - **No auto-quarantine (OQ-009 deferred):** the queue only surfaces counts; nothing is auto-hidden.
   This is the safest default against coordinated false reports — all removals are manual.
 - Appeals go through [content-guidelines](../community/content-guidelines.md) (channel & SLA — OQ-010).
@@ -93,7 +94,7 @@ flowchart LR
 | Spam proposals | Per-IP/device **rate limits**; **CAPTCHA** on anonymous writes |
 | Vote stuffing | **Account required** to confirm; one vote per user per proposal |
 | Sock-puppets / sybil | Email-verified accounts; reputation + anomaly heuristics (Phase 6) |
-| Bad new markets | Duplicate detection; pending until confirmed; moderation |
+| Bad new markets | **Soft** duplicate detection (name + proximity, warn-only); sign-in required to submit; pending until community-confirmed; reportable + removable via moderation (Phase 5) |
 | Vandalism | Full history + **revert**; moderator content removal; **temp-bans** (1d/7d/30d/permanent, block all writes) |
 | Coordinated attack | WAF/Front Door; alerting; Super-Admin override/revert; manual queue triage (no auto-hide) |
 

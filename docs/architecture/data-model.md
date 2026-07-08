@@ -1,6 +1,6 @@
 # Data Model — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-07 (feedback table)_
+**Status:** 🟡 Draft · _Last updated: 2026-07-09 (Phase 5: market_submissions + submission_confirmations; reports gain 'submission' target)_
 
 Logical data model for the community platform. Storage is **PostgreSQL Flexible Server + PostGIS**
 ([ADR-0004](../decisions/0004-database-postgresql-flexible.md)). This is a design reference, not a
@@ -22,12 +22,15 @@ erDiagram
   proposals ||--o{ confirmations : "receives"
   markets ||--o{ reports : "flagged by"
   proposals ||--o{ reports : "flagged by"
+  market_submissions ||--o{ reports : "flagged by"
   users ||--o{ confirmations : "casts"
   users ||--o{ proposals : "submits (nullable if anon)"
   users ||--o{ reports : "files"
   users ||--o{ user_roles : "granted"
   users ||--o{ market_submissions : "submits"
   market_submissions ||--o| markets : "promoted to"
+  market_submissions ||--o{ submission_confirmations : "receives"
+  users ||--o{ submission_confirmations : "casts"
   markets ||--o{ change_history : "records"
   users ||--o{ moderation_actions : "performs"
   markets ||--o{ moderation_actions : "targets"
@@ -100,8 +103,18 @@ erDiagram
     geography location
     jsonb details
     uuid submitted_by FK
+    text submitter_ip_hash
     text status
+    int confirm_count
+    int reject_count
     uuid promoted_market_id FK
+    timestamptz created_at
+  }
+  submission_confirmations {
+    uuid id PK
+    uuid submission_id FK
+    uuid user_id FK
+    text vote
     timestamptz created_at
   }
   moderation_actions {
@@ -187,7 +200,8 @@ One **account-gated** vote on a proposal. `vote`: `confirm` | `reject`. Unique o
 the proposal.
 
 ### reports
-Flags on a market or proposal (`target_type` + `target_id`). Feeds the moderation queue
+Flags on a market, proposal, or community **submission** (`target_type` ∈ `market | proposal |
+submission` + `target_id`). Feeds the moderation queue
 ([moderation-trust](moderation-trust.md)). `status`: `open` | `actioned` | `dismissed`. Indexed by
 `(target_type, target_id, status)` and, for queue listing, `(status, created_at)`.
 
@@ -207,8 +221,22 @@ global). Unique on `(user_id, role, scope)` plus a partial unique index where `s
 because Postgres treats NULLs as distinct. See [rbac](rbac.md).
 
 ### market_submissions
-Proposed **new** markets (Phase 5). Holds candidate details until promoted to a real `markets` row;
-`promoted_market_id` links the result. Duplicate detection on name + proximity before acceptance.
+Proposed **new** markets (Phase 5, [ADR-0009](../decisions/0009-community-submitted-markets.md)).
+Holds candidate details until promoted to a real `markets` row; `promoted_market_id` links the
+result. Submitting **requires sign-in** (`submitted_by` FK to `users`, `SET NULL`); `submitter_ip_hash`
+supports rate-limiting. Core columns live in SQL; the `details` **jsonb** carries the rest
+(region id/name, canonical `days` + label, hours, reference, map url, phones, organizer). `location`
+is PostGIS `geography(Point,4326)` (written/read via raw SQL). `status` is
+`pending | verified | rejected | hidden`. **Soft** duplicate detection (name similarity + proximity)
+warns the submitter but never blocks. A submission is a **votable entity**: `confirm_count`/
+`reject_count` track its tally and it auto-promotes at N **net** confirmations (same threshold as
+proposals, DB→env→default 2), creating a `markets` row with `source='community'`. Indexes: `(status,
+created_at)` for the queue and GIST on `location` for proximity.
+
+### submission_confirmations
+Per-user confirm/reject votes on a `market_submission` (Phase 5). Mirrors `confirmations` but keyed to
+submissions so the proposal flow is untouched. Unique `(submission_id, user_id)` enforces one vote per
+account; the submission's own author cannot vote. FKs cascade on delete.
 
 ### moderation_actions
 Append-only audit of moderator/admin actions (remove, hide, ban, override, revert, grant/revoke role,

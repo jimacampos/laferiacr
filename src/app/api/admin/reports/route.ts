@@ -53,7 +53,11 @@ export async function POST(request: Request) {
     reason?: unknown;
   };
 
-  if (targetType !== "market" && targetType !== "proposal") {
+  if (
+    targetType !== "market" &&
+    targetType !== "proposal" &&
+    targetType !== "submission"
+  ) {
     return NextResponse.json({ error: "invalid_target" }, { status: 400 });
   }
   if (typeof targetId !== "string" || targetId.length === 0) {

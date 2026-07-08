@@ -279,3 +279,51 @@ model Feedback {
   @@index([submittedBy])
   @@map("feedback")
 }
+
+/// A community-submitted **new** market awaiting promotion (Phase 5, ADR-0009). Holds the
+/// candidate's core details until it collects enough confirmations to be promoted into a real
+/// `markets` row (`source='community'`). Submitting requires sign-in (`submittedBy` always set);
+/// promotion is automatic at **N** net confirmations, mirroring the Phase 3 proposal loop. The
+/// PostGIS `location` column is created via raw SQL (Prisma cannot project `geography`), so reads
+/// that need coordinates use `$queryRaw`. FKs to `users`/`markets` are enforced in SQL, mirroring
+/// the reports/feedback precedent to keep the related models clean.
+model MarketSubmission {
+  id       String @id @default(uuid()) @db.Uuid
+  name     String
+  /// PostGIS point for the proposed location; null when unknown at submission time.
+  location Unsupported("geography(Point, 4326)")?
+  /// JSON payload with the remaining candidate fields: region_id, region_name, days (canonical
+  /// keys), days_label, hours_text, reference_text, map_url, phones[], organizer.
+  details  Json
+  /// Author account (required — submitting a new market is sign-in only).
+  submittedBy String @map("submitted_by") @db.Uuid
+  /// Hashed submitter IP for abuse triage only (operational, short-retention).
+  submitterIpHash String? @map("submitter_ip_hash")
+  /// 'pending' | 'verified' | 'rejected' | 'hidden'.
+  status   String @default("pending")
+  /// Cached vote tallies; net = confirmCount - rejectCount drives promotion at N.
+  confirmCount Int @default(0) @map("confirm_count")
+  rejectCount  Int @default(0) @map("reject_count")
+  /// The market created when this submission was promoted; null until verified.
+  promotedMarketId String? @map("promoted_market_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@map("market_submissions")
+}
+
+/// One account-gated vote on a market submission. Unique per (submission, user) → one vote each.
+/// A submission's own author cannot confirm it (enforced in the API). Mirrors `confirmations` so
+/// the Phase 3 proposal flow is left untouched. FK to `users` enforced in SQL.
+model SubmissionConfirmation {
+  id           String @id @default(uuid()) @db.Uuid
+  submissionId String @map("submission_id") @db.Uuid
+  userId       String @map("user_id") @db.Uuid
+  /// 'confirm' | 'reject'.
+  vote         String
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@unique([submissionId, userId])
+  @@map("submission_confirmations")
+}

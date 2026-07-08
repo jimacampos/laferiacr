@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 export type ModerationTargetType =
   | "market"
   | "proposal"
+  | "submission"
   | "report"
   | "user"
   | "config";
@@ -62,17 +63,20 @@ export function orderQueueGroups(groups: RawReportGroup[]): RawReportGroup[] {
 }
 
 export interface QueueItem {
-  targetType: "market" | "proposal";
+  targetType: "market" | "proposal" | "submission";
   targetId: string;
   openReports: number;
   latestReportAt: string;
   latestReason: string | null;
-  /** Market slug for linking (the market itself, or the proposal's market). */
+  /** Market slug for linking (the market itself, or the proposal's market). Null for submissions. */
   marketSlug: string | null;
   marketName: string | null;
-  /** Proposal enrichment (null for market targets). */
+  /** Proposal enrichment (null for market/submission targets). */
   proposalField: string | null;
   proposalStatus: string | null;
+  /** Submission enrichment (null for market/proposal targets). */
+  submissionName: string | null;
+  submissionStatus: string | null;
 }
 
 /**
@@ -103,8 +107,11 @@ export async function getReportQueue(limit = 50, offset = 0): Promise<QueueItem[
   const proposalIds = ranked
     .filter((g) => g.targetType === "proposal")
     .map((g) => g.targetId);
+  const submissionIds = ranked
+    .filter((g) => g.targetType === "submission")
+    .map((g) => g.targetId);
 
-  const [markets, proposals] = await Promise.all([
+  const [markets, proposals, submissions] = await Promise.all([
     marketIds.length
       ? prisma.market.findMany({
           where: { id: { in: marketIds } },
@@ -122,10 +129,17 @@ export async function getReportQueue(limit = 50, offset = 0): Promise<QueueItem[
           },
         })
       : Promise.resolve([]),
+    submissionIds.length
+      ? prisma.marketSubmission.findMany({
+          where: { id: { in: submissionIds } },
+          select: { id: true, name: true, status: true },
+        })
+      : Promise.resolve([]),
   ]);
 
   const marketById = new Map(markets.map((m) => [m.id, m]));
   const proposalById = new Map(proposals.map((p) => [p.id, p]));
+  const submissionById = new Map(submissions.map((s) => [s.id, s]));
 
   // Latest report reason per target, for a quick queue preview.
   const latestReasons = await prisma.report.findMany({
@@ -149,8 +163,10 @@ export async function getReportQueue(limit = 50, offset = 0): Promise<QueueItem[
     const market = g.targetType === "market" ? marketById.get(g.targetId) : undefined;
     const proposal =
       g.targetType === "proposal" ? proposalById.get(g.targetId) : undefined;
+    const submission =
+      g.targetType === "submission" ? submissionById.get(g.targetId) : undefined;
     return {
-      targetType: g.targetType as "market" | "proposal",
+      targetType: g.targetType as "market" | "proposal" | "submission",
       targetId: g.targetId,
       openReports: g.count,
       latestReportAt: g.latestReportAt.toISOString(),
@@ -159,6 +175,8 @@ export async function getReportQueue(limit = 50, offset = 0): Promise<QueueItem[
       marketName: market?.name ?? proposal?.market.name ?? null,
       proposalField: proposal?.field ?? null,
       proposalStatus: proposal?.status ?? null,
+      submissionName: submission?.name ?? null,
+      submissionStatus: submission?.status ?? null,
     };
   });
 }
@@ -170,7 +188,7 @@ export async function getReportQueue(limit = 50, offset = 0): Promise<QueueItem[
  */
 export async function resolveReportsForTarget(
   actorId: string,
-  targetType: "market" | "proposal",
+  targetType: "market" | "proposal" | "submission",
   targetId: string,
   decision: "resolve" | "dismiss",
   reason?: string | null,
@@ -224,6 +242,41 @@ export async function removeProposal(
         targetId: proposalId,
         reason,
         metadata: { previousStatus: proposal.status },
+      },
+      tx,
+    );
+    return true;
+  });
+}
+
+/**
+ * Remove an abusive/incorrect submission for a **new** community market: mark it `hidden` so it
+ * drops out of the public confirm queue, and audit the removal. Does not delete an already-promoted
+ * market (that is a separate hide/override action). Returns false when the submission does not exist.
+ */
+export async function removeSubmission(
+  actorId: string,
+  submissionId: string,
+  reason?: string | null,
+): Promise<boolean> {
+  return prisma.$transaction(async (tx) => {
+    const submission = await tx.marketSubmission.findUnique({
+      where: { id: submissionId },
+      select: { id: true, status: true },
+    });
+    if (!submission) return false;
+    await tx.marketSubmission.update({
+      where: { id: submissionId },
+      data: { status: "hidden" },
+    });
+    await recordModerationAction(
+      {
+        actorId,
+        action: "remove_submission",
+        targetType: "submission",
+        targetId: submissionId,
+        reason,
+        metadata: { previousStatus: submission.status },
       },
       tx,
     );

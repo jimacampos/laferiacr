@@ -1,6 +1,6 @@
 # Product Requirements (PRD) — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-08 (coordinate coverage ~55/73; "near me" reconsidering)_
+**Status:** 🟡 Draft · _Last updated: 2026-07-09 (FR-23/24/25 community markets implemented on dev)_
 
 This PRD describes **what** we build, grouped by release. The **order** of delivery is in
 [roadmap.md](roadmap.md); the **how** is in the [architecture](../architecture/overview.md) docs.
@@ -89,11 +89,12 @@ flag-gated CAPTCHA seam, and reversible `change_history`.)_
   the new `moderation_actions` table; **N** is DB-configurable
   ([ADR-0015](../decisions/0015-admin-configurable-settings-app-config.md))._
 - **FR-23 Add a market:** users can submit a brand-new market (name, region, days, location, hours).
-  _Phase 5 — planned._
+  _Phase 5 — 🚧 implemented on dev; sign-in required, rate-limited + CAPTCHA-gated ([ADR-0009](../decisions/0009-community-submitted-markets.md))._
 - **FR-24 Duplicate detection:** new submissions are checked against existing markets by name
-  similarity and proximity before publishing. _Phase 5 — planned._
+  similarity and proximity before publishing. _Phase 5 — 🚧 implemented on dev as a **soft warning**
+  (name ≥ 0.6 or within 500 m); never blocks._
 - **FR-25 Provenance:** markets are labeled **"Official (2026 list)"** or **"Community-added"**.
-  _Phase 5 — planned._
+  _Phase 5 — 🚧 implemented on dev; promoted submissions become `source=community` markets._
 
 ---
 

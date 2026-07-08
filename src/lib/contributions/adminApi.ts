@@ -40,7 +40,7 @@ function post<T>(url: string, body?: unknown): Promise<ApiResult<T>> {
 // --- Reports queue ---------------------------------------------------------
 
 export function resolveReports(
-  targetType: "market" | "proposal",
+  targetType: "market" | "proposal" | "submission",
   targetId: string,
   decision: "resolve" | "dismiss",
   reason?: string,
@@ -55,6 +55,17 @@ export function removeProposal(
   reason?: string,
 ): Promise<ApiResult<{ status: string }>> {
   return post(`/api/admin/proposals/${encodeURIComponent(proposalId)}`, {
+    action: "remove",
+    reason,
+  });
+}
+
+/** Hide an abusive/incorrect community new-market submission (Community Safety+). */
+export function removeSubmission(
+  submissionId: string,
+  reason?: string,
+): Promise<ApiResult<{ status: string }>> {
+  return post(`/api/admin/submissions/${encodeURIComponent(submissionId)}`, {
     action: "remove",
     reason,
   });

@@ -1,6 +1,6 @@
 # Backlog — La Feria CR
 
-**Status:** 🟢 Living document · _Last updated: 2026-07-08 (BL-027/028 + OQ-014 re-statused; coverage ~55/73)_
+**Status:** 🟢 Living document · _Last updated: 2026-07-09 (OQ-004 dup-strictness defaults noted; Phase 5 shipped)_
 
 The single place to capture future features and decisions that aren't in the active phase. Add items
 with the **`backlog-add`** skill (it appends a row using the format below). Promote items into a phase
@@ -56,7 +56,7 @@ in the [roadmap](roadmap.md) when they're ready to schedule.
 | OQ-001 | Confirmation threshold **N** starting value | P1 | ✅ resolved (Phase 3: **N = 2**, net confirmations; configurable via `CONFIRMATION_THRESHOLD`) | [moderation-trust](../architecture/moderation-trust.md), [ADR-0008](../decisions/0008-promotion-automated-confirmation-and-roles.md) |
 | OQ-002 | When to enable reputation weighting of votes | P2 | open (deferred to Phase 6; Phase 4 `trusted` is a manual marker, no weighting) | [moderation-trust](../architecture/moderation-trust.md) |
 | OQ-003 | Moderator vetting & regional scoping | P2 | open (Phase 4 decision: **manual grant only, scoping deferred** — `user_roles.scope` kept but not enforced; grants global) | [rbac](../architecture/rbac.md), [ADR-0014](../decisions/0014-rbac-moderation-queue-and-temp-bans.md) |
-| OQ-004 | Duplicate-detection strictness for new markets | P2 | open | [ADR-0009](../decisions/0009-community-submitted-markets.md) |
+| OQ-004 | Duplicate-detection strictness for new markets | P2 | open — Phase 5 ships a **soft warn-only** default (Dice name ≥ **0.6** OR within **500 m**); never blocks. Tune these thresholds with real submission data. | [ADR-0009](../decisions/0009-community-submitted-markets.md) |
 | OQ-005 | Entra sign-in providers beyond Google | P2 | open | [ADR-0005](../decisions/0005-identity-entra-external-id.md) |
 | OQ-006 | Pin prod ACA to min-1 replica vs scale-to-zero | P2 | open | [infrastructure](../architecture/infrastructure.md) |
 | OQ-007 | Private networking (VNet/Private Link) for DB | P3 | open | [infrastructure](../architecture/infrastructure.md) |
