@@ -31,6 +31,10 @@ export interface MarketDetail {
   daysLabel: string;
   /** Human-readable hours; null until contributed (Phase 3). */
   hoursText: string | null;
+  /** Landmark-based point-of-reference direction (e.g. "Contiguo al Pali"); null when unknown. */
+  referenceText: string | null;
+  /** Google Maps link to the feria's location; null until provided. */
+  mapUrl: string | null;
   organizer: string;
   phones: string[];
   /** PostGIS point; null until a location is known/contributed (Phase 3). */
@@ -106,6 +110,8 @@ interface MarketDetailRow {
   days: DayOfWeek[];
   days_label: string;
   hours_text: string | null;
+  reference_text: string | null;
+  map_url: string | null;
   organizer: string | null;
   phones: string[];
   source: string;
@@ -139,7 +145,9 @@ export async function getMarketBySlug(
       regionName: getRegion(feria.regionId)?.name ?? "",
       days: feria.days,
       daysLabel: feria.daysLabel,
-      hoursText: null,
+      hoursText: feria.hoursText ?? null,
+      referenceText: feria.referenceText ?? null,
+      mapUrl: feria.mapUrl ?? null,
       organizer: feria.administrator,
       phones: feria.phones,
       location: null,
@@ -153,6 +161,7 @@ export async function getMarketBySlug(
   const { prisma } = await import("./prisma");
   const rows = await prisma.$queryRaw<MarketDetailRow[]>`
     SELECT id, slug, name, region_id, region_name, days, days_label, hours_text,
+           reference_text, map_url,
            organizer, phones, source, status, updated_at,
            ST_Y(location::geometry) AS lat, ST_X(location::geometry) AS lng
     FROM markets
@@ -172,6 +181,8 @@ export async function getMarketBySlug(
     days: row.days,
     daysLabel: row.days_label,
     hoursText: row.hours_text,
+    referenceText: row.reference_text,
+    mapUrl: row.map_url,
     organizer: row.organizer ?? "",
     phones: row.phones,
     location:

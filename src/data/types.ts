@@ -28,6 +28,16 @@ export interface Feria {
   daysLabel: string;
   administrator: string;
   phones: string[];
+  /** Human-readable operating hours from the official source; null when unknown. */
+  hoursText?: string | null;
+  /**
+   * Landmark-based point-of-reference direction (e.g. "Contiguo al Pali"); null when
+   * unknown. Costa Rican addresses are landmark-based, so this often locates a feria
+   * better than coordinates alone.
+   */
+  referenceText?: string | null;
+  /** Google Maps link to the feria's location; null until provided. */
+  mapUrl?: string | null;
   /**
    * Whether the market has known coordinates. Drives the name-first card's
    * lightweight 📍 indicator (Phase 4.5); true only when a location exists.
