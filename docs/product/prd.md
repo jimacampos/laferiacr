@@ -1,6 +1,6 @@
 # Product Requirements (PRD) — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-07_
+**Status:** 🟡 Draft · _Last updated: 2026-07-08 (coordinate coverage ~55/73; "near me" reconsidering)_
 
 This PRD describes **what** we build, grouped by release. The **order** of delivery is in
 [roadmap.md](roadmap.md); the **how** is in the [architecture](../architecture/overview.md) docs.
@@ -99,8 +99,9 @@ flag-gated CAPTCHA seam, and reversible `change_history`.)_
 
 ## Home & discovery — name-first browse (Phase 4.5)
 Reframes the home page around the primary job: **find the specific market you're looking for, by name.**
-Location-based discovery ("near me") is deferred until coordinate coverage grows (only **2 of 66** markets
-have coordinates today).
+Location-based discovery ("near me") was deferred while coordinate coverage was thin. **Update (2026-07-08):
+coverage has grown to ~55 of 73 active markets (~75%)** through community location approvals, so "near me" is
+now worth reconsidering (see FR-66, BL-027, OQ-014).
 - **FR-60 Name-first search:** the home page centers a prominent search that filters markets by **name**
   (accent-insensitive) as the primary way to find a market. _Phase 4.5 — shipped._
 - **FR-61 Redesigned market card:** leads with the **name**; shows **days open**; shows a **location
@@ -114,9 +115,10 @@ have coordinates today).
   not penalized in the default name/day ordering. _Phase 4.5 — shipped._
 - **FR-65 Welcoming bilingual hero:** a short ES/EN header/value prop centered on the name search.
   _Phase 4.5 — shipped._
-- **FR-66 "Near me" (deferred):** distance-sorted nearest markets using the visitor's location (with
+- **FR-66 "Near me" (reconsidering):** distance-sorted nearest markets using the visitor's location (with
   explicit geolocation consent, NFR-32), enabled once most markets have coordinates
-  (see BL-027/BL-028, OQ-014). _Parked — needs location data._
+  (see BL-027/BL-028, OQ-014). _Coverage reached ~75% (55/73) on 2026-07-08 — the "needs data" blocker is
+  largely cleared; ready to reconsider._
 - **FR-67 Scannable, paginated A–Z directory + live search feedback:** results are grouped into
   **alphabetical sections** and **paginated (10 per page)** to keep the page light; an **A–Z jump index**
   below the pager jumps to the page + section for a letter (present letters active; absent letters

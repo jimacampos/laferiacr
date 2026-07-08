@@ -1,6 +1,6 @@
 # Infrastructure — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-07 (GA4 live on dev)_
+**Status:** 🟡 Draft · _Last updated: 2026-07-08 (ad-hoc markets JSON snapshot noted)_
 
 Azure footprint, environments, IaC, CI/CD, and **cost control**. Guiding constraint:
 **minimize cost via serverless / scale-to-zero**. Component rationale lives in
@@ -142,7 +142,8 @@ telemetry. A cookie-consent banner is deferred (backlog BL-031).
 - Budget + cost alerts on each subscription/resource group.
 
 ## Backups & DR
-- Postgres automated backups with point-in-time restore (retention per environment).
+- Postgres automated backups with point-in-time restore (retention per environment) — the primary recovery mechanism.
+- **Ad-hoc data snapshots:** the community-curated **markets** data (the highest-effort stateful asset) can be exported on demand to local JSON — coordinates decoded to `lat`/`lng`, **PII tables excluded** (users, bans, reports, moderation actions) — using the same Key Vault + temporary-firewall access pattern as `scripts/db-azure.sh`. Doubles as a re-seedable point-in-time copy; taken after significant curation milestones (e.g. the 2026-07-08 location-approval pass that reached ~55/73 coverage). Snapshots live outside the repo and are never committed.
 - IaC + container images make the platform **re-creatable**; data is the stateful asset to protect.
 - Periodic restore test (Phase 6 hardening). Region-failover strategy documented when traffic warrants.
 

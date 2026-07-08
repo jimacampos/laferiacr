@@ -1,6 +1,6 @@
 # Roadmap — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-07_
+**Status:** 🟡 Draft · _Last updated: 2026-07-08 (coordinate coverage ~55/73; "near me" reconsidering)_
 
 Phased delivery from the shipped static directory (v0) to a community-maintained, photo-rich guide.
 No dates — phases are ordered by dependency and value. Requirements are in [prd.md](prd.md);
@@ -24,8 +24,9 @@ flowchart LR
 ---
 
 ## v0 — Shipped ✅
-Static, bilingual, mobile-first directory of 66 official markets; "this weekend" default; day/region
-filters; search; tap-to-call. No backend, no accounts. **This is the baseline all phases build on.**
+Static, bilingual, mobile-first directory of 66 official markets (the June 2026 seed; **73 live as of
+2026-07-08** — 72 official + 1 community); "this weekend" default; day/region filters; search; tap-to-call.
+No backend, no accounts. **This is the baseline all phases build on.**
 
 ## Phase 1 — Backend foundation & data migration _(invisible to users)_
 **Status:** ✅ Done — live on **dev** (Azure infra + CI/CD; DB-backed reads with v0 parity).
@@ -79,13 +80,13 @@ filters; search; tap-to-call. No backend, no accounts. **This is the baseline al
 
 ## Phase 4.5 — Home & discovery redesign (name-first) _(near-term UX)_
 **Status:** 🚧 In progress — discovery done (2026-07-07); **BL-023/024/025/026 shipped** (name-first hero, redesigned cards, no weekend default, region filter removed — OQ-013), plus a **home-redesign polish pass** (BL-029: brand wordmark + SVG motif, paginated A–Z directory with a bottom jump index, collapsible day filter, live search highlighting, wider grid). A near-term UX track that can run alongside/before Phase 5.
-**Goal:** make the home page a **name-first, search-led** way to find the specific feria you're looking for — and feel less bare — without depending on location data we don't have yet (only **2 of 66** markets have coordinates today).
+**Goal:** make the home page a **name-first, search-led** way to find the specific feria you're looking for — and feel less bare — without depending on location data (coverage was thin at discovery — 2 of 66; **as of 2026-07-08 it has grown to ~55 of 73 active markets (~75%)** via community approvals, so "near me" is now worth revisiting — BL-027/OQ-014).
 - **Name-first search** as the primary find path; short bilingual hero + value prop + light market count.
 - **Redesigned cards:** lead with the **name**; show **days open**; show **location only when present** (📍 link to the map); **drop region + phone** from the card (phone stays on the market detail page).
 - **Drop the "this weekend" default** (scheduled days ≠ confirmed open/closed) — day filtering becomes optional.
 - **Demote region** (administrative, not how users think — the name already implies the place); remove from the primary UI (OQ-013).
 - **Cohesive visual + scannability polish (BL-029):** a shared brand wordmark + hand-built SVG motif, a **paginated A–Z directory** (10 per page) with an **A–Z jump index at the bottom** that jumps to the right page, a **collapsible day filter**, and **live search highlighting** (matched substrings, clear ✕, `/`-to-focus, query-aware empty state) — so the home feels intentionally designed within our no-photos/no-coords data reality.
-- **Deferred (needs data):** "near me"/distance ranking and any map-first view, pending location coverage / a decision to geocode the official list (BL-027, BL-028, OQ-014).
+- **Reconsidering (coverage improved):** "near me"/distance ranking and any map-first view were deferred pending location coverage; **as of 2026-07-08 ~55 of 73 markets (~75%) have coordinates**, so the coverage blocker is largely cleared — the geocode-the-list enabler (BL-028) is now likely unnecessary (BL-027, OQ-014).
 - **Exit criteria:** a returning user can find a specific market by name in seconds; the home leads with names and shows days (and location where known), with region/phone no longer competing for attention.
 - Backlog: BL-023…BL-029; decisions OQ-013, OQ-014.
 
