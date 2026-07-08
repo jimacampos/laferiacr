@@ -60,6 +60,17 @@ export function removeProposal(
   });
 }
 
+/** Super-admin break-glass: verify a pending proposal immediately from the attention queue. */
+export function approveProposal(
+  proposalId: string,
+  reason?: string,
+): Promise<ApiResult<{ status: string }>> {
+  return post(`/api/admin/proposals/${encodeURIComponent(proposalId)}`, {
+    action: "approve",
+    reason,
+  });
+}
+
 export function moderateMarket(
   slug: string,
   body: Record<string, unknown>,

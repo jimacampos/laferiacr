@@ -46,7 +46,17 @@ stateDiagram-v2
   the field, progress (`net X of N`, how many more are needed), and how long it's been waiting,
   and links to the market page where anyone signed in can confirm.
 - Hidden/non-active markets are excluded (their suggestions can't be confirmed publicly). The
-  view only reads state — it never auto-verifies or mutates (BL-020).
+  view only reads state for community-driven confirmation (BL-020).
+- **Approve from the queue (Super Admin, break-glass):** each backlog row shows the proposed
+  value (hours text, or a location mini-map + Google Maps link) and — for Super Admins only — an
+  **Approve** button. Approving **promotes the proposal immediately**, bypassing the N-confirmation
+  threshold: it writes the value onto the market, marks the proposal `verified`, supersedes
+  competing proposals for the same field, and records `change_history` (`action='override'`,
+  linked via `caused_by_proposal`) plus a moderation audit entry (`override_field`,
+  `target_type='proposal'`). This is the same authority as the market-page field override
+  (`override_field` capability), surfaced in the worklist so an admin can clear a batch of
+  official data (e.g. imported location pins) without visiting each market page. Community Safety
+  moderators still only confirm/remove — they do not see the Approve action.
 
 ## Conflict resolution
 - Multiple competing proposals for the same field can be open at once; users confirm the one they

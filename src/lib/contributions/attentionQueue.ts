@@ -14,6 +14,8 @@ export type SuggestionField = "hours" | "location";
 export interface PendingSuggestion {
   proposalId: string;
   field: string;
+  /** The proposed value: a string for hours; { lat, lng } for location. */
+  value: string | { lat: number; lng: number };
   /** Net confirmations so far: confirmCount - rejectCount. */
   net: number;
   /** How many more net confirmations are still needed to verify (never negative). */
@@ -75,6 +77,7 @@ export async function getConfirmationBacklog(): Promise<AttentionMarket[]> {
     select: {
       id: true,
       field: true,
+      proposedValue: true,
       confirmCount: true,
       rejectCount: true,
       createdAt: true,
@@ -90,6 +93,7 @@ export async function getConfirmationBacklog(): Promise<AttentionMarket[]> {
     const suggestion: PendingSuggestion = {
       proposalId: p.id,
       field: p.field,
+      value: p.proposedValue as PendingSuggestion["value"],
       net,
       remaining: remainingConfirmations(net, threshold),
       createdAt,
