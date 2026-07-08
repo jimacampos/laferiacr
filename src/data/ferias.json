@@ -45,14 +45,17 @@
       "name": "Alajuela",
       "regionId": "central-occidental-este-heredia",
       "days": [
-        "fri",
-        "sat"
+        "sat",
+        "sun"
       ],
-      "daysLabel": "Viernes - sábado",
+      "daysLabel": "Sábado - Domingo",
       "administrator": "Plaza Ferias",
       "phones": [
         "2443-2579"
-      ]
+      ],
+      "hoursText": "Sábado 1pm a 6pm; Domingo 6am a 1pm",
+      "referenceText": "200 metros este del Estadio",
+      "mapUrl": null
     },
     {
       "id": "alajuelita",
@@ -65,7 +68,10 @@
       "administrator": "CAC de Mora",
       "phones": [
         "2418-5712"
-      ]
+      ],
+      "hoursText": "5am a 2pm",
+      "referenceText": "Costado norte iglesia católica",
+      "mapUrl": null
     },
     {
       "id": "atenas",
@@ -78,7 +84,10 @@
       "administrator": "CAC de Atenas",
       "phones": [
         "2446-9033"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "aurora-alajuelita",
@@ -91,7 +100,24 @@
       "administrator": "CAC Alajuelita",
       "phones": [
         "4709 3039"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
+    },
+    {
+      "id": "barreal",
+      "name": "Barreal",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "",
+      "phones": [],
+      "hoursText": "5am a 1pm",
+      "referenceText": "CENADA",
+      "mapUrl": null
     },
     {
       "id": "barva",
@@ -105,7 +131,10 @@
       "phones": [
         "8506-1879",
         "8631-9141"
-      ]
+      ],
+      "hoursText": "5am a 12:30pm",
+      "referenceText": "Contiguo a la plaza de deportes San Bartolomé",
+      "mapUrl": null
     },
     {
       "id": "buenos-aires",
@@ -118,7 +147,10 @@
       "administrator": "Red Quercus",
       "phones": [
         "8304- 6164"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "ciudad-colon",
@@ -131,7 +163,10 @@
       "administrator": "CAC de Mora",
       "phones": [
         "2418-5712"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Diagonal a la plaza municipal",
+      "mapUrl": null
     },
     {
       "id": "ciudad-neilly",
@@ -144,7 +179,10 @@
       "administrator": "Comité Regional Brunca",
       "phones": [
         "2773-3530"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "ciudad-quesada",
@@ -158,7 +196,10 @@
       "administrator": "Asoc. de Vendedores Artesanos y Cultivos Agrícolas de la Feria de Ciudad Quesada",
       "phones": [
         "8947-1548"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "coronado",
@@ -171,7 +212,10 @@
       "administrator": "CAC de Coronado",
       "phones": [
         "2229-4023"
-      ]
+      ],
+      "hoursText": "5am a 2pm",
+      "referenceText": "100 metros norte de la iglesia",
+      "mapUrl": null
     },
     {
       "id": "curridabat",
@@ -184,7 +228,10 @@
       "administrator": "Municipalidad Curridabat",
       "phones": [
         "2272-9089"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Costado este del estadio",
+      "mapUrl": null
     },
     {
       "id": "desamparados",
@@ -197,7 +244,10 @@
       "administrator": "CAC Desamparados",
       "phones": [
         "2544-0014"
-      ]
+      ],
+      "hoursText": "5am a 2pm",
+      "referenceText": "Villa Olímpica",
+      "mapUrl": null
     },
     {
       "id": "el-guarco",
@@ -210,7 +260,10 @@
       "administrator": "CAC del Guarco",
       "phones": [
         "2573-8465"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Detrás del colegio Elías Leiva",
+      "mapUrl": null
     },
     {
       "id": "el-molino",
@@ -223,7 +276,10 @@
       "administrator": "CAC de Oreamuno",
       "phones": [
         "2536-7322"
-      ]
+      ],
+      "hoursText": "7:30am a 12pm",
+      "referenceText": "Barrio El Molino",
+      "mapUrl": null
     },
     {
       "id": "escazu",
@@ -236,7 +292,10 @@
       "administrator": "CAC de Escazú",
       "phones": [
         "2288-3957"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Costado sur iglesia católica",
+      "mapUrl": null
     },
     {
       "id": "esparza",
@@ -249,7 +308,24 @@
       "administrator": "CAC Esparza",
       "phones": [
         "2636-6962"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
+    },
+    {
+      "id": "feria-verde",
+      "name": "Feria Verde",
+      "regionId": "central-central",
+      "days": [
+        "sat"
+      ],
+      "daysLabel": "Sábado",
+      "administrator": "",
+      "phones": [],
+      "hoursText": "7am a 1pm",
+      "referenceText": "Polideportivo Aranjuez",
+      "mapUrl": null
     },
     {
       "id": "frailes",
@@ -262,7 +338,10 @@
       "administrator": "CAC Desamparados",
       "phones": [
         "2544-0014"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "grecia",
@@ -275,7 +354,10 @@
       "administrator": "CAC de Grecia",
       "phones": [
         "2494-7360"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "guachipelin",
@@ -288,7 +370,10 @@
       "administrator": "CAC de Escazú",
       "phones": [
         "2288-3958"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Gimnasio Escuela Guachipelín",
+      "mapUrl": null
     },
     {
       "id": "guapiles",
@@ -301,7 +386,10 @@
       "administrator": "CAC de Pococi",
       "phones": [
         "4033-3624"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "hatillo",
@@ -314,7 +402,10 @@
       "administrator": "CAC de Santa Ana",
       "phones": [
         "2282-5986"
-      ]
+      ],
+      "hoursText": "6am a 2pm",
+      "referenceText": "Frente al Más x Menos Hatillo 2",
+      "mapUrl": null
     },
     {
       "id": "heredia",
@@ -328,7 +419,10 @@
       "administrator": "Asociación de Agricultores feria de Heredia",
       "phones": [
         "8744-5732"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "jaco",
@@ -341,7 +435,10 @@
       "administrator": "CAC Orotina",
       "phones": [
         "2428-9836"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "la-capri",
@@ -354,7 +451,10 @@
       "administrator": "CAC Desamparados",
       "phones": [
         "2544-0014"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "la-fortuna",
@@ -367,7 +467,25 @@
       "administrator": "Asoc. De Productores Agrícolas San Carlos y Zarcero",
       "phones": [
         "8326-4604"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
+    },
+    {
+      "id": "la-perla-mercedes-norte",
+      "name": "La Perla Mercedes Norte",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - Sábado",
+      "administrator": "",
+      "phones": [],
+      "hoursText": "Viernes 10am a 8pm; Sábado 6am a 1pm",
+      "referenceText": "Campo Ferial Mercedes Norte",
+      "mapUrl": null
     },
     {
       "id": "liberia",
@@ -380,7 +498,10 @@
       "administrator": "CAC de Liberia",
       "phones": [
         "8838-7196"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "lomas-del-rio",
@@ -393,7 +514,10 @@
       "administrator": "Asociación de Pequeños, Medianos, Productores, Artesanos de Rincon Grande de Pavas",
       "phones": [
         "6079-0001"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "naranjo",
@@ -407,7 +531,10 @@
       "administrator": "CAC de Naranjo",
       "phones": [
         "2450-5732"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "nicoya",
@@ -420,7 +547,10 @@
       "administrator": "CAC Nicoya",
       "phones": [
         "8775-9779"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "oreamuno",
@@ -433,7 +563,10 @@
       "administrator": "CAC de Oreamuno",
       "phones": [
         "2536-7322"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "orotina",
@@ -446,7 +579,10 @@
       "administrator": "CAC de Orotina",
       "phones": [
         "2428-9836"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "palmares",
@@ -459,7 +595,10 @@
       "administrator": "CAC de Palmares",
       "phones": [
         "2221-2375"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "paraiso",
@@ -472,7 +611,10 @@
       "administrator": "CAC Paraiso",
       "phones": [
         "2574-7364"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "pavas",
@@ -485,7 +627,25 @@
       "administrator": "Asociación de Agricultores, Productores y Artesanos de la Feria del Agricultor en Pavas",
       "phones": [
         "6079-0000"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Contiguo al Pali",
+      "mapUrl": null
+    },
+    {
+      "id": "plaza-ferias",
+      "name": "Plaza Ferias",
+      "regionId": "central-occidental-este-heredia",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - Sábado",
+      "administrator": "",
+      "phones": [],
+      "hoursText": "Viernes 2pm a 9pm; Sábado 5am a 12pm",
+      "referenceText": "Contiguo a PriceSmart",
+      "mapUrl": null
     },
     {
       "id": "plaza-viquez",
@@ -498,7 +658,10 @@
       "administrator": "CAC del Guarco",
       "phones": [
         "2573-8465"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "poas",
@@ -511,7 +674,25 @@
       "administrator": "CAC Poas",
       "phones": [
         "2448-5375"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
+    },
+    {
+      "id": "puriscal",
+      "name": "Puriscal",
+      "regionId": "central-central",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - Sábado",
+      "administrator": "",
+      "phones": [],
+      "hoursText": "Viernes 4pm a 9pm; Sábado 6am a 12md",
+      "referenceText": "Contiguo al gimnasio del Liceo Académico",
+      "mapUrl": null
     },
     {
       "id": "quepos",
@@ -524,7 +705,10 @@
       "administrator": "COOPESILENCIO",
       "phones": [
         "2200-5940"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-antonio-belen",
@@ -537,7 +721,10 @@
       "administrator": "Asoc. Productores  Belen",
       "phones": [
         "8558-2689"
-      ]
+      ],
+      "hoursText": "5:30am a 12pm",
+      "referenceText": "Costado oeste de la plaza de deportes Belén",
+      "mapUrl": null
     },
     {
       "id": "san-isidro",
@@ -552,7 +739,10 @@
       "phones": [
         "2268-5787",
         "8413-0424"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-isidro-pz",
@@ -565,20 +755,26 @@
       "administrator": "AFASIG",
       "phones": [
         "8822-20-63"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-joaquin",
       "name": "San Joaquin",
       "regionId": "central-occidental-este-heredia",
       "days": [
-        "sat"
+        "fri"
       ],
-      "daysLabel": "Sábado",
+      "daysLabel": "Viernes",
       "administrator": "Asociación de Agricultores feria de Heredia",
       "phones": [
         "6307-7209"
-      ]
+      ],
+      "hoursText": "6am a 4pm",
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-juan-de-dios",
@@ -591,7 +787,10 @@
       "administrator": "Asoc. Des. San Juan de Dios",
       "phones": [
         "2259-9535"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-luis-de-sto-domingo",
@@ -605,7 +804,10 @@
       "administrator": "CAC San Luis Sto Domingo",
       "phones": [
         "8822-7758"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-mateo",
@@ -618,22 +820,27 @@
       "administrator": "CAC de San Mateo",
       "phones": [
         "2428-0393"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-pablo-heredia",
       "name": "San Pablo-Heredia",
       "regionId": "central-occidental-este-heredia",
       "days": [
-        "fri",
         "sat"
       ],
-      "daysLabel": "Viernes - sábado",
+      "daysLabel": "Sábado",
       "administrator": "CAC Alajuela",
       "phones": [
         "2430-3898",
         "8378-2365"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Costado norte de la plaza",
+      "mapUrl": null
     },
     {
       "id": "san-pedro",
@@ -646,7 +853,10 @@
       "administrator": "Comite Regional Central Oriental",
       "phones": [
         "2553-3185"
-      ]
+      ],
+      "hoursText": "6am a 12md",
+      "referenceText": "Frente a la iglesia católica",
+      "mapUrl": null
     },
     {
       "id": "san-rafael-abajo",
@@ -659,7 +869,10 @@
       "administrator": "CAC Desamparados",
       "phones": [
         "2544-0014"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-rafael-arriba",
@@ -672,7 +885,10 @@
       "administrator": "CAC Desamparados",
       "phones": [
         "2544-0014"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-rafael-alajuela",
@@ -685,7 +901,10 @@
       "administrator": "Asoc. Parceleros San Rafael",
       "phones": [
         "2418-5712"
-      ]
+      ],
+      "hoursText": "5am a 12pm",
+      "referenceText": "Contiguo de la plaza",
+      "mapUrl": null
     },
     {
       "id": "san-rafael-heredia",
@@ -699,7 +918,10 @@
       "phones": [
         "4033-2330",
         "8623-4619"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Frente a la clínica de la CCSS",
+      "mapUrl": null
     },
     {
       "id": "san-ramon",
@@ -713,7 +935,10 @@
       "administrator": "CAC de San Ramon",
       "phones": [
         "2445-7585"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "san-sebastian",
@@ -726,7 +951,10 @@
       "administrator": "CAC de Mora",
       "phones": [
         "2418-5712"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Frente a la delegación policial",
+      "mapUrl": null
     },
     {
       "id": "santa-ana",
@@ -739,7 +967,10 @@
       "administrator": "CAC de Santa Ana",
       "phones": [
         "2282-5986"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Contiguo a la municipalidad",
+      "mapUrl": null
     },
     {
       "id": "santa-barbara",
@@ -753,7 +984,10 @@
       "phones": [
         "2269-1162",
         "8384-9985"
-      ]
+      ],
+      "hoursText": "5am a 12pm",
+      "referenceText": "De esquina sureste de la escuela Juan Mora Fernández 150 metros sur",
+      "mapUrl": null
     },
     {
       "id": "santa-cruz",
@@ -766,7 +1000,10 @@
       "administrator": "CAC Santa Cruz",
       "phones": [
         "8775-9779"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "santo-domingo",
@@ -780,7 +1017,10 @@
       "phones": [
         "2268-5787",
         "8413-0424"
-      ]
+      ],
+      "hoursText": "8am a 1pm",
+      "referenceText": "Costado oeste de la plaza",
+      "mapUrl": null
     },
     {
       "id": "sarapiqui",
@@ -793,7 +1033,10 @@
       "administrator": "CAC de Sarapiqui",
       "phones": [
         "2766-5808"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "sarchi",
@@ -806,7 +1049,10 @@
       "administrator": "CAC de Sarchi",
       "phones": [
         "2454-4017"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "siquirres",
@@ -819,22 +1065,27 @@
       "administrator": "CAC de Siquirrres",
       "phones": [
         "2768-6825"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "tibas",
       "name": "Tibas",
       "regionId": "central-occidental-este-heredia",
       "days": [
-        "sat",
-        "sun"
+        "sat"
       ],
-      "daysLabel": "Sábado - domingo",
+      "daysLabel": "Sábado",
       "administrator": "CAC San Luis Sto Domingo",
       "phones": [
         "2268-4418",
         "8822-7758"
-      ]
+      ],
+      "hoursText": "5am a 1pm",
+      "referenceText": "Costado sur Estadio Ricardo Saprissa",
+      "mapUrl": null
     },
     {
       "id": "tres-rios",
@@ -847,7 +1098,25 @@
       "administrator": "Asoc. Agricultores Tres Ríos",
       "phones": [
         "2544-0015"
-      ]
+      ],
+      "hoursText": "5am a 12:30pm",
+      "referenceText": "Costado sur de la iglesia católica",
+      "mapUrl": null
+    },
+    {
+      "id": "turrialba",
+      "name": "Turrialba",
+      "regionId": "central-oriental-cartago",
+      "days": [
+        "fri",
+        "sat"
+      ],
+      "daysLabel": "Viernes - Sábado",
+      "administrator": "",
+      "phones": [],
+      "hoursText": "Viernes 5:30am a 3pm; Sábado 5:30am a 3pm",
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "turrucares",
@@ -860,7 +1129,10 @@
       "administrator": "CAC de Atenas",
       "phones": [
         "2446-9033"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "vargas-araya",
@@ -873,7 +1145,10 @@
       "administrator": "CAC del Guarco",
       "phones": [
         "2573-8465"
-      ]
+      ],
+      "hoursText": "5am a 12md",
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "villas-de-ayarco",
@@ -886,7 +1161,10 @@
       "administrator": "CAC de Oreamuno",
       "phones": [
         "2536-7322"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "zapote",
@@ -899,7 +1177,10 @@
       "administrator": "CAC Desamparados",
       "phones": [
         "2544-0014"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     },
     {
       "id": "zarcero",
@@ -912,7 +1193,10 @@
       "administrator": "CAC de Zarcero",
       "phones": [
         "2463-2122"
-      ]
+      ],
+      "hoursText": null,
+      "referenceText": null,
+      "mapUrl": null
     }
   ]
 }

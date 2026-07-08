@@ -18,7 +18,8 @@ set -euo pipefail
 #   scripts/db-azure.sh studio                      # Prisma Studio GUI (browse + edit rows)
 #   scripts/db-azure.sh query "SELECT ..."          # run one SQL statement (no psql needed)
 #   scripts/db-azure.sh psql                         # interactive psql shell (needs psql)
-#   scripts/db-azure.sh seed                          # (re)seed the 66 markets (idempotent)
+#   scripts/db-azure.sh migrate                       # apply pending migrations (prisma migrate deploy)
+#   scripts/db-azure.sh seed                          # (re)seed the markets (idempotent)
 #   scripts/db-azure.sh seed-admin                    # grant super_admin (SUPER_ADMIN_OID/EMAIL)
 #   scripts/db-azure.sh url                           # print the connection string (secret!)
 #
@@ -90,6 +91,9 @@ case "$CMD" in
     command -v psql >/dev/null 2>&1 || die "psql not found. Install with 'brew install libpq' (and add it to PATH), or use the 'query'/'studio' subcommands instead."
     psql "$DATABASE_URL" "$@"
     ;;
+  migrate)
+    npm run db:migrate
+    ;;
   seed)
     npm run db:seed
     ;;
@@ -100,6 +104,6 @@ case "$CMD" in
     echo "$DATABASE_URL"
     ;;
   *)
-    die "Unknown command '${CMD}'. Use: studio | query | psql | seed | seed-admin | url"
+    die "Unknown command '${CMD}'. Use: studio | query | psql | migrate | seed | seed-admin | url"
     ;;
 esac

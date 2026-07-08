@@ -18,14 +18,19 @@ async function main(): Promise<void> {
 
   let count = 0;
   for (const feria of data.ferias) {
-    // Official-derived fields only. We deliberately never touch hours_text or
-    // location so re-seeding cannot clobber community-verified data (Phase 3+).
+    // Official-derived fields from the source list. We still never touch `location`
+    // (PostGIS point) so re-seeding cannot clobber community-verified coordinates
+    // (Phase 3+). hours_text / reference_text / map_url now come from the official
+    // source (the feria listing), so they are seeded here.
     const fields = {
       name: feria.name,
       regionId: feria.regionId,
       regionName: regionName.get(feria.regionId) ?? feria.regionId,
       days: feria.days,
       daysLabel: feria.daysLabel,
+      hoursText: feria.hoursText ?? null,
+      referenceText: feria.referenceText ?? null,
+      mapUrl: feria.mapUrl ?? null,
       organizer: feria.administrator || null,
       phones: feria.phones,
       source: "official",

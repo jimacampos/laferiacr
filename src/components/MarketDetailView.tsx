@@ -193,6 +193,22 @@ export function MarketDetailView({
               {t("detail.locationUnknown")}
             </p>
           )}
+          {market.referenceText && (
+            <p className="mt-2 text-sm text-stone-800">
+              <span className="text-stone-400">{t("detail.reference")}: </span>
+              {market.referenceText}
+            </p>
+          )}
+          {market.mapUrl && (
+            <a
+              href={market.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-emerald-700 hover:underline"
+            >
+              {t("detail.viewOnMap")}
+            </a>
+          )}
           {canContribute && (
             <>
               <ProposalList

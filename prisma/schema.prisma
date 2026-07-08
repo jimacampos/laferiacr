@@ -30,6 +30,13 @@ model Market {
   daysLabel  String   @map("days_label")
   /// Human-readable operating hours; null until contributed (Phase 3).
   hoursText  String?  @map("hours_text")
+  /// Free-text point-of-reference direction (e.g. "Contiguo al Pali"). From the
+  /// official source; null when unknown. Costa Rican addresses are landmark-based,
+  /// so this often locates a feria better than coordinates alone.
+  referenceText String? @map("reference_text")
+  /// Google Maps link to the feria's location, to make the point easy to find on a
+  /// map before precise coordinates exist; null until provided.
+  mapUrl        String? @map("map_url")
   /// Market administrator/organizer.
   organizer  String?
   phones     String[] @default([])
