@@ -9,6 +9,7 @@ import { AdminLink } from "./AdminLink";
 import { AuthStatus } from "./AuthStatus";
 import { BrandMark } from "./BrandMark";
 import { LanguageToggle } from "./LanguageToggle";
+import { NavDropdown } from "./NavDropdown";
 import { NavLink } from "./NavLink";
 
 export function Header() {
@@ -39,18 +40,22 @@ export function Header() {
       <NavLink href="/" exact onNavigate={closeMenu}>
         {t("nav.home")}
       </NavLink>
-      <NavLink href="/markets/new" onNavigate={closeMenu}>
-        {t("nav.addMarket")}
-      </NavLink>
-      <NavLink href="/markets/pending" onNavigate={closeMenu}>
-        {t("nav.pending")}
-      </NavLink>
-      <NavLink href="/help" onNavigate={closeMenu}>
-        {t("nav.help")}
-      </NavLink>
-      <NavLink href="/feedback" onNavigate={closeMenu}>
-        {t("nav.feedback")}
-      </NavLink>
+      <NavDropdown
+        label={t("nav.contribute")}
+        onNavigate={closeMenu}
+        items={[
+          { href: "/markets/new", label: t("nav.addMarket") },
+          { href: "/markets/pending", label: t("nav.pending") },
+        ]}
+      />
+      <NavDropdown
+        label={t("nav.more")}
+        onNavigate={closeMenu}
+        items={[
+          { href: "/help", label: t("nav.help") },
+          { href: "/feedback", label: t("nav.feedback") },
+        ]}
+      />
       <AdminLink onNavigate={closeMenu} />
     </>
   );

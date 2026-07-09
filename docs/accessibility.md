@@ -1,6 +1,6 @@
 # Accessibility — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-07_
+**Status:** 🟡 Draft · _Last updated: 2026-07-08 (desktop nav dropdowns)_
 
 Accessibility is a **product requirement**, not an afterthought. The app must work for a wide range of
 people: tech-savvy early adopters (25–45) **and** older or non-technical shoppers, on modest phones
@@ -36,10 +36,14 @@ and slower connections. See personas in [product/personas.md](product/personas.m
 - **Bilingual:** language toggle is easy to find; `lang` attributes set correctly for assistive tech.
 - **Primary navigation (header):** a sticky site header whose brand mark/wordmark is a link to home
   (`/`) with an accessible label. Primary links live in a `<nav aria-label>`; the current route is
-  marked with `aria-current="page"` and a visible active style (not color alone). On small screens the
-  links collapse behind a **menu disclosure** button (`aria-expanded` + `aria-controls`) that opens a
-  full-width list-row panel; it closes on navigation. The moderator-only entry is resolved server-side,
-  never from a client claim.
+  marked with `aria-current="page"` and a visible active style (not color alone). On desktop, related
+  links are grouped under **dropdown menus** (`Contribute`, `More`): the trigger is a button with
+  `aria-haspopup="menu"` + `aria-expanded` + `aria-controls`, the panel is `role="menu"` with
+  `role="menuitem"` links, and it highlights when a child route is active. Each menu closes on Escape
+  (returning focus to its trigger), outside click, focus leaving the menu, and navigation. On small
+  screens the links collapse behind a **menu disclosure** button (`aria-expanded` + `aria-controls`)
+  that opens a full-width list-row panel; it closes on navigation. The moderator-only entry is resolved
+  server-side, never from a client claim.
 - **Directory navigation (home):** the day filter is a **disclosure** (`aria-expanded` toggle) so it can
   be collapsed; the market list is **paginated** with a `<nav aria-label>` pager whose current page uses
   `aria-current="page"` and whose prev/next are disabled at the ends. The A–Z jump index is a `<nav>` of

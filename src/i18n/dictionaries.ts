@@ -334,6 +334,8 @@ export const dictionaries: Record<Language, Messages> = {
 
     "nav.addMarket": "Agregar feria",
     "nav.pending": "Ferias propuestas",
+    "nav.contribute": "Contribuir",
+    "nav.more": "Más",
 
     "submitMarket.title": "Agregar una feria",
     "submitMarket.subtitle":
@@ -719,6 +721,8 @@ export const dictionaries: Record<Language, Messages> = {
 
     "nav.addMarket": "Add a market",
     "nav.pending": "Proposed markets",
+    "nav.contribute": "Contribute",
+    "nav.more": "More",
 
     "submitMarket.title": "Add a market",
     "submitMarket.subtitle":
