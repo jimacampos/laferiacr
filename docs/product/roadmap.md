@@ -1,6 +1,6 @@
 # Roadmap — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-09 (Phase 5 community markets implemented on dev)_
+**Status:** 🟡 Draft · _Last updated: 2026-07-08 (Phase 5 community markets shipped on dev; desktop nav dropdowns)_
 
 Phased delivery from the shipped static directory (v0) to a community-maintained, photo-rich guide.
 No dates — phases are ordered by dependency and value. Requirements are in [prd.md](prd.md);
@@ -91,7 +91,7 @@ No backend, no accounts. **This is the baseline all phases build on.**
 - Backlog: BL-023…BL-029; decisions OQ-013, OQ-014.
 
 ## Phase 5 — Add new markets (community-submitted)
-**Status:** 🚧 Implemented on dev (2026-07-09; [ADR-0009](../decisions/0009-community-submitted-markets.md)) — `/markets/new` submission flow (sign-in required), soft duplicate detection (name + proximity, warn-only), `/markets/pending` community-confirmation queue with auto-promotion to `source=community`, provenance badges, and moderation of submissions (reportable + removable). Migration authored; `prisma migrate deploy` + dev smoke are operator follow-ups.
+**Status:** ✅ Done — live on **dev** (2026-07-08; [ADR-0009](../decisions/0009-community-submitted-markets.md)) — `/markets/new` submission flow (sign-in required, rate-limited + CAPTCHA-gated), soft duplicate detection (name + proximity, warn-only — never blocks), `/markets/pending` community-confirmation queue with auto-promotion to a `source=community` market at N net confirmations, provenance badges, and moderation of submissions (reportable + removable). Migration deployed and smoke-tested end-to-end.
 **Goal:** grow beyond the official list.
 - "Add a market" flow; **duplicate detection** (name + proximity).
 - New markets enter pending/unverified; promoted by confirmations; subject to moderation.

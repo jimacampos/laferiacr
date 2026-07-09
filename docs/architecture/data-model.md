@@ -1,6 +1,6 @@
 # Data Model — La Feria CR
 
-**Status:** 🟡 Draft · _Last updated: 2026-07-09 (Phase 5: market_submissions + submission_confirmations; reports gain 'submission' target)_
+**Status:** 🟡 Draft · _Last updated: 2026-07-08 (Phase 5: market_submissions + submission_confirmations; reports gain 'submission' target)_
 
 Logical data model for the community platform. Storage is **PostgreSQL Flexible Server + PostGIS**
 ([ADR-0004](../decisions/0004-database-postgresql-flexible.md)). This is a design reference, not a

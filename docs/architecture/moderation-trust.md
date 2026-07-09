@@ -1,6 +1,6 @@
 # Moderation & Trust — La Feria CR
 
-**Status:** 🟢 Implemented (Phase 4) · _Last updated: 2026-07-09 (Phase 5: submissions reportable + removable)_
+**Status:** 🟢 Implemented (Phase 4) · _Last updated: 2026-07-08 (Phase 5: submissions reportable + removable)_
 
 How community input becomes trustworthy "verified" data, and how abuse is contained. Combines an
 **automated** confirmation loop ([ADR-0008](../decisions/0008-promotion-automated-confirmation-and-roles.md))
