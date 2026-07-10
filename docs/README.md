@@ -8,6 +8,10 @@ implement against; they are living drafts and will evolve.
 - **Status legend:** 🟡 Draft · 🟢 Approved · ⚪ Stub/Planned
 - The shipped **v0** application is documented in the repository [`../README.md`](../README.md).
 - The official source data is `Lista_Ferias_del_Agricultor.xlsx` (June 2026) in this folder.
+- **Forward-looking phases** (4.5, 6, 7, 8) are also maintained as **Spec Kit specs** under
+  [`../laferiaspecs/specs/`](../laferiaspecs/specs/) so future work runs through the `/speckit.*`
+  flow. These docs remain the authoritative reference for shipped behavior, ADRs, and architecture;
+  the specs link back here rather than duplicating.
 
 ## Table of contents
 

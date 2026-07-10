@@ -6,6 +6,10 @@ Phased delivery from the shipped static directory (v0) to a community-maintained
 No dates — phases are ordered by dependency and value. Requirements are in [prd.md](prd.md);
 architecture in [../architecture/overview.md](../architecture/overview.md).
 
+> **Spec Kit:** the forward-looking phases below — **4.5, 6, 7, 8** — are also maintained as Spec Kit
+> specs in [`../../laferiaspecs/specs/`](../../laferiaspecs/specs/) (name-first home, trust &
+> accessibility, PWA + notifications, photos). Continue those with the `/speckit.*` flow.
+
 ```mermaid
 flowchart LR
   P0[v0 · Shipped] --> P1[1 · Backend + data migration]
