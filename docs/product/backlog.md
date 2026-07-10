@@ -1,6 +1,6 @@
 # Backlog — La Feria CR
 
-**Status:** 🟢 Living document · _Last updated: 2026-07-09 (OQ-004 dup-strictness defaults noted; Phase 5 shipped)_
+**Status:** 🟢 Living document · _Last updated: 2026-07-08 (OQ-004 dup-strictness defaults noted; Phase 5 shipped)_
 
 The single place to capture future features and decisions that aren't in the active phase. Add items
 with the **`backlog-add`** skill (it appends a row using the format below). Promote items into a phase
